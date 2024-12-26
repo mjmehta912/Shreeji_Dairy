@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shreeji_dairy/extensions/app_size_extensions.dart';
+import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 
 class AppPaddings {
   //* All Side Padding

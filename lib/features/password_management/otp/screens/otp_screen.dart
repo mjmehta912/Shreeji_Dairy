@@ -4,8 +4,8 @@ import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/password_management/otp/controllers/otp_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
-import 'package:shreeji_dairy/utils/app_paddings.dart';
-import 'package:shreeji_dairy/utils/app_spacings.dart';
+import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
+import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 

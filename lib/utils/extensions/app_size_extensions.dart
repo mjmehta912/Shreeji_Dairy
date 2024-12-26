@@ -1,5 +1,5 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shreeji_dairy/utils/app_screen_utils.dart';
+import 'package:shreeji_dairy/utils/screen_utils/app_screen_utils.dart';
 
 extension AppSizeExtension on num {
   double get screenHeight => AppScreenUtils.height * this;
