@@ -56,14 +56,18 @@ class LoginScreen extends StatelessWidget {
                   ),
                   AppSpaces.v20,
                   AppTextFormField(
-                    controller: _controller.usernameController,
-                    hintText: 'Username',
+                    controller: _controller.mobileNumberController,
+                    hintText: 'Mobile Number',
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter a username';
+                        return 'Please enter a mobile number';
+                      }
+                      if (value.length != 10) {
+                        return 'Please enter a valid mobile number';
                       }
                       return null;
                     },
+                    keyboardType: TextInputType.phone,
                   ),
                   AppSpaces.v20,
                   Obx(

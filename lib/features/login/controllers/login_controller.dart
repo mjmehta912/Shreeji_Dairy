@@ -9,7 +9,7 @@ class LoginController extends GetxController {
     obscuredText.value = !obscuredText.value;
   }
 
-  var usernameController = TextEditingController();
+  var mobileNumberController = TextEditingController();
   var passwordController = TextEditingController();
   var hasAttemptedLogin = false.obs;
   final loginFormKey = GlobalKey<FormState>();
@@ -21,7 +21,7 @@ class LoginController extends GetxController {
   }
 
   void setupValidationListeners() {
-    usernameController.addListener(validateForm);
+    mobileNumberController.addListener(validateForm);
     passwordController.addListener(validateForm);
   }
 
