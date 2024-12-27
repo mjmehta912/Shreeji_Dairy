@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: Center(
           child: SingleChildScrollView(
             padding: AppPaddings.ph30,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/products/screens/products_screen.dart';
+import 'package:shreeji_dairy/features/bottom_nav/screens/bottom_nav_screen.dart';
 import 'package:shreeji_dairy/features/select_branch/controllers/select_branch_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -65,7 +65,7 @@ class SelectBranchScreen extends StatelessWidget {
                       if (_controller.selectBranchFormKey.currentState!
                           .validate()) {
                         Get.offAll(
-                          () => ProductsScreen(),
+                          () => BottomNavScreen(),
                           transition: Transition.fadeIn,
                           duration: Duration(
                             milliseconds: 500,

@@ -23,31 +23,60 @@ class OnboardingScreen extends StatelessWidget {
     milliseconds: 500,
   );
 
+  void _goToNextPage() {
+    if (_controller.currentPage.value < _controller.images.length - 1) {
+      pageController.nextPage(
+        duration: _animationDuration,
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  void _goToPreviousPage() {
+    if (_controller.currentPage.value > 0) {
+      pageController.previousPage(
+        duration: _animationDuration,
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          PageView.builder(
-            controller: pageController,
-            itemCount: _controller.images.length,
-            onPageChanged: (pageIndex) {
-              _controller.currentPage.value = pageIndex;
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTapUp: (details) {
+              final screenWidth = MediaQuery.of(context).size.width;
+              if (details.globalPosition.dx > screenWidth / 2) {
+                _goToNextPage();
+              } else {
+                _goToPreviousPage();
+              }
             },
-            itemBuilder: (context, index) {
-              return Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.asset(
-                    _controller.images[index],
-                    fit: BoxFit.cover,
-                  ),
-                  Container(
-                    color: kColorBlackWithOpacity,
-                  ),
-                ],
-              );
-            },
+            child: PageView.builder(
+              controller: pageController,
+              itemCount: _controller.images.length,
+              onPageChanged: (pageIndex) {
+                _controller.currentPage.value = pageIndex;
+              },
+              itemBuilder: (context, index) {
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.asset(
+                      _controller.images[index],
+                      fit: BoxFit.cover,
+                    ),
+                    Container(
+                      color: kColorBlackWithOpacity,
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
           Padding(
             padding: AppPaddings.ph20,

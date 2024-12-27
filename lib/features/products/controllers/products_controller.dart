@@ -16,7 +16,7 @@ class ProductsController extends GetxController {
     'Sort By',
     'Category',
     'Group',
-    'Sub Group',
+    'Sub Category',
   ].obs;
 
   final selectedFilters = <String>[].obs;
@@ -39,56 +39,81 @@ class ProductsController extends GetxController {
     }
   }
 
-  // Product list
-  final RxList<Product> products = RxList<Product>([
-    Product(
-      name: 'Angoori Basundi',
-      image: kImageBasundi,
-      skus: [
-        Sku(size: '250 G', rate: 100.0),
-        Sku(size: '500 G', rate: 180.0),
-        Sku(size: '1 KG', rate: 350.0),
-      ],
-    ),
-    Product(
-      name: 'Badam Kali',
-      image: kImageBadamKali,
-      skus: [
-        Sku(size: '250 G', rate: 150.0),
-        Sku(size: '500 G', rate: 250.0),
-        Sku(size: '1 KG', rate: 450.0),
-      ],
-    ),
-    Product(
-      name: 'Kamal',
-      image: kImageKamal,
-      skus: [
-        Sku(size: '250G', rate: 120.0),
-        Sku(size: '500G', rate: 210.0),
-        Sku(size: '1KG', rate: 400.0),
-      ],
-    ),
-    Product(
-      name: 'Mango Shrikhand',
-      image: kImageMangoShrikhand,
-      skus: [
-        Sku(size: '250G', rate: 120.0),
-        Sku(size: '500G', rate: 210.0),
-        Sku(size: '1KG', rate: 400.0),
-      ],
-    ),
-    Product(
-      name: 'Cherry Almond',
-      image: kImageCherryAlmond,
-      skus: [
-        Sku(size: '250G', rate: 120.0),
-        Sku(size: '500G', rate: 210.0),
-        Sku(size: '1KG', rate: 400.0),
-      ],
-    ),
-  ]);
+  final RxList<Product> products = RxList<Product>(
+    [
+      Product(
+        name: 'Angoori Basundi',
+        image: kImageBasundi,
+        skus: [
+          Sku(size: '250 G', rate: 100.0),
+          Sku(size: '500 G', rate: 180.0),
+          Sku(size: '1 KG', rate: 350.0),
+          Sku(size: '2 KG', rate: 650.0),
+        ],
+      ),
+      Product(
+        name: 'Badam Kali',
+        image: kImageBadamKali,
+        skus: [
+          Sku(size: '250 G', rate: 150.0),
+          Sku(size: '500 G', rate: 250.0),
+          Sku(size: '1 KG', rate: 450.0),
+          Sku(size: '2 KG', rate: 850.0),
+        ],
+      ),
+      Product(
+        name: 'Kamal',
+        image: kImageKamal,
+        skus: [
+          Sku(size: '250G', rate: 120.0),
+          Sku(size: '500G', rate: 210.0),
+          Sku(size: '1KG', rate: 400.0),
+          Sku(size: '2KG', rate: 780.0),
+        ],
+      ),
+      Product(
+        name: 'Afghan Dryfruit Shrikhand',
+        image: kImageMAndM,
+        skus: [
+          Sku(size: '250 G', rate: 100.0),
+          Sku(size: '500 G', rate: 180.0),
+          Sku(size: '1 KG', rate: 350.0),
+          Sku(size: '2 KG', rate: 650.0),
+        ],
+      ),
+      Product(
+        name: 'Mango Shrikhand',
+        image: kImageMangoShrikhand,
+        skus: [
+          Sku(size: '250G', rate: 120.0),
+          Sku(size: '500G', rate: 210.0),
+          Sku(size: '1KG', rate: 400.0),
+          Sku(size: '2KG', rate: 780.0),
+        ],
+      ),
+      Product(
+        name: 'Choco Moon Penda',
+        image: kImageMAndM,
+        skus: [
+          Sku(size: '250 G', rate: 150.0),
+          Sku(size: '500 G', rate: 250.0),
+          Sku(size: '1 KG', rate: 450.0),
+          Sku(size: '2 KG', rate: 850.0),
+        ],
+      ),
+      Product(
+        name: 'Cherry Almond',
+        image: kImageCherryAlmond,
+        skus: [
+          Sku(size: '250G', rate: 120.0),
+          Sku(size: '500G', rate: 210.0),
+          Sku(size: '1KG', rate: 400.0),
+          Sku(size: '2KG', rate: 780.0),
+        ],
+      ),
+    ],
+  );
 
-  // Increment and decrement logic
   void incrementCounter(Product product, Sku sku) {
     int index = products.indexOf(product);
     int skuIndex = product.skus.indexOf(sku);
@@ -120,7 +145,7 @@ class Product {
 
 class Sku {
   String size;
-  RxInt counter = RxInt(0); // Using RxInt to make it reactive
+  RxInt counter = RxInt(0);
   double rate;
 
   Sku({
