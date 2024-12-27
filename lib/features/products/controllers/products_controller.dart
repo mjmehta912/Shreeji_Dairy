@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
+import 'package:shreeji_dairy/styles/font_sizes.dart';
+import 'package:shreeji_dairy/styles/text_styles.dart';
 
 class ProductsController extends GetxController {
   var isLoading = false.obs;
@@ -21,6 +23,9 @@ class ProductsController extends GetxController {
 
   final selectedFilters = <String>[].obs;
 
+  // Reactive variable for the selected sort option
+  final RxString selectedSortBy = ''.obs;
+
   List<String> get reorderedFilterOptions {
     final selected = selectedFilters.toList();
     final unselected = filterOptions
@@ -32,11 +37,34 @@ class ProductsController extends GetxController {
   }
 
   void toggleFilter(String filter) {
+    if (filter == 'Sort By') {
+      Get.bottomSheet(
+        SortOptionsBottomSheet(onSortSelected: sortProducts),
+        isScrollControlled: true,
+      );
+      return;
+    }
     if (selectedFilters.contains(filter)) {
       selectedFilters.remove(filter);
     } else {
       selectedFilters.add(filter);
     }
+  }
+
+  void sortProducts(String criteria) {
+    // Set the selected sort option
+    selectedSortBy.value = criteria;
+
+    if (criteria == 'Price: High to Low') {
+      products.sort((a, b) => b.skus[0].rate.compareTo(a.skus[0].rate));
+    } else if (criteria == 'Price: Low to High') {
+      products.sort((a, b) => a.skus[0].rate.compareTo(b.skus[0].rate));
+    } else if (criteria == 'Alphabetical: A to Z') {
+      products.sort((a, b) => a.name.compareTo(b.name));
+    } else if (criteria == 'Alphabetical: Z to A') {
+      products.sort((a, b) => b.name.compareTo(a.name));
+    }
+    products.refresh(); // Notify listeners of the change
   }
 
   final RxList<Product> products = RxList<Product>(
@@ -152,4 +180,86 @@ class Sku {
     required this.size,
     required this.rate,
   });
+}
+
+class SortOptionsBottomSheet extends StatelessWidget {
+  final Function(String) onSortSelected;
+
+  const SortOptionsBottomSheet({
+    super.key,
+    required this.onSortSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Sort By',
+            style: TextStyles.kMediumFredoka(),
+          ),
+          const SizedBox(height: 16),
+          ListTile(
+            title: Text(
+              'Price: High to Low',
+              style: TextStyles.kRegularFredoka(
+                fontSize: FontSizes.k16FontSize,
+              ),
+            ),
+            onTap: () {
+              onSortSelected('Price: High to Low');
+              Get.back(); // Close the bottom sheet
+            },
+          ),
+          ListTile(
+            title: Text(
+              'Price: Low to High',
+              style: TextStyles.kRegularFredoka(
+                fontSize: FontSizes.k16FontSize,
+              ),
+            ),
+            onTap: () {
+              onSortSelected('Price: Low to High');
+              Get.back(); // Close the bottom sheet
+            },
+          ),
+          ListTile(
+            title: Text(
+              'Alphabetical: A to Z',
+              style: TextStyles.kRegularFredoka(
+                fontSize: FontSizes.k16FontSize,
+              ),
+            ),
+            onTap: () {
+              onSortSelected('Alphabetical: A to Z');
+              Get.back(); // Close the bottom sheet
+            },
+          ),
+          ListTile(
+            title: Text(
+              'Alphabetical: Z to A',
+              style: TextStyles.kRegularFredoka(
+                fontSize: FontSizes.k16FontSize,
+              ),
+            ),
+            onTap: () {
+              onSortSelected('Alphabetical: Z to A');
+              Get.back(); // Close the bottom sheet
+            },
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
 }

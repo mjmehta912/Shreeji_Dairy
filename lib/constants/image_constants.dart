@@ -24,3 +24,12 @@ const kIconLedgerFilled = 'assets/icons/ledger_filled.svg';
 const kIconSettings = 'assets/icons/settings.svg';
 const kIconSettingsFilled = 'assets/icons/settings_filled.svg';
 const kIconShoppingCart = 'assets/icons/shopping_cart.svg';
+
+const kIconOrderStatus = 'assets/icons/order_status.svg';
+const kIconResetPassword = 'assets/icons/reset_password.svg';
+const kIconUploadProductImage = 'assets/icons/image_upload.svg';
+const kIconUserManagement = 'assets/icons/user_management.svg';
+const kIconUserAuthorisation = 'assets/icons/user_authorisation.svg';
+const kIconCreditNoteEntry = 'assets/icons/credit_entry.svg';
+const kIconCreditNoteStatus = 'assets/icons/credit_status.svg';
+const kIconCreditNoteApproval = 'assets/icons/credit_approval.svg';

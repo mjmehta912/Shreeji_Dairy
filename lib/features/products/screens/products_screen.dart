@@ -144,205 +144,205 @@ class ProductsScreen extends StatelessWidget {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final product = _controller.products[index];
-
-                    return Column(
-                      children: [
-                        Card(
-                          elevation: 2.5,
-                          color: kColorWhite,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                              color: kColorBlack,
+                    return Obx(
+                      () => Column(
+                        children: [
+                          Card(
+                            elevation: 2.5,
+                            color: kColorWhite,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                color: kColorBlack,
+                              ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: AppPaddings.combined(
-                              horizontal: 10.appWidth,
-                              vertical: 5.appHeight,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Card(
-                                      color: kColorWhite,
-                                      clipBehavior: Clip.antiAlias,
-                                      child: Image.asset(
-                                        product.image,
-                                        height: 75.appHeight,
+                            child: Padding(
+                              padding: AppPaddings.combined(
+                                horizontal: 10.appWidth,
+                                vertical: 5.appHeight,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Card(
+                                        color: kColorWhite,
+                                        clipBehavior: Clip.antiAlias,
+                                        child: Image.asset(
+                                          _controller.products[index].image,
+                                          height: 75.appHeight,
+                                        ),
                                       ),
-                                    ),
-                                    AppSpaces.h10,
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            product.name,
-                                            style: TextStyles.kMediumFredoka(
-                                              fontSize: FontSizes.k18FontSize,
-                                            ).copyWith(
-                                              height: 1,
+                                      AppSpaces.h10,
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              _controller.products[index].name,
+                                              style: TextStyles.kMediumFredoka(
+                                                fontSize: FontSizes.k18FontSize,
+                                              ).copyWith(
+                                                height: 1,
+                                              ),
                                             ),
-                                          ),
-                                          AppSpaces.v10,
-                                          SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: product.skus.map(
-                                                (sku) {
-                                                  return Card(
-                                                    color: kColorWhite,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      side: BorderSide(
-                                                        color:
-                                                            kColorTextPrimary,
+                                            AppSpaces.v10,
+                                            SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                children: _controller
+                                                    .products[index].skus
+                                                    .map(
+                                                  (sku) {
+                                                    return Card(
+                                                      color: kColorWhite,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        side: BorderSide(
+                                                          color:
+                                                              kColorTextPrimary,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    child: Padding(
-                                                      padding:
-                                                          AppPaddings.combined(
-                                                        horizontal: 10,
-                                                        vertical: 5,
-                                                      ),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            sku.size,
-                                                            style: TextStyles
-                                                                .kMediumFredoka(
-                                                              fontSize: FontSizes
-                                                                  .k14FontSize,
-                                                            ).copyWith(
-                                                              height: 1,
+                                                      child: Padding(
+                                                        padding: AppPaddings
+                                                            .combined(
+                                                          horizontal: 10,
+                                                          vertical: 5,
+                                                        ),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              sku.size,
+                                                              style: TextStyles
+                                                                  .kMediumFredoka(
+                                                                fontSize: FontSizes
+                                                                    .k14FontSize,
+                                                              ).copyWith(
+                                                                height: 1,
+                                                              ),
                                                             ),
-                                                          ),
-                                                          AppSpaces.v4,
-                                                          Text(
-                                                            '₹ ${sku.rate}',
-                                                            style: TextStyles
-                                                                .kRegularFredoka(
-                                                              fontSize: FontSizes
-                                                                  .k14FontSize,
-                                                            ).copyWith(
-                                                              height: 1,
+                                                            AppSpaces.v4,
+                                                            Text(
+                                                              '₹ ${sku.rate}',
+                                                              style: TextStyles
+                                                                  .kRegularFredoka(
+                                                                fontSize: FontSizes
+                                                                    .k14FontSize,
+                                                              ).copyWith(
+                                                                height: 1,
+                                                              ),
                                                             ),
-                                                          ),
-                                                          AppSpaces.v4,
-                                                          // Initially show 'Add' button
-                                                          Obx(
-                                                            () => sku.counter
-                                                                        .value ==
-                                                                    0
-                                                                ? SizedBox(
-                                                                    width: 0.2
-                                                                        .screenWidth,
-                                                                    height: 30,
-                                                                    child:
-                                                                        AppButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        _controller.incrementCounter(
-                                                                            product,
-                                                                            sku);
-                                                                      },
-                                                                      title:
-                                                                          'Add +',
-                                                                      titleSize:
-                                                                          FontSizes
-                                                                              .k14FontSize,
-                                                                      buttonColor:
-                                                                          kColorWhite,
-                                                                      borderColor:
-                                                                          kColorSecondary,
-                                                                      titleColor:
-                                                                          kColorSecondary,
+                                                            AppSpaces.v4,
+                                                            // Initially show 'Add' button
+                                                            Obx(
+                                                              () => sku.counter
+                                                                          .value ==
+                                                                      0
+                                                                  ? SizedBox(
+                                                                      width: 0.2
+                                                                          .screenWidth,
+                                                                      height:
+                                                                          30,
+                                                                      child:
+                                                                          AppButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          _controller.incrementCounter(
+                                                                              _controller.products[index],
+                                                                              sku);
+                                                                        },
+                                                                        title:
+                                                                            'Add +',
+                                                                        titleSize:
+                                                                            FontSizes.k14FontSize,
+                                                                        buttonColor:
+                                                                            kColorWhite,
+                                                                        borderColor:
+                                                                            kColorSecondary,
+                                                                        titleColor:
+                                                                            kColorSecondary,
+                                                                      ),
+                                                                    )
+                                                                  : Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        InkWell(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10),
+                                                                          child:
+                                                                              Icon(
+                                                                            Icons.remove,
+                                                                            color:
+                                                                                kColorSecondary,
+                                                                            size:
+                                                                                20,
+                                                                          ),
+                                                                          onTap: () => _controller.decrementCounter(
+                                                                              _controller.products[index],
+                                                                              sku),
+                                                                        ),
+                                                                        AppSpaces
+                                                                            .h10,
+                                                                        Text(
+                                                                          '${sku.counter.value}',
+                                                                          style:
+                                                                              TextStyles.kMediumFredoka(
+                                                                            fontSize:
+                                                                                FontSizes.k16FontSize,
+                                                                            color:
+                                                                                kColorTextPrimary,
+                                                                          ),
+                                                                        ),
+                                                                        AppSpaces
+                                                                            .h10,
+                                                                        InkWell(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10),
+                                                                          child:
+                                                                              Icon(
+                                                                            Icons.add,
+                                                                            color:
+                                                                                kColorSecondary,
+                                                                            size:
+                                                                                20,
+                                                                          ),
+                                                                          onTap: () => _controller.incrementCounter(
+                                                                              _controller.products[index],
+                                                                              sku),
+                                                                        ),
+                                                                      ],
                                                                     ),
-                                                                  )
-                                                                : Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      InkWell(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
-                                                                        child:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .remove,
-                                                                          color:
-                                                                              kColorSecondary,
-                                                                          size:
-                                                                              20,
-                                                                        ),
-                                                                        onTap: () => _controller.decrementCounter(
-                                                                            product,
-                                                                            sku),
-                                                                      ),
-                                                                      AppSpaces
-                                                                          .h10,
-                                                                      Text(
-                                                                        '${sku.counter.value}',
-                                                                        style: TextStyles
-                                                                            .kMediumFredoka(
-                                                                          fontSize:
-                                                                              FontSizes.k16FontSize,
-                                                                          color:
-                                                                              kColorTextPrimary,
-                                                                        ),
-                                                                      ),
-                                                                      AppSpaces
-                                                                          .h10,
-                                                                      InkWell(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
-                                                                        child:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .add,
-                                                                          color:
-                                                                              kColorSecondary,
-                                                                          size:
-                                                                              20,
-                                                                        ),
-                                                                        onTap: () => _controller.incrementCounter(
-                                                                            product,
-                                                                            sku),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                          ),
-                                                        ],
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                  );
-                                                },
-                                              ).toList(),
+                                                    );
+                                                  },
+                                                ).toList(),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        AppSpaces.v6,
-                      ],
+                          AppSpaces.v6,
+                        ],
+                      ),
                     );
                   },
                   childCount: _controller.products.length,

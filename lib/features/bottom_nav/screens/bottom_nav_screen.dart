@@ -5,6 +5,7 @@ import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/bottom_nav/controllers/bottom_nav_controller.dart';
 import 'package:shreeji_dairy/features/invoice/invoices/screens/invoices_screen.dart';
+import 'package:shreeji_dairy/features/ledger/controllers/ledger_screen.dart';
 import 'package:shreeji_dairy/features/products/screens/products_screen.dart';
 import 'package:shreeji_dairy/features/profile/screens/profile_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
@@ -22,7 +23,7 @@ class BottomNavScreen extends StatelessWidget {
   final List<Widget> pages = [
     ProductsScreen(),
     InvoicesScreen(),
-    Center(child: Text('Profile Screen 1', style: TextStyle(fontSize: 24))),
+    LedgerScreen(),
     ProfileScreen(),
   ];
 

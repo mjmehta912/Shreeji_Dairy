@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
+import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/login/screens/login_screen.dart';
 import 'package:shreeji_dairy/features/password_management/reset_password/screens/reset_password_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
@@ -16,6 +18,7 @@ class ProfileScreen extends StatelessWidget {
     super.key,
   });
 
+  // ignore: unused_field
   final ProfileController _controller = Get.put(
     ProfileController(),
   );
@@ -33,14 +36,14 @@ class ProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildWelcomeText(),
-            SizedBox(height: 20),
+            AppSpaces.v16,
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 1.5,
+                  childAspectRatio: 1.25,
                 ),
                 itemCount: 8,
                 itemBuilder: (context, index) {
@@ -122,26 +125,26 @@ class ProfileScreen extends StatelessWidget {
     }
   }
 
-  IconData _getIconForService(int index) {
+  String _getIconForService(int index) {
     switch (index) {
       case 0:
-        return Icons.shopping_bag;
+        return kIconOrderStatus;
       case 1:
-        return Icons.lock_reset;
+        return kIconResetPassword;
       case 2:
-        return Icons.cloud_upload;
+        return kIconUploadProductImage;
       case 3:
-        return Icons.group;
+        return kIconUserManagement;
       case 4:
-        return Icons.security;
+        return kIconUserAuthorisation;
       case 5:
-        return Icons.note_add;
+        return kIconCreditNoteEntry;
       case 6:
-        return Icons.history;
+        return kIconCreditNoteStatus;
       case 7:
-        return Icons.fact_check;
+        return kIconCreditNoteApproval;
       default:
-        return Icons.help;
+        return kIconHome;
     }
   }
 
@@ -169,7 +172,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildServiceCard({
-    required IconData icon,
+    required String icon,
     required String title,
     required VoidCallback onTap,
   }) {
@@ -192,21 +195,24 @@ class ProfileScreen extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: AppPaddings.p14,
+          padding: AppPaddings.ph10,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              SvgPicture.asset(
                 icon,
-                size: 30,
-                color: kColorSecondary,
+                height: 30,
+                colorFilter: ColorFilter.mode(
+                  kColorSecondary,
+                  BlendMode.srcIn,
+                ),
               ),
               AppSpaces.v4,
               Text(
                 title,
                 style: TextStyles.kRegularFredoka(
-                  fontSize: FontSizes.k16FontSize,
+                  fontSize: FontSizes.k18FontSize,
                   color: kColorTextPrimary,
                 ).copyWith(
                   height: 1.25,

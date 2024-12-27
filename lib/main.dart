@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:shreeji_dairy/features/splash/screens/splash_screen.dart';
+import 'package:shreeji_dairy/features/bottom_nav/screens/bottom_nav_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
         ),
-        home: SplashScreen(),
+        home: BottomNavScreen(),
       ),
     );
   }
