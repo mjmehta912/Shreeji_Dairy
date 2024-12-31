@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
-import 'package:shreeji_dairy/styles/font_sizes.dart';
-import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/features/products/models/cart.dart';
+import 'package:shreeji_dairy/features/products/models/product.dart';
+import 'package:shreeji_dairy/features/products/widgets/sort_by_bottom_sheet.dart';
+
+class FilterConstants {
+  static const sortBy = 'Sort By';
+  static const category = 'Category';
+  static const group = 'Group';
+  static const subCategory = 'Sub Category';
+}
+
+enum SortCriteria {
+  priceHighToLow,
+  priceLowToHigh,
+  alphabeticalAToZ,
+  alphabeticalZToA,
+}
 
 class ProductsController extends GetxController {
   var isLoading = false.obs;
+
+  final RxDouble totalPrice = 0.0.obs; // Track total price reactively
 
   final List<String> imagePaths = [
     kImageAd1,
@@ -15,15 +32,13 @@ class ProductsController extends GetxController {
 
   var searchController = TextEditingController();
   final filterOptions = [
-    'Sort By',
-    'Category',
-    'Group',
-    'Sub Category',
+    FilterConstants.sortBy,
+    FilterConstants.category,
+    FilterConstants.group,
+    FilterConstants.subCategory,
   ].obs;
 
   final selectedFilters = <String>[].obs;
-
-  // Reactive variable for the selected sort option
   final RxString selectedSortBy = ''.obs;
 
   List<String> get reorderedFilterOptions {
@@ -33,38 +48,10 @@ class ProductsController extends GetxController {
           (filter) => !selected.contains(filter),
         )
         .toList();
-    return [...selected, ...unselected];
-  }
-
-  void toggleFilter(String filter) {
-    if (filter == 'Sort By') {
-      Get.bottomSheet(
-        SortOptionsBottomSheet(onSortSelected: sortProducts),
-        isScrollControlled: true,
-      );
-      return;
-    }
-    if (selectedFilters.contains(filter)) {
-      selectedFilters.remove(filter);
-    } else {
-      selectedFilters.add(filter);
-    }
-  }
-
-  void sortProducts(String criteria) {
-    // Set the selected sort option
-    selectedSortBy.value = criteria;
-
-    if (criteria == 'Price: High to Low') {
-      products.sort((a, b) => b.skus[0].rate.compareTo(a.skus[0].rate));
-    } else if (criteria == 'Price: Low to High') {
-      products.sort((a, b) => a.skus[0].rate.compareTo(b.skus[0].rate));
-    } else if (criteria == 'Alphabetical: A to Z') {
-      products.sort((a, b) => a.name.compareTo(b.name));
-    } else if (criteria == 'Alphabetical: Z to A') {
-      products.sort((a, b) => b.name.compareTo(a.name));
-    }
-    products.refresh(); // Notify listeners of the change
+    return [
+      ...selected,
+      ...unselected,
+    ];
   }
 
   final RxList<Product> products = RxList<Product>(
@@ -139,127 +126,144 @@ class ProductsController extends GetxController {
           Sku(size: '2KG', rate: 780.0),
         ],
       ),
+      Product(
+        name: 'Akhrot Barfi',
+        image: kImageAkhrotBarfi,
+        skus: [
+          Sku(size: '250 G', rate: 100.0),
+          Sku(size: '500 G', rate: 180.0),
+          Sku(size: '1 KG', rate: 350.0),
+          Sku(size: '2 KG', rate: 650.0),
+        ],
+      ),
+      Product(
+        name: 'Kala Jam',
+        image: kImageKalajam,
+        skus: [
+          Sku(size: '250G', rate: 120.0),
+          Sku(size: '500G', rate: 210.0),
+          Sku(size: '1KG', rate: 400.0),
+          Sku(size: '2KG', rate: 780.0),
+        ],
+      ),
     ],
   );
+
+  // Recalculate total price
+  void updateTotalPrice() {
+    totalPrice.value = cartItems.fold(
+      0.0,
+      (sum, item) => sum + (item.sku.rate * item.quantity.value),
+    );
+  }
+
+  void toggleFilter(String filter) {
+    if (filter == FilterConstants.sortBy) {
+      Get.bottomSheet(
+        SortOptionsBottomSheet(
+          onSortSelected: sortProducts,
+        ),
+        isScrollControlled: true,
+      );
+      return;
+    }
+    selectedFilters.contains(filter)
+        ? selectedFilters.remove(filter)
+        : selectedFilters.add(filter);
+  }
+
+  void sortProducts(SortCriteria criteria) {
+    switch (criteria) {
+      case SortCriteria.priceHighToLow:
+        products.sort(
+          (a, b) => b.skus[0].rate.compareTo(a.skus[0].rate),
+        );
+        break;
+      case SortCriteria.priceLowToHigh:
+        products.sort(
+          (a, b) => a.skus[0].rate.compareTo(b.skus[0].rate),
+        );
+        break;
+      case SortCriteria.alphabeticalAToZ:
+        products.sort(
+          (a, b) => a.name.compareTo(b.name),
+        );
+        break;
+      case SortCriteria.alphabeticalZToA:
+        products.sort(
+          (a, b) => b.name.compareTo(a.name),
+        );
+        break;
+    }
+    products.refresh();
+  }
 
   void incrementCounter(Product product, Sku sku) {
     int index = products.indexOf(product);
     int skuIndex = product.skus.indexOf(sku);
+
     if (index != -1 && skuIndex != -1) {
       sku.counter++;
+      addToCart(product, sku); // Ensure cart is updated
+      products.refresh();
     }
   }
 
   void decrementCounter(Product product, Sku sku) {
     int index = products.indexOf(product);
     int skuIndex = product.skus.indexOf(sku);
+
     if (index != -1 && skuIndex != -1 && sku.counter > 0) {
       sku.counter--;
+      removeFromCart(product, sku); // Ensure cart is updated
+      products.refresh();
     }
   }
-}
 
-class Product {
-  String name;
-  String image;
-  List<Sku> skus;
+  //! //! //! //! //! SHOPPING CART //! //! //! //! !//
 
-  Product({
-    required this.name,
-    required this.image,
-    required this.skus,
-  });
-}
+  final RxList<CartItem> cartItems = <CartItem>[].obs;
 
-class Sku {
-  String size;
-  RxInt counter = RxInt(0);
-  double rate;
-
-  Sku({
-    required this.size,
-    required this.rate,
-  });
-}
-
-class SortOptionsBottomSheet extends StatelessWidget {
-  final Function(String) onSortSelected;
-
-  const SortOptionsBottomSheet({
-    super.key,
-    required this.onSortSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Sort By',
-            style: TextStyles.kMediumFredoka(),
-          ),
-          const SizedBox(height: 16),
-          ListTile(
-            title: Text(
-              'Price: High to Low',
-              style: TextStyles.kRegularFredoka(
-                fontSize: FontSizes.k16FontSize,
-              ),
-            ),
-            onTap: () {
-              onSortSelected('Price: High to Low');
-              Get.back(); // Close the bottom sheet
-            },
-          ),
-          ListTile(
-            title: Text(
-              'Price: Low to High',
-              style: TextStyles.kRegularFredoka(
-                fontSize: FontSizes.k16FontSize,
-              ),
-            ),
-            onTap: () {
-              onSortSelected('Price: Low to High');
-              Get.back(); // Close the bottom sheet
-            },
-          ),
-          ListTile(
-            title: Text(
-              'Alphabetical: A to Z',
-              style: TextStyles.kRegularFredoka(
-                fontSize: FontSizes.k16FontSize,
-              ),
-            ),
-            onTap: () {
-              onSortSelected('Alphabetical: A to Z');
-              Get.back(); // Close the bottom sheet
-            },
-          ),
-          ListTile(
-            title: Text(
-              'Alphabetical: Z to A',
-              style: TextStyles.kRegularFredoka(
-                fontSize: FontSizes.k16FontSize,
-              ),
-            ),
-            onTap: () {
-              onSortSelected('Alphabetical: Z to A');
-              Get.back(); // Close the bottom sheet
-            },
-          ),
-          const SizedBox(height: 16),
-        ],
-      ),
+  void addToCart(Product product, Sku sku) {
+    var existingItem = cartItems.firstWhereOrNull(
+      (item) => item.product == product && item.sku == sku,
     );
+
+    if (existingItem != null) {
+      existingItem.quantity++;
+    } else {
+      cartItems.add(
+        CartItem(
+          product: product,
+          sku: sku,
+          quantity: RxInt(1),
+        ),
+      );
+    }
+
+    updateTotalPrice(); // Update total price after adding to cart
+    products.refresh();
+  }
+
+  void removeFromCart(Product product, Sku sku) {
+    var existingItem = cartItems.firstWhereOrNull(
+      (item) => item.product == product && item.sku == sku,
+    );
+
+    if (existingItem != null) {
+      if (existingItem.quantity > 1) {
+        existingItem.quantity--;
+      } else {
+        cartItems.remove(existingItem);
+      }
+    }
+
+    updateTotalPrice(); // Update total price after removing from cart
+    products.refresh();
+  }
+
+  void clearCart() {
+    cartItems.clear();
+    totalPrice.value = 0.0; // Reset total price when cart is cleared
   }
 }

@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
                   mainAxisSpacing: 16,
                   childAspectRatio: 1.25,
                 ),
-                itemCount: 8,
+                itemCount: 9,
                 itemBuilder: (context, index) {
                   return _buildServiceCard(
                     icon: _getIconForService(index),
@@ -143,6 +143,8 @@ class ProfileScreen extends StatelessWidget {
         return kIconCreditNoteStatus;
       case 7:
         return kIconCreditNoteApproval;
+      case 8:
+        return kIconLedgerFilled;
       default:
         return kIconHome;
     }
@@ -166,6 +168,8 @@ class ProfileScreen extends StatelessWidget {
         return 'Credit Note Status';
       case 7:
         return 'Credit Note Approval';
+      case 8:
+        return 'Outstandings';
       default:
         return 'Service';
     }

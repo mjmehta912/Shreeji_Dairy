@@ -12,6 +12,8 @@ const kImageBadamKali = 'assets/images/badamkali.png';
 const kImageCherryAlmond = 'assets/images/cherry_almond.png';
 const kImageKamal = 'assets/images/kamal.png';
 const kImageMangoShrikhand = 'assets/images/mango_shrikhand.png';
+const kImageAkhrotBarfi = 'assets/images/akhrot_barfi.png';
+const kImageKalajam = 'assets/images/kalajam.png';
 
 const kVideoSplash = 'assets/videos/splash.mp4';
 

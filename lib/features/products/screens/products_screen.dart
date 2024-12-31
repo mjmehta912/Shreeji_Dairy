@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/products/controllers/products_controller.dart';
+import 'package:shreeji_dairy/features/products/screens/cart_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
@@ -13,6 +14,7 @@ import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
+import 'package:badges/badges.dart' as badges;
 
 class ProductsScreen extends StatelessWidget {
   ProductsScreen({super.key});
@@ -30,16 +32,63 @@ class ProductsScreen extends StatelessWidget {
         appBar: AppAppbar(
           title: 'Products',
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: SvgPicture.asset(
-                kIconShoppingCart,
-                height: 20,
-                colorFilter: ColorFilter.mode(
-                  kColorTextPrimary,
-                  BlendMode.srcIn,
-                ),
-              ),
+            Obx(
+              () {
+                // If there are items in the cart, show the badge; otherwise, show an empty icon button
+                return Padding(
+                  padding: AppPaddings.ph6,
+                  child: GestureDetector(
+                    onTap: () {
+                      // Navigate to the cart screen when the badge or icon is clicked
+                      Get.to(() => CartScreen());
+                    },
+                    child: _controller.cartItems.isEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              Get.to(() => CartScreen());
+                            },
+                            icon: SvgPicture.asset(
+                              kIconShoppingCart,
+                              height: 20,
+                              colorFilter: ColorFilter.mode(
+                                kColorTextPrimary,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          )
+                        : badges.Badge(
+                            badgeContent: Text(
+                              '${_controller.cartItems.length}',
+                              style: TextStyles.kMediumFredoka(
+                                fontSize: FontSizes.k12FontSize,
+                                color: kColorWhite,
+                              ),
+                            ),
+                            badgeStyle: badges.BadgeStyle(
+                              badgeColor: kColorTextPrimary,
+                              padding: AppPaddings.p6,
+                            ),
+                            position: badges.BadgePosition.topEnd(
+                              top: 0,
+                              end: 0,
+                            ),
+                            child: IconButton(
+                              onPressed: () {
+                                Get.to(() => CartScreen());
+                              },
+                              icon: SvgPicture.asset(
+                                kIconShoppingCart,
+                                height: 20,
+                                colorFilter: ColorFilter.mode(
+                                  kColorTextPrimary,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                          ),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -83,7 +132,6 @@ class ProductsScreen extends StatelessWidget {
               ),
               SliverPersistentHeader(
                 pinned: true,
-                // floating: false,
                 delegate: _SearchBarAndChipsDelegate(
                   child: Container(
                     color: kColorWhite,
@@ -241,7 +289,6 @@ class ProductsScreen extends StatelessWidget {
                                                               ),
                                                             ),
                                                             AppSpaces.v4,
-                                                            // Initially show 'Add' button
                                                             Obx(
                                                               () => sku.counter
                                                                           .value ==
