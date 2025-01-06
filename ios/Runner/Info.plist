@@ -45,5 +45,29 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- 🚀 LOCATION PERMISSIONS -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We require your location to provide accurate services and personalized content.</string>
+
+	<!-- Optional: For background location access -->
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need access to your location even in the background to ensure seamless services.</string>
+
+	<!-- Optional: If requesting temporary location access -->
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>PurposeKey</key>
+		<string>We temporarily require your location for feature functionality.</string>
+	</dict>
+
+	<key>NSCameraUsageDescription</key>
+    <string>We need access to your camera for [reason]</string>
+
+    <key>NSMicrophoneUsageDescription</key>
+    <string>We need access to your microphone for [reason]</string>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to upload your profile image.</string>
 </dict>
 </plist>

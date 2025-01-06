@@ -3,8 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
-import 'package:shreeji_dairy/features/login/screens/login_screen.dart';
-import 'package:shreeji_dairy/features/password_management/reset_password/screens/reset_password_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -12,67 +10,70 @@ import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
+import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({
     super.key,
   });
 
-  // ignore: unused_field
   final ProfileController _controller = Get.put(
     ProfileController(),
   );
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kColorWhite,
-      appBar: AppAppbar(
-        title: 'Services',
-      ),
-      body: Padding(
-        padding: AppPaddings.p12,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildWelcomeText(),
-            AppSpaces.v16,
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 1.25,
-                ),
-                itemCount: 9,
-                itemBuilder: (context, index) {
-                  return _buildServiceCard(
-                    icon: _getIconForService(index),
-                    title: _getTitleForService(index),
-                    onTap: () => _onServiceTap(index),
-                  );
-                },
-              ),
-            ),
-            AppButton(
-              buttonHeight: 45,
-              title: 'Log Out',
-              onPressed: () {
-                Get.offAll(
-                  () => LoginScreen(),
-                  transition: Transition.fadeIn,
-                  duration: Duration(
-                    milliseconds: 500,
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: kColorWhite,
+          appBar: AppAppbar(
+            title: 'Services',
+          ),
+          body: Padding(
+            padding: AppPaddings.p12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildWelcomeText(),
+                AppSpaces.v16,
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 1.25,
+                    ),
+                    itemCount: 9,
+                    itemBuilder: (context, index) {
+                      return _buildServiceCard(
+                        icon: _getIconForService(index),
+                        title: _getTitleForService(index),
+                        onTap: () => _onServiceTap(index),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+                AppButton(
+                  buttonHeight: 45,
+                  title: 'Log Out',
+                  onPressed: () {
+                    _controller.logoutUser();
+                  },
+                ),
+                AppSpaces.v60,
+                AppSpaces.v10,
+              ],
             ),
-            AppSpaces.v60,
-            AppSpaces.v10,
-          ],
+          ),
         ),
-      ),
+        Obx(
+          () => AppLoadingOverlay(
+            isLoading: _controller.isLoading.value,
+          ),
+        ),
+      ],
     );
   }
 
@@ -93,13 +94,7 @@ class ProfileScreen extends StatelessWidget {
         () {};
         break;
       case 1:
-        Get.to(
-          () => ResetPasswordScreen(),
-          transition: Transition.fadeIn,
-          duration: Duration(
-            milliseconds: 500,
-          ),
-        );
+        () {};
         break;
       case 2:
         () {};

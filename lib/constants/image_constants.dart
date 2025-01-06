@@ -35,3 +35,5 @@ const kIconUserAuthorisation = 'assets/icons/user_authorisation.svg';
 const kIconCreditNoteEntry = 'assets/icons/credit_entry.svg';
 const kIconCreditNoteStatus = 'assets/icons/credit_status.svg';
 const kIconCreditNoteApproval = 'assets/icons/credit_approval.svg';
+
+const kLoadingGif = 'assets/images/loading.gif';

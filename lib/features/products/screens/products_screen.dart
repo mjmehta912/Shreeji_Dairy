@@ -158,7 +158,7 @@ class ProductsScreen extends StatelessWidget {
                                       label: Text(
                                         filter,
                                         style: TextStyles.kRegularFredoka(
-                                          fontSize: FontSizes.k14FontSize,
+                                          fontSize: FontSizes.k12FontSize,
                                           color: _controller.selectedFilters
                                                   .contains(filter)
                                               ? kColorWhite
