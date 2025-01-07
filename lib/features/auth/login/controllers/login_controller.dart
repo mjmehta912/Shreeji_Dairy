@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/features/auth/login/repositories/login_repo.dart';
-import 'package:shreeji_dairy/features/bottom_nav/screens/bottom_nav_screen.dart';
+import 'package:shreeji_dairy/features/select_customer/screens/select_customer_screen.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/helpers/device_helper.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
@@ -72,9 +72,13 @@ class LoginController extends GetxController {
         'userType',
         response['userType'].toString(),
       );
+      await SecureStorageHelper.write(
+        'mobileNo',
+        response['mobileNo'],
+      );
 
       Get.offAll(
-        () => BottomNavScreen(),
+        () => SelectCustomerScreen(),
       );
     } catch (e) {
       showErrorSnackbar(

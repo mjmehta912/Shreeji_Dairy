@@ -26,14 +26,15 @@ void showErrorSnackbar(
     ),
     titleText: Text(
       title,
-      style: TextStyles.kBoldFredoka(
+      style: TextStyles.kMediumFredoka(
         color: kColorWhite,
+        fontSize: FontSizes.k24FontSize,
       ),
     ),
     messageText: Text(
       message,
-      style: TextStyles.kMediumFredoka(
-        fontSize: FontSizes.k16FontSize,
+      style: TextStyles.kRegularFredoka(
+        fontSize: FontSizes.k18FontSize,
         color: kColorWhite,
       ),
     ),
@@ -43,8 +44,9 @@ void showErrorSnackbar(
       },
       child: Text(
         'OK',
-        style: TextStyles.kBoldFredoka(
+        style: TextStyles.kMediumFredoka(
           color: kColorWhite,
+          fontSize: FontSizes.k24FontSize,
         ),
       ),
     ),
@@ -73,14 +75,15 @@ void showSuccessSnackbar(
     ),
     titleText: Text(
       title,
-      style: TextStyles.kBoldFredoka(
+      style: TextStyles.kMediumFredoka(
         color: kColorWhite,
+        fontSize: FontSizes.k24FontSize,
       ),
     ),
     messageText: Text(
       message,
-      style: TextStyles.kMediumFredoka(
-        fontSize: FontSizes.k16FontSize,
+      style: TextStyles.kRegularFredoka(
+        fontSize: FontSizes.k18FontSize,
         color: kColorWhite,
       ),
     ),
@@ -90,8 +93,9 @@ void showSuccessSnackbar(
       },
       child: Text(
         'OK',
-        style: TextStyles.kBoldFredoka(
+        style: TextStyles.kMediumFredoka(
           color: kColorWhite,
+          fontSize: FontSizes.k24FontSize,
         ),
       ),
     ),

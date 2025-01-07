@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 
@@ -20,7 +21,7 @@ class AppLoadingOverlay extends StatelessWidget {
       children: [
         Positioned.fill(
           child: Container(
-            color: Colors.black.withOpacity(0.5),
+            color: kColorBlackWithOpacity,
           ),
         ),
         Center(

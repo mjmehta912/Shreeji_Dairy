@@ -7,7 +7,9 @@ class AppAppbar extends StatelessWidget implements PreferredSizeWidget {
   const AppAppbar({
     super.key,
     required this.title,
+    this.subtitle,
     this.titleStyle,
+    this.subtitleStyle,
     this.leading,
     this.automaticallyImplyLeading,
     this.actions,
@@ -15,7 +17,9 @@ class AppAppbar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   final String title;
+  final String? subtitle;
   final TextStyle? titleStyle;
+  final TextStyle? subtitleStyle;
   final Widget? leading;
   final bool? automaticallyImplyLeading;
   final List<Widget>? actions;
@@ -26,13 +30,27 @@ class AppAppbar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: automaticallyImplyLeading ?? false,
       backgroundColor: bgColor ?? kColorWhite,
-      title: Text(
-        title,
-        style: titleStyle ??
-            TextStyles.kRegularFredoka(
-              fontSize: FontSizes.k24FontSize,
-              color: kColorTextPrimary,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: titleStyle ??
+                TextStyles.kRegularFredoka(
+                  fontSize: FontSizes.k24FontSize,
+                  color: kColorTextPrimary,
+                ),
+          ),
+          if (subtitle != null)
+            Text(
+              subtitle!,
+              style: subtitleStyle ??
+                  TextStyles.kRegularFredoka(
+                    fontSize: FontSizes.k16FontSize,
+                    color: kColorTextPrimary,
+                  ),
             ),
+        ],
       ),
       leading: leading,
       actions: actions,

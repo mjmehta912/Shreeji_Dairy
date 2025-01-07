@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
@@ -16,16 +16,35 @@ import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 class BottomNavScreen extends StatelessWidget {
   BottomNavScreen({
     super.key,
+    required this.pCode,
+    required this.pName,
   });
 
-  final BottomNavController _controller = Get.put(BottomNavController());
+  final String pCode;
+  final String pName;
+  final BottomNavController _controller = Get.put(
+    BottomNavController(),
+  );
 
-  final List<Widget> pages = [
-    ProductsScreen(),
-    InvoicesScreen(),
-    LedgerScreen(),
-    ProfileScreen(),
+  final List<GlobalKey<NavigatorState>> _navigatorKeys = [
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
   ];
+
+  List<Widget> get pages => [
+        ProductsScreen(
+          pCode: pCode,
+          pName: pName,
+        ),
+        InvoicesScreen(),
+        LedgerScreen(),
+        ProfileScreen(
+          pCode: pCode,
+          pName: pName,
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +78,10 @@ class BottomNavScreen extends StatelessWidget {
                 label: 'Products',
                 index: 0,
                 isSelected: _controller.selectedIndex.value == 0,
-                onTap: () => _controller.changeIndex(0),
+                onTap: () {
+                  _controller.changeIndex(0);
+                  _navigatorKeys[0].currentState?.pushReplacementNamed('/');
+                },
               ),
               _buildNavItem(
                 icon: kIconBill,
@@ -67,7 +89,10 @@ class BottomNavScreen extends StatelessWidget {
                 label: 'Invoices',
                 index: 1,
                 isSelected: _controller.selectedIndex.value == 1,
-                onTap: () => _controller.changeIndex(1),
+                onTap: () {
+                  _controller.changeIndex(1);
+                  _navigatorKeys[1].currentState?.pushReplacementNamed('/');
+                },
               ),
               _buildNavItem(
                 icon: kIconLedger,
@@ -75,7 +100,10 @@ class BottomNavScreen extends StatelessWidget {
                 label: 'Ledger',
                 index: 2,
                 isSelected: _controller.selectedIndex.value == 2,
-                onTap: () => _controller.changeIndex(2),
+                onTap: () {
+                  _controller.changeIndex(2);
+                  _navigatorKeys[2].currentState?.pushReplacementNamed('/');
+                },
               ),
               _buildNavItem(
                 icon: kIconSettings,
@@ -83,7 +111,10 @@ class BottomNavScreen extends StatelessWidget {
                 label: 'Services',
                 index: 3,
                 isSelected: _controller.selectedIndex.value == 3,
-                onTap: () => _controller.changeIndex(3),
+                onTap: () {
+                  _controller.changeIndex(3);
+                  _navigatorKeys[3].currentState?.pushReplacementNamed('/');
+                },
               ),
             ],
           ),

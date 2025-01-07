@@ -3,7 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
+import 'package:shreeji_dairy/features/auth/reset_password/screens/reset_password_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
+import 'package:shreeji_dairy/features/select_customer/screens/select_customer_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
@@ -15,11 +17,44 @@ import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({
     super.key,
+    required this.pCode,
+    required this.pName,
   });
+
+  final String pCode;
+  final String pName;
 
   final ProfileController _controller = Get.put(
     ProfileController(),
   );
+
+  List<Map<String, dynamic>> get services {
+    List<Map<String, dynamic>> availableServices = [];
+
+    if (_controller.userType.value == '0' ||
+        _controller.userType.value == '1') {
+      availableServices.add(
+        {
+          "icon": kIconResetPassword,
+          "title": 'Change Customer',
+        },
+      );
+    }
+
+    availableServices.addAll([
+      {"icon": kIconResetPassword, "title": 'Reset Password'},
+      {"icon": kIconOrderStatus, "title": 'Order Status'},
+      {"icon": kIconUploadProductImage, "title": 'Upload Product Image'},
+      {"icon": kIconUserManagement, "title": 'User Management'},
+      {"icon": kIconUserAuthorisation, "title": 'User Authorisation'},
+      {"icon": kIconCreditNoteEntry, "title": 'Credit Note Entry'},
+      {"icon": kIconCreditNoteStatus, "title": 'Credit Note Status'},
+      {"icon": kIconCreditNoteApproval, "title": 'Credit Note Approval'},
+      {"icon": kIconLedgerFilled, "title": 'Outstandings'},
+    ]);
+
+    return availableServices;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +80,7 @@ class ProfileScreen extends StatelessWidget {
                       mainAxisSpacing: 16,
                       childAspectRatio: 1.25,
                     ),
-                    itemCount: 9,
+                    itemCount: services.length,
                     itemBuilder: (context, index) {
                       return _buildServiceCard(
                         icon: _getIconForService(index),
@@ -78,96 +113,71 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildWelcomeText() {
-    return Text(
-      'Welcome, User!',
-      style: TextStyles.kRegularFredoka(
-        fontSize: FontSizes.k30FontSize,
-        color: kColorSecondary,
-      ),
-      textAlign: TextAlign.left,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Obx(
+          () {
+            String fullName =
+                '${_controller.firstName.value} ${_controller.lastName.value}';
+
+            return Text(
+              'Welcome, $fullName!',
+              style: TextStyles.kRegularFredoka(
+                fontSize: FontSizes.k30FontSize,
+                color: kColorSecondary,
+              ),
+              textAlign: TextAlign.left,
+            );
+          },
+        ),
+      ],
     );
   }
 
   void _onServiceTap(int index) {
     switch (index) {
       case 0:
-        () {};
+        Get.offAll(
+          () => SelectCustomerScreen(),
+        );
         break;
       case 1:
-        () {};
+        Get.to(
+          () => ResetPasswordScreen(
+            mobileNumber: _controller.mobileNumber.value,
+          ),
+        );
         break;
       case 2:
-        () {};
         break;
       case 3:
-        () {};
         break;
       case 4:
-        () {};
         break;
       case 5:
-        () {};
         break;
       case 6:
-        () {};
         break;
       case 7:
-        () {};
+        break;
+      case 8:
+        break;
+      case 9:
         break;
       default:
-        () {};
         break;
     }
   }
 
   String _getIconForService(int index) {
-    switch (index) {
-      case 0:
-        return kIconOrderStatus;
-      case 1:
-        return kIconResetPassword;
-      case 2:
-        return kIconUploadProductImage;
-      case 3:
-        return kIconUserManagement;
-      case 4:
-        return kIconUserAuthorisation;
-      case 5:
-        return kIconCreditNoteEntry;
-      case 6:
-        return kIconCreditNoteStatus;
-      case 7:
-        return kIconCreditNoteApproval;
-      case 8:
-        return kIconLedgerFilled;
-      default:
-        return kIconHome;
-    }
+    var service = services[index];
+    return service['icon'] ?? kIconHome;
   }
 
   String _getTitleForService(int index) {
-    switch (index) {
-      case 0:
-        return 'Order Status';
-      case 1:
-        return 'Reset Password';
-      case 2:
-        return 'Upload Product Image';
-      case 3:
-        return 'User Management';
-      case 4:
-        return 'User Authorisation';
-      case 5:
-        return 'Credit Note Entry';
-      case 6:
-        return 'Credit Note Status';
-      case 7:
-        return 'Credit Note Approval';
-      case 8:
-        return 'Outstandings';
-      default:
-        return 'Service';
-    }
+    var service = services[index];
+    return service['title'] ?? 'Service';
   }
 
   Widget _buildServiceCard({
@@ -178,10 +188,7 @@ class ProfileScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: RadialGradient(
-          colors: [
-            kColorWhite,
-            kColorSecondary,
-          ],
+          colors: [kColorWhite, kColorSecondary],
           radius: 10,
         ),
         borderRadius: BorderRadius.circular(10),

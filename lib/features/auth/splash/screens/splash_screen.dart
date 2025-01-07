@@ -3,12 +3,14 @@ import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/auth/login/screens/login_screen.dart';
-import 'package:shreeji_dairy/features/bottom_nav/screens/bottom_nav_screen.dart';
+import 'package:shreeji_dairy/features/select_customer/screens/select_customer_screen.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 import 'package:video_player/video_player.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({
+    super.key,
+  });
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -41,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 () {
                   if (token != null && token.isNotEmpty) {
                     Get.offAll(
-                      () => BottomNavScreen(),
+                      () => SelectCustomerScreen(),
                     );
                   } else {
                     Get.offAll(
