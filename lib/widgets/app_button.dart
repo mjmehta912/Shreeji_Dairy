@@ -49,6 +49,7 @@ class AppButton extends StatelessWidget {
             fontSize: titleSize ?? FontSizes.k20FontSize,
             color: titleColor ?? kColorWhite,
           ),
+          textAlign: TextAlign.center,
         ),
       ),
     );

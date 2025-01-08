@@ -95,17 +95,13 @@ class CartController extends GetxController {
 
       if (response != null && response.containsKey('message')) {
         String message = response['message'];
+        print(message);
 
         await getCartProducts(
           pCode: pCode,
         );
         await productsController.searchProduct(
           pCode: pCode,
-        );
-
-        showSuccessSnackbar(
-          'Removed',
-          message,
         );
       }
     } catch (e) {

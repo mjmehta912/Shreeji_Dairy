@@ -141,7 +141,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     controller: _controller.searchController,
                     hintText: 'Search Product',
                     onChanged: (value) {
-                      _controller.searchProduct(searchText: value);
+                      _controller.searchProduct(
+                        searchText: value,
+                        pCode: widget.pCode,
+                      );
                     },
                   ),
                   AppSpaces.v10,

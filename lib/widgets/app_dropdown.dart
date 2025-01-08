@@ -44,6 +44,8 @@ class AppDropdown extends StatelessWidget {
         baseStyle: TextStyles.kRegularFredoka(
           fontSize: FontSizes.k20FontSize,
           color: kColorTextPrimary,
+        ).copyWith(
+          height: 1.25,
         ),
         decoration: InputDecoration(
           hintText: hintText,

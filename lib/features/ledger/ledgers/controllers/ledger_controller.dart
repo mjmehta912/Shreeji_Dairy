@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shreeji_dairy/features/invoice/invoices/models/invoice_dm.dart';
-import 'package:shreeji_dairy/features/invoice/invoices/repositories/invoices_repo.dart';
+import 'package:shreeji_dairy/features/ledger/ledgers/models/ledger_dm.dart';
+import 'package:shreeji_dairy/features/ledger/ledgers/repositories/ledger_repo.dart';
 import 'package:shreeji_dairy/features/select_customer/models/customer_dm.dart';
 import 'package:shreeji_dairy/features/select_customer/repositories/select_customer_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
-class InvoicesController extends GetxController {
+class LedgerController extends GetxController {
   var isLoading = false.obs;
 
   var customers = <CustomerDm>[].obs;
@@ -16,10 +16,11 @@ class InvoicesController extends GetxController {
   var selectedCustomerCode = ''.obs;
   var fromDateController = TextEditingController();
   var toDateController = TextEditingController();
-  var searchController = TextEditingController();
-  var selectedStatus = 'ALL'.obs;
+  var showBillDtl = false.obs;
+  var showItemDtl = false.obs;
+  var showSign = true.obs;
 
-  var invoices = <InvoiceDm>[].obs;
+  var ledgerData = <LedgerDm>[].obs;
 
   Future<void> getCustomers() async {
     try {
@@ -53,26 +54,28 @@ class InvoicesController extends GetxController {
     );
 
     selectedCustomerCode.value = customerObj.pCode;
-    getInvoices();
+
+    getLedger();
   }
 
-  Future<void> getInvoices() async {
+  Future<void> getLedger() async {
     try {
       isLoading.value = true;
 
-      final fetchedInvoices = await InvoicesRepo.getInvoices(
+      final fetchedLedger = await LedgerRepo.getLedger(
         fromDate: DateFormat('yyyy-MM-dd').format(
           DateFormat('dd-MM-yyyy').parse(fromDateController.text),
         ),
         toDate: DateFormat('yyyy-MM-dd').format(
           DateFormat('dd-MM-yyyy').parse(toDateController.text),
         ),
-        status: selectedStatus.value,
-        invNo: searchController.text,
         pCode: selectedCustomerCode.value,
+        billDtl: showBillDtl.value,
+        itemDtl: showItemDtl.value,
+        sign: showSign.value,
       );
 
-      invoices.assignAll(fetchedInvoices);
+      ledgerData.assignAll(fetchedLedger);
     } catch (e) {
       showErrorSnackbar(
         'Error',
