@@ -42,7 +42,7 @@ class AppDropdown extends StatelessWidget {
       items: (filter, infiniteScrollProps) => items,
       decoratorProps: DropDownDecoratorProps(
         baseStyle: TextStyles.kRegularFredoka(
-          fontSize: FontSizes.k20FontSize,
+          fontSize: FontSizes.k18FontSize,
           color: kColorTextPrimary,
         ).copyWith(
           height: 1.25,

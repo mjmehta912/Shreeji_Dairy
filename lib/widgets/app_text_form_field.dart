@@ -50,7 +50,7 @@ class AppTextFormField extends StatelessWidget {
       onChanged: onChanged,
       keyboardType: keyboardType ?? TextInputType.text,
       style: TextStyles.kRegularFredoka(
-        fontSize: FontSizes.k20FontSize,
+        fontSize: FontSizes.k18FontSize,
         color: kColorTextPrimary,
       ),
       obscureText: isObscure!,
