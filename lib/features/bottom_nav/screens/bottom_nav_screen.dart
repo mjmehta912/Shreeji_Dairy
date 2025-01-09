@@ -5,7 +5,7 @@ import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/bottom_nav/controllers/bottom_nav_controller.dart';
 import 'package:shreeji_dairy/features/invoice/invoices/screens/invoices_screen.dart';
-import 'package:shreeji_dairy/features/ledger/ledgers/screens/ledger_screen.dart';
+import 'package:shreeji_dairy/features/ledger/screens/ledger_screen.dart';
 import 'package:shreeji_dairy/features/products/screens/products_screen.dart';
 import 'package:shreeji_dairy/features/profile/screens/profile_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';

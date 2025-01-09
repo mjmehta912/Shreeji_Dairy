@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/auth/reset_password/screens/reset_password_screen.dart';
+import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/features/select_customer/screens/select_customer_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
@@ -164,6 +165,12 @@ class ProfileScreen extends StatelessWidget {
       case 8:
         break;
       case 9:
+        Get.to(
+          () => OutstandingsScreen(
+            pCode: pCode,
+            pName: pName,
+          ),
+        );
         break;
       default:
         break;

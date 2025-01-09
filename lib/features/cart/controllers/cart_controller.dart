@@ -66,8 +66,8 @@ class CartController extends GetxController {
       );
 
       if (response != null && response.containsKey('message')) {
-        String message = response['message'];
-        print(message);
+        // String message = response['message'];
+        // print(message);
       }
     } catch (e) {
       showErrorSnackbar(
@@ -94,8 +94,8 @@ class CartController extends GetxController {
       );
 
       if (response != null && response.containsKey('message')) {
-        String message = response['message'];
-        print(message);
+        // String message = response['message'];
+        // print(message);
 
         await getCartProducts(
           pCode: pCode,

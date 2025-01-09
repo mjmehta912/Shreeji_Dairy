@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shreeji_dairy/features/ledger/ledgers/models/ledger_dm.dart';
-import 'package:shreeji_dairy/features/ledger/ledgers/repositories/ledger_repo.dart';
+import 'package:shreeji_dairy/features/ledger/models/ledger_dm.dart';
+import 'package:shreeji_dairy/features/ledger/repositories/ledger_repo.dart';
+import 'package:shreeji_dairy/features/ledger/screens/ledger_pdf_screen.dart';
 import 'package:shreeji_dairy/features/select_customer/models/customer_dm.dart';
 import 'package:shreeji_dairy/features/select_customer/repositories/select_customer_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
@@ -76,6 +77,40 @@ class LedgerController extends GetxController {
       );
 
       ledgerData.assignAll(fetchedLedger);
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> downloadLedger() async {
+    try {
+      isLoading.value = true;
+      final pdfBytes = await LedgerRepo.downloadLedger(
+        fromDate: DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(fromDateController.text),
+        ),
+        toDate: DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(toDateController.text),
+        ),
+        pCode: selectedCustomerCode.value,
+        billDtl: showBillDtl.value,
+        itemDtl: showItemDtl.value,
+        sign: showSign.value,
+      );
+
+      if (pdfBytes != null && pdfBytes.isNotEmpty) {
+        Get.to(
+          () => LedgerPdfScreen(
+            pdfBytes: pdfBytes,
+            title: selectedCustomerCode.value,
+          ),
+        );
+      }
     } catch (e) {
       showErrorSnackbar(
         'Error',

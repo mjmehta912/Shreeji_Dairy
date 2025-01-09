@@ -40,6 +40,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void initState() {
     _controller.searchProduct(
       pCode: widget.pCode,
+      searchText: _controller.searchController.text,
     );
     super.initState();
   }
@@ -192,12 +193,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                             children: [
                                               Text(
                                                 product.printName,
-                                                style: TextStyles.kMediumFredoka(
-                                                        color:
-                                                            kColorTextPrimary,
-                                                        fontSize: FontSizes
-                                                            .k18FontSize)
-                                                    .copyWith(
+                                                style:
+                                                    TextStyles.kMediumFredoka(
+                                                  color: kColorTextPrimary,
+                                                  fontSize:
+                                                      FontSizes.k18FontSize,
+                                                ).copyWith(
                                                   height: 1,
                                                 ),
                                               ),
@@ -281,6 +282,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
                                                                                 await _controller.searchProduct(
                                                                                   pCode: widget.pCode,
+                                                                                  searchText: _controller.searchController.text,
                                                                                 );
                                                                               },
                                                                               title: 'Add +',
@@ -303,6 +305,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
                                                                                   await _controller.searchProduct(
                                                                                     pCode: widget.pCode,
+                                                                                    searchText: _controller.searchController.text,
                                                                                   );
                                                                                 },
                                                                                 child: const Icon(
@@ -331,6 +334,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
                                                                                   await _controller.searchProduct(
                                                                                     pCode: widget.pCode,
+                                                                                    searchText: _controller.searchController.text,
                                                                                   );
                                                                                 },
                                                                                 child: const Icon(

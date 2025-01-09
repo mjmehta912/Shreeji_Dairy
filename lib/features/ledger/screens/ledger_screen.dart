@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/ledger/ledgers/controllers/ledger_controller.dart';
+import 'package:shreeji_dairy/features/ledger/controllers/ledger_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
@@ -80,7 +80,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
               title: 'Ledger',
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _controller.downloadLedger();
+                  },
                   icon: Icon(
                     Icons.file_download_outlined,
                     color: kColorTextPrimary,
@@ -363,13 +365,10 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                                 subLedger.pnameC != null &&
                                                 subLedger.pnameC!.isNotEmpty))
                                           Padding(
-                                            padding: AppPaddings
-                                                .pv2, // Optional spacing
+                                            padding: AppPaddings.pv2,
                                             child: Divider(
-                                              color:
-                                                  kColorGrey, // Replace with your divider color
-                                              thickness:
-                                                  1.0, // Divider thickness
+                                              color: kColorGrey,
+                                              thickness: 1.0,
                                             ),
                                           ),
                                         for (var subLedger
