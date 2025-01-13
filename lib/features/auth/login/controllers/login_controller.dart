@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/features/auth/login/repositories/login_repo.dart';
@@ -48,11 +51,29 @@ class LoginController extends GetxController {
       return;
     }
 
+    String? fcmToken;
+    if (Platform.isAndroid) {
+      // Fetch FCM Token only on Android
+      fcmToken = await FirebaseMessaging.instance.getToken();
+
+      if (fcmToken == null) {
+        showErrorSnackbar(
+          'Login Failed',
+          'Unable to fetch FCM Token.',
+        );
+        isLoading.value = false;
+        return;
+      }
+    } else {
+      // Pass blank token for iOS
+      fcmToken = '';
+    }
+
     try {
       var response = await LoginRepo.loginUser(
         mobileNo: mobileNumberController.text,
         password: passwordController.text,
-        fcmToken: '',
+        fcmToken: fcmToken,
         deviceId: deviceId,
       );
 
