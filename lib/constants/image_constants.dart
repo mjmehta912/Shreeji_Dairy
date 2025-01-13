@@ -31,6 +31,7 @@ const kIconOrderStatus = 'assets/icons/order_status.svg';
 const kIconResetPassword = 'assets/icons/reset_password.svg';
 const kIconUploadProductImage = 'assets/icons/image_upload.svg';
 const kIconUserManagement = 'assets/icons/user_management.svg';
+const kIconUserRights = 'assets/icons/user_rights.svg';
 const kIconUserAuthorisation = 'assets/icons/user_authorisation.svg';
 const kIconCreditNoteEntry = 'assets/icons/credit_entry.svg';
 const kIconCreditNoteStatus = 'assets/icons/credit_status.svg';

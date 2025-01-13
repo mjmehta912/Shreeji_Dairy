@@ -7,6 +7,7 @@ import 'package:shreeji_dairy/features/auth/reset_password/screens/reset_passwor
 import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/features/select_customer/screens/select_customer_screen.dart';
+import 'package:shreeji_dairy/features/user_rights/users/screens/users_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
@@ -31,8 +32,8 @@ class ProfileScreen extends StatelessWidget {
   List<Map<String, dynamic>> get services {
     List<Map<String, dynamic>> availableServices = [];
 
-    if (_controller.userType.value == '0' ||
-        _controller.userType.value == '1') {
+    // Add services conditionally
+    if (_controller.userType.value != '3') {
       availableServices.add(
         {
           "icon": kIconChangeCustomer,
@@ -41,17 +42,95 @@ class ProfileScreen extends StatelessWidget {
       );
     }
 
-    availableServices.addAll([
-      {"icon": kIconResetPassword, "title": 'Reset \nPassword'},
-      {"icon": kIconOrderStatus, "title": 'Order \nStatus'},
-      {"icon": kIconUploadProductImage, "title": 'Upload Product \nImage'},
-      {"icon": kIconUserManagement, "title": 'User \nManagement'},
-      {"icon": kIconUserAuthorisation, "title": 'User \nAuthorisation'},
-      {"icon": kIconCreditNoteEntry, "title": 'Credit Note \nEntry'},
-      {"icon": kIconCreditNoteStatus, "title": 'Credit Note \nStatus'},
-      {"icon": kIconCreditNoteApproval, "title": 'Credit Note \nApproval'},
-      {"icon": kIconViewOutstandings, "title": 'View \nOutstandings'},
-    ]);
+    if (true) {
+      // Replace with actual condition for Reset Password
+      availableServices.add(
+        {
+          "icon": kIconResetPassword,
+          "title": 'Reset \nPassword',
+        },
+      );
+    }
+
+    if (true) {
+      // Replace with actual condition for Order Status
+      availableServices.add(
+        {
+          "icon": kIconOrderStatus,
+          "title": 'Order \nStatus',
+        },
+      );
+    }
+
+    if (true) {
+      // Replace with actual condition for Upload Product Image
+      availableServices.add(
+        {
+          "icon": kIconUploadProductImage,
+          "title": 'Upload Product \nImage',
+        },
+      );
+    }
+
+    if (true) {
+      // Replace with actual condition for User Management
+      availableServices.add(
+        {
+          "icon": kIconUserRights,
+          "title": 'User \nRights',
+        },
+      );
+    }
+
+    if (true) {
+      // Replace with actual condition for User Authorisation
+      availableServices.add(
+        {
+          "icon": kIconUserAuthorisation,
+          "title": 'User \nAuthorisation',
+        },
+      );
+    }
+
+    if (true) {
+      // Replace with actual condition for Credit Note Entry
+      availableServices.add(
+        {
+          "icon": kIconCreditNoteEntry,
+          "title": 'Credit Note \nEntry',
+        },
+      );
+    }
+
+    if (true) {
+      // Replace with actual condition for Credit Note Status
+      availableServices.add(
+        {
+          "icon": kIconCreditNoteStatus,
+          "title": 'Credit Note \nStatus',
+        },
+      );
+    }
+
+    if (true) {
+      // Replace with actual condition for Credit Note Approval
+      availableServices.add(
+        {
+          "icon": kIconCreditNoteApproval,
+          "title": 'Credit Note \nApproval',
+        },
+      );
+    }
+
+    if (true) {
+      // Replace with actual condition for View Outstandings
+      availableServices.add(
+        {
+          "icon": kIconViewOutstandings,
+          "title": 'View \nOutstandings',
+        },
+      );
+    }
 
     return availableServices;
   }
@@ -137,11 +216,25 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Obx(
           () {
-            return Text(
-              'Hi, ${_controller.firstName.value}!',
-              style: TextStyles.kRegularFredoka(
-                fontSize: FontSizes.k30FontSize,
-                color: kColorSecondary,
+            return RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text:
+                        '${_controller.getDynamicGreeting(_controller.userType.value)} \n',
+                    style: TextStyles.kLightFredoka(
+                      color: kColorTextPrimary,
+                    ),
+                  ),
+                  TextSpan(
+                    text:
+                        '${_controller.firstName.value} ${_controller.lastName.value}',
+                    style: TextStyles.kRegularFredoka(
+                      fontSize: FontSizes.k30FontSize,
+                      color: kColorSecondary,
+                    ),
+                  ),
+                ],
               ),
               textAlign: TextAlign.left,
             );
@@ -170,6 +263,9 @@ class ProfileScreen extends StatelessWidget {
       case 3:
         break;
       case 4:
+        Get.to(
+          () => UsersScreen(),
+        );
         break;
       case 5:
         break;

@@ -17,6 +17,23 @@ class ProfileController extends GetxController {
     loadUserInfo();
   }
 
+  String getDynamicGreeting(String userType) {
+    switch (userType) {
+      case '0':
+        return 'Hello, Visionary Leader!';
+      case '1':
+        return 'Greetings, Branch Chief!';
+      case '2':
+        return 'Welcome, Sales Pro!';
+      case '3':
+        return 'Hi, Business Partner!';
+      case '4':
+        return 'Hello, Valued Guest!';
+      default:
+        return 'Welcome, Esteemed User!';
+    }
+  }
+
   Future<void> loadUserInfo() async {
     try {
       firstName.value =
