@@ -68,7 +68,12 @@ class _CartScreenState extends State<CartScreen> {
               children: [
                 Obx(
                   () {
-                    if (_controller.cartProducts.isEmpty) {
+                    if (_controller.isLoading.value) {
+                      return SizedBox.shrink();
+                    }
+
+                    if (_controller.cartProducts.isEmpty &&
+                        !_controller.isLoading.value) {
                       return Expanded(
                         child: Center(
                           child: Text(
@@ -319,7 +324,8 @@ class _CartScreenState extends State<CartScreen> {
                   },
                 ),
                 Obx(
-                  () => _controller.cartProducts.isNotEmpty
+                  () => _controller.cartProducts.isNotEmpty &&
+                          !_controller.isLoading.value
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -349,7 +355,11 @@ class _CartScreenState extends State<CartScreen> {
                               title: 'Place Order',
                               titleColor: kColorTextPrimary,
                               buttonColor: kColorPrimary,
-                              onPressed: () {},
+                              onPressed: () {
+                                _controller.placeOrder(
+                                  pCode: widget.pCode,
+                                );
+                              },
                             ),
                           ],
                         )

@@ -126,7 +126,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                       ),
                     ],
                   ),
-                  AppSpaces.v10,
+                  AppSpaces.v6,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -148,10 +148,16 @@ class _LedgerScreenState extends State<LedgerScreen> {
                       ),
                     ],
                   ),
-                  AppSpaces.v10,
+                  AppSpaces.v6,
                   Obx(
                     () => _controller.ledgerData.isNotEmpty &&
-                            _controller.isLoading.value == false
+                            !_controller.isLoading.value &&
+                            (_controller.ledgerData.first.remarks != null &&
+                                _controller
+                                    .ledgerData.first.remarks!.isNotEmpty &&
+                                _controller.ledgerData.first.remarks!
+                                    .toLowerCase()
+                                    .contains('opening'))
                         ? AppCard2(
                             child: Padding(
                               padding: AppPaddings.p8,
@@ -160,14 +166,19 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    _controller.ledgerData.first.remarks!,
+                                    'Opening Balance',
                                     style: TextStyles.kMediumFredoka(
                                       color: kColorTextPrimary,
                                       fontSize: FontSizes.k18FontSize,
                                     ),
                                   ),
                                   Text(
-                                    _controller.ledgerData.first.balance!,
+                                    _controller.ledgerData.first.balance !=
+                                                null &&
+                                            _controller.ledgerData.first
+                                                .balance!.isNotEmpty
+                                        ? _controller.ledgerData.first.balance!
+                                        : '0.0',
                                     style: TextStyles.kMediumFredoka(
                                       color: kColorTextPrimary,
                                       fontSize: FontSizes.k18FontSize,
@@ -188,35 +199,30 @@ class _LedgerScreenState extends State<LedgerScreen> {
                               itemCount: _controller.ledgerData
                                   .where((ledger) =>
                                       ledger.invNo != null &&
-                                      ledger.invNo!.isNotEmpty)
-                                  .map(
-                                    (ledger) => ledger.invNo,
-                                  )
-                                  .toSet()
+                                      ledger.invNo!.isNotEmpty &&
+                                      ledger.isParent ==
+                                          1) // Filter for valid parents
+                                  .toList()
                                   .length,
                               itemBuilder: (context, index) {
-                                final uniqueInvNos = _controller.ledgerData
+                                // Get unique parent entries
+                                final parentEntries = _controller.ledgerData
                                     .where((ledger) =>
                                         ledger.invNo != null &&
-                                        ledger.invNo!.isNotEmpty)
-                                    .map(
-                                      (ledger) => ledger.invNo,
-                                    )
-                                    .toSet()
+                                        ledger.invNo!.isNotEmpty &&
+                                        ledger.isParent == 1)
                                     .toList();
 
-                                final filteredLedgerData = _controller
-                                    .ledgerData
-                                    .where(
-                                      (ledger) =>
-                                          ledger.invNo == uniqueInvNos[index],
-                                    )
+                                final parent = parentEntries[index];
+
+                                // Get child entries for the current parent
+                                final childEntries = _controller.ledgerData
+                                    .where((ledger) =>
+                                        ledger.invNo != null &&
+                                        ledger.invNo!.isNotEmpty &&
+                                        ledger.invNo == parent.invNo &&
+                                        ledger.isParent == 0)
                                     .toList();
-
-                                final ledger = filteredLedgerData.first;
-
-                                bool isFirstOccurrence =
-                                    filteredLedgerData.indexOf(ledger) == 0;
 
                                 return AppCard2(
                                   child: Padding(
@@ -228,37 +234,17 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        isFirstOccurrence
-                                            ? ledger.pnameC != null &&
-                                                    ledger.pnameC!.isNotEmpty
-                                                ? Text(
-                                                    ledger.pnameC!,
-                                                    style: TextStyles
-                                                        .kMediumFredoka(
-                                                      color: kColorSecondary,
-                                                      fontSize:
-                                                          FontSizes.k16FontSize,
-                                                    ).copyWith(
-                                                      height: 1,
-                                                    ),
-                                                  )
-                                                : (ledger.remarks != null &&
-                                                        ledger
-                                                            .remarks!.isNotEmpty
-                                                    ? Text(
-                                                        ledger.remarks!,
-                                                        style: TextStyles
-                                                            .kMediumFredoka(
-                                                          color:
-                                                              kColorSecondary,
-                                                          fontSize: FontSizes
-                                                              .k16FontSize,
-                                                        ).copyWith(
-                                                          height: 1,
-                                                        ),
-                                                      )
-                                                    : SizedBox.shrink())
-                                            : SizedBox.shrink(),
+                                        // Parent Entry Display
+                                        Text(
+                                          parent.pnameC != null &&
+                                                  parent.pnameC!.isNotEmpty
+                                              ? parent.pnameC!
+                                              : '',
+                                          style: TextStyles.kMediumFredoka(
+                                            color: kColorSecondary,
+                                            fontSize: FontSizes.k16FontSize,
+                                          ).copyWith(height: 1),
+                                        ),
                                         AppSpaces.v4,
                                         Row(
                                           mainAxisAlignment:
@@ -269,38 +255,32 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  ledger.invNo!,
+                                                  parent.invNo!,
                                                   style: TextStyles
                                                       .kRegularFredoka(
                                                     color: kColorTextPrimary,
                                                     fontSize:
                                                         FontSizes.k14FontSize,
-                                                  ).copyWith(
-                                                    height: 1,
-                                                  ),
+                                                  ).copyWith(height: 1),
                                                 ),
                                                 Text(
-                                                  ledger.date!,
+                                                  parent.date!,
                                                   style: TextStyles
                                                       .kRegularFredoka(
                                                     color: kColorTextPrimary,
                                                     fontSize:
                                                         FontSizes.k14FontSize,
-                                                  ).copyWith(
-                                                    height: 1,
-                                                  ),
+                                                  ).copyWith(height: 1),
                                                 ),
                                                 AppSpaces.v4,
                                                 Text(
-                                                  ledger.dbc!,
+                                                  parent.dbc!,
                                                   style:
                                                       TextStyles.kMediumFredoka(
                                                     color: kColorSecondary,
                                                     fontSize:
                                                         FontSizes.k16FontSize,
-                                                  ).copyWith(
-                                                    height: 1,
-                                                  ),
+                                                  ).copyWith(height: 1),
                                                 ),
                                               ],
                                             ),
@@ -308,80 +288,169 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
-                                                ledger.credit! == 0.00
+                                                parent.credit! == 0.00
                                                     ? Text(
-                                                        ledger.debit!
+                                                        parent.debit!
                                                             .toString(),
                                                         style: TextStyles
                                                             .kMediumFredoka(
                                                           color: kColorRed,
                                                           fontSize: FontSizes
                                                               .k18FontSize,
-                                                        ).copyWith(
-                                                          height: 1,
-                                                        ),
+                                                        ).copyWith(height: 1),
                                                       )
                                                     : Text(
-                                                        ledger.credit!
+                                                        parent.credit!
                                                             .toString(),
                                                         style: TextStyles
                                                             .kMediumFredoka(
                                                           color: Colors.green,
                                                           fontSize: FontSizes
                                                               .k18FontSize,
-                                                        ).copyWith(
-                                                          height: 1,
-                                                        ),
+                                                        ).copyWith(height: 1),
                                                       ),
                                                 Text(
-                                                  'Bal : ${ledger.balance}',
+                                                  'Bal : ${parent.balance}',
                                                   style:
                                                       TextStyles.kMediumFredoka(
                                                     color: kColorTextPrimary,
                                                     fontSize:
                                                         FontSizes.k18FontSize,
-                                                  ).copyWith(
-                                                    height: 1,
-                                                  ),
+                                                  ).copyWith(height: 1),
                                                 ),
+                                                AppSpaces.v4,
                                               ],
                                             ),
                                           ],
                                         ),
-                                        if (ledger.pnameC != null &&
-                                            ledger.pnameC!.isNotEmpty)
-                                          Text(
-                                            ledger.remarks!,
-                                            style: TextStyles.kRegularFredoka(
-                                              color: kColorTextPrimary,
-                                              fontSize: FontSizes.k16FontSize,
-                                            ).copyWith(
-                                              height: 1,
-                                            ),
-                                            maxLines: 2,
+
+                                        parent.remarks != null &&
+                                                parent.remarks!.isNotEmpty
+                                            ? Text(
+                                                parent.remarks!,
+                                                style:
+                                                    TextStyles.kRegularFredoka(
+                                                  color: kColorTextPrimary,
+                                                  fontSize:
+                                                      FontSizes.k14FontSize,
+                                                ).copyWith(
+                                                  height: 1,
+                                                ),
+                                              )
+                                            : SizedBox.shrink(),
+
+                                        if (childEntries.isNotEmpty &&
+                                            childEntries.any((child) =>
+                                                child.pnameC != null &&
+                                                child.pnameC!.isNotEmpty &&
+                                                child.remarks!
+                                                    .toLowerCase()
+                                                    .contains('bill')))
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              AppSpaces.v4,
+                                              Divider(
+                                                color: kColorGrey,
+                                                thickness: 1.0,
+                                              ),
+                                              Text(
+                                                'Bill Detail',
+                                                style:
+                                                    TextStyles.kMediumFredoka(
+                                                  color: kColorTextPrimary,
+                                                  fontSize:
+                                                      FontSizes.k16FontSize,
+                                                ).copyWith(
+                                                  height: 1,
+                                                ),
+                                              ),
+                                              AppSpaces.v2,
+                                            ],
                                           ),
-                                        if (filteredLedgerData.skip(1).any(
-                                            (subLedger) =>
-                                                subLedger.pnameC != null &&
-                                                subLedger.pnameC!.isNotEmpty))
-                                          Padding(
-                                            padding: AppPaddings.pv2,
-                                            child: Divider(
-                                              color: kColorGrey,
-                                              thickness: 1.0,
+
+                                        for (var child in childEntries)
+                                          if (child.pnameC != null &&
+                                              child.pnameC!.isNotEmpty &&
+                                              child.remarks!
+                                                  .toLowerCase()
+                                                  .contains('bill'))
+                                            Padding(
+                                              padding: AppPaddings.pv2,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    child.pnameC ?? '',
+                                                    style: TextStyles
+                                                        .kRegularFredoka(
+                                                      color: kColorTextPrimary,
+                                                      fontSize:
+                                                          FontSizes.k14FontSize,
+                                                    ).copyWith(
+                                                      height: 1,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
+
+                                        if (childEntries.isNotEmpty &&
+                                            childEntries.any((child) =>
+                                                child.pnameC != null &&
+                                                child.pnameC!.isNotEmpty &&
+                                                child.remarks!
+                                                    .toLowerCase()
+                                                    .contains('item')))
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Divider(
+                                                color: kColorGrey,
+                                                thickness: 1.0,
+                                              ),
+                                              Text(
+                                                'Item Detail',
+                                                style:
+                                                    TextStyles.kMediumFredoka(
+                                                  color: kColorTextPrimary,
+                                                  fontSize:
+                                                      FontSizes.k16FontSize,
+                                                ).copyWith(
+                                                  height: 1,
+                                                ),
+                                              ),
+                                              AppSpaces.v2,
+                                            ],
                                           ),
-                                        for (var subLedger
-                                            in filteredLedgerData.skip(1))
-                                          if (subLedger.pnameC != null &&
-                                              subLedger.pnameC!.isNotEmpty)
-                                            Text(
-                                              subLedger.pnameC!,
-                                              style: TextStyles.kRegularFredoka(
-                                                color: kColorTextPrimary,
-                                                fontSize: FontSizes.k16FontSize,
-                                              ).copyWith(
-                                                height: 1,
+
+                                        for (var child in childEntries)
+                                          if (child.pnameC != null &&
+                                              child.pnameC!.isNotEmpty &&
+                                              child.remarks!
+                                                  .toLowerCase()
+                                                  .contains('item'))
+                                            Padding(
+                                              padding: AppPaddings.pv2,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    child.pnameC ?? '',
+                                                    style: TextStyles
+                                                        .kRegularFredoka(
+                                                      color: kColorTextPrimary,
+                                                      fontSize:
+                                                          FontSizes.k14FontSize,
+                                                    ).copyWith(
+                                                      height: 1,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                       ],
@@ -413,16 +482,17 @@ class _LedgerScreenState extends State<LedgerScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                closingBalance.remarks ?? '',
+                                'Closing Balance',
                                 style: TextStyles.kMediumFredoka(
                                   color: kColorTextPrimary,
                                   fontSize: FontSizes.k18FontSize,
                                 ),
                               ),
                               Text(
-                                closingBalance.credit == 0.00
-                                    ? closingBalance.debit.toString()
-                                    : closingBalance.credit.toString(),
+                                closingBalance.balance != null &&
+                                        closingBalance.balance!.isNotEmpty
+                                    ? closingBalance.balance!
+                                    : '0.0',
                                 style: TextStyles.kMediumFredoka(
                                   color: kColorTextPrimary,
                                   fontSize: FontSizes.k18FontSize,
@@ -477,8 +547,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
                   children: [
                     Text(
                       'Show Bill Detail',
-                      style:
-                          TextStyles.kRegularFredoka(color: kColorTextPrimary),
+                      style: TextStyles.kRegularFredoka(
+                        color: kColorTextPrimary,
+                      ),
                     ),
                     Switch(
                       activeTrackColor: kColorSecondary,

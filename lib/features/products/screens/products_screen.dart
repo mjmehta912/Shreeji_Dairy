@@ -151,7 +151,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   AppSpaces.v10,
                   Obx(
                     () {
-                      if (_controller.products.isEmpty) {
+                      if (_controller.isLoading.value) {
+                        return const SizedBox.shrink();
+                      }
+                      if (_controller.products.isEmpty &&
+                          !_controller.isLoading.value) {
                         return Center(
                           child: Text(
                             'No products found',

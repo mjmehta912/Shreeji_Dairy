@@ -91,4 +91,27 @@ class CartRepo {
       rethrow;
     }
   }
+
+  static Future<dynamic> placeOrder({
+    required String pCode,
+  }) async {
+    String? token = await SecureStorageHelper.read(
+      'token',
+    );
+
+    final Map<String, dynamic> requestBody = {
+      'PCODE': pCode,
+    };
+
+    try {
+      var response = await ApiService.postRequest(
+        endpoint: '/Order/placeOrder',
+        requestBody: requestBody,
+        token: token,
+      );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

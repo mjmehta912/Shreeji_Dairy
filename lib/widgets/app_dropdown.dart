@@ -42,15 +42,15 @@ class AppDropdown extends StatelessWidget {
       items: (filter, infiniteScrollProps) => items,
       decoratorProps: DropDownDecoratorProps(
         baseStyle: TextStyles.kRegularFredoka(
-          fontSize: FontSizes.k18FontSize,
+          fontSize: FontSizes.k16FontSize,
           color: kColorTextPrimary,
         ).copyWith(
-          height: 1.25,
+          height: 1,
         ),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyles.kLightFredoka(
-            fontSize: FontSizes.k18FontSize,
+            fontSize: FontSizes.k16FontSize,
             color: kColorGrey,
           ),
           errorStyle: TextStyles.kRegularFredoka(
@@ -97,13 +97,16 @@ class AppDropdown extends StatelessWidget {
             item,
             style: TextStyles.kRegularFredoka(
               color: kColorTextPrimary,
+              fontSize: FontSizes.k16FontSize,
+            ).copyWith(
+              height: 1.25,
             ),
           ),
         ),
         showSearchBox: showSearchBox ?? true,
         searchFieldProps: TextFieldProps(
           style: TextStyles.kRegularFredoka(
-            fontSize: FontSizes.k20FontSize,
+            fontSize: FontSizes.k16FontSize,
             color: kColorTextPrimary,
           ),
           cursorColor: kColorTextPrimary,
@@ -111,7 +114,7 @@ class AppDropdown extends StatelessWidget {
           decoration: InputDecoration(
             hintText: searchHintText ?? 'Search',
             hintStyle: TextStyles.kLightFredoka(
-              fontSize: FontSizes.k18FontSize,
+              fontSize: FontSizes.k16FontSize,
               color: kColorGrey,
             ),
             errorStyle: TextStyles.kMediumFredoka(

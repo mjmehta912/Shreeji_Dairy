@@ -28,13 +28,13 @@ void showErrorSnackbar(
       title,
       style: TextStyles.kMediumFredoka(
         color: kColorWhite,
-        fontSize: FontSizes.k24FontSize,
+        fontSize: FontSizes.k20FontSize,
       ),
     ),
     messageText: Text(
       message,
       style: TextStyles.kRegularFredoka(
-        fontSize: FontSizes.k18FontSize,
+        fontSize: FontSizes.k16FontSize,
         color: kColorWhite,
       ),
     ),
@@ -77,13 +77,13 @@ void showSuccessSnackbar(
       title,
       style: TextStyles.kMediumFredoka(
         color: kColorWhite,
-        fontSize: FontSizes.k24FontSize,
+        fontSize: FontSizes.k20FontSize,
       ),
     ),
     messageText: Text(
       message,
       style: TextStyles.kRegularFredoka(
-        fontSize: FontSizes.k18FontSize,
+        fontSize: FontSizes.k16FontSize,
         color: kColorWhite,
       ),
     ),
@@ -95,7 +95,7 @@ void showSuccessSnackbar(
         'OK',
         style: TextStyles.kMediumFredoka(
           color: kColorWhite,
-          fontSize: FontSizes.k24FontSize,
+          fontSize: FontSizes.k20FontSize,
         ),
       ),
     ),

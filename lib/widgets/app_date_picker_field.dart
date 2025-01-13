@@ -105,14 +105,14 @@ class _AppDatePickerTextFormFieldState
       enabled: widget.enabled,
       validator: widget.validator,
       style: TextStyles.kRegularFredoka(
-        fontSize: FontSizes.k18FontSize,
+        fontSize: FontSizes.k16FontSize,
         color: kColorTextPrimary,
       ),
       readOnly: true,
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: TextStyles.kLightFredoka(
-          fontSize: FontSizes.k18FontSize,
+          fontSize: FontSizes.k16FontSize,
           color: kColorGrey,
         ),
         errorStyle: TextStyles.kRegularFredoka(

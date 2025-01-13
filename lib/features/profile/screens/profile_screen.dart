@@ -12,7 +12,6 @@ import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
-import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -36,22 +35,22 @@ class ProfileScreen extends StatelessWidget {
         _controller.userType.value == '1') {
       availableServices.add(
         {
-          "icon": kIconResetPassword,
-          "title": 'Change Customer',
+          "icon": kIconChangeCustomer,
+          "title": 'Change \nCustomer',
         },
       );
     }
 
     availableServices.addAll([
-      {"icon": kIconResetPassword, "title": 'Reset Password'},
-      {"icon": kIconOrderStatus, "title": 'Order Status'},
-      {"icon": kIconUploadProductImage, "title": 'Upload Product Image'},
-      {"icon": kIconUserManagement, "title": 'User Management'},
-      {"icon": kIconUserAuthorisation, "title": 'User Authorisation'},
-      {"icon": kIconCreditNoteEntry, "title": 'Credit Note Entry'},
-      {"icon": kIconCreditNoteStatus, "title": 'Credit Note Status'},
-      {"icon": kIconCreditNoteApproval, "title": 'Credit Note Approval'},
-      {"icon": kIconLedgerFilled, "title": 'Outstandings'},
+      {"icon": kIconResetPassword, "title": 'Reset \nPassword'},
+      {"icon": kIconOrderStatus, "title": 'Order \nStatus'},
+      {"icon": kIconUploadProductImage, "title": 'Upload Product \nImage'},
+      {"icon": kIconUserManagement, "title": 'User \nManagement'},
+      {"icon": kIconUserAuthorisation, "title": 'User \nAuthorisation'},
+      {"icon": kIconCreditNoteEntry, "title": 'Credit Note \nEntry'},
+      {"icon": kIconCreditNoteStatus, "title": 'Credit Note \nStatus'},
+      {"icon": kIconCreditNoteApproval, "title": 'Credit Note \nApproval'},
+      {"icon": kIconViewOutstandings, "title": 'View \nOutstandings'},
     ]);
 
     return availableServices;
@@ -65,6 +64,34 @@ class ProfileScreen extends StatelessWidget {
           backgroundColor: kColorWhite,
           appBar: AppAppbar(
             title: 'Services',
+            actions: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _controller.logoutUser();
+                    },
+                    child: Text(
+                      'Logout',
+                      style: TextStyles.kRegularFredoka(
+                        fontSize: FontSizes.k16FontSize,
+                        color: kColorTextPrimary,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      _controller.logoutUser();
+                    },
+                    icon: Icon(
+                      Icons.logout,
+                      color: kColorTextPrimary,
+                      size: 25,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
           body: Padding(
             padding: AppPaddings.p12,
@@ -79,7 +106,7 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisCount: 2,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
-                      childAspectRatio: 1.25,
+                      childAspectRatio: 1.5,
                     ),
                     itemCount: services.length,
                     itemBuilder: (context, index) {
@@ -91,15 +118,6 @@ class ProfileScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                AppButton(
-                  buttonHeight: 45,
-                  title: 'Log Out',
-                  onPressed: () {
-                    _controller.logoutUser();
-                  },
-                ),
-                AppSpaces.v60,
-                AppSpaces.v10,
               ],
             ),
           ),
@@ -119,11 +137,8 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Obx(
           () {
-            String fullName =
-                '${_controller.firstName.value} ${_controller.lastName.value}';
-
             return Text(
-              'Welcome, $fullName!',
+              'Hi, ${_controller.firstName.value}!',
               style: TextStyles.kRegularFredoka(
                 fontSize: FontSizes.k30FontSize,
                 color: kColorSecondary,
@@ -195,7 +210,10 @@ class ProfileScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: RadialGradient(
-          colors: [kColorWhite, kColorSecondary],
+          colors: [
+            kColorWhite,
+            kColorSecondary,
+          ],
           radius: 10,
         ),
         borderRadius: BorderRadius.circular(10),
@@ -206,9 +224,9 @@ class ProfileScreen extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         child: Padding(
-          padding: AppPaddings.ph10,
+          padding: AppPaddings.ph8,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,

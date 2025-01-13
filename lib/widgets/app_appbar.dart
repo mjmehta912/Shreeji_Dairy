@@ -30,6 +30,7 @@ class AppAppbar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: automaticallyImplyLeading ?? false,
       backgroundColor: bgColor ?? kColorWhite,
+      centerTitle: false,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

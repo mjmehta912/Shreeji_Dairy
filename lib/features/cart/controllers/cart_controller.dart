@@ -113,4 +113,36 @@ class CartController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<void> placeOrder({
+    required String pCode,
+  }) async {
+    isLoading.value = true;
+
+    try {
+      var response = await CartRepo.placeOrder(
+        pCode: pCode,
+      );
+
+      if (response != null && response.containsKey('message')) {
+        String message = response['message'];
+
+        Get.back();
+        await productsController.searchProduct(
+          pCode: pCode,
+        );
+        showSuccessSnackbar(
+          'Order Placed!',
+          message,
+        );
+      }
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

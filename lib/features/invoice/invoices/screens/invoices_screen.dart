@@ -138,7 +138,11 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
                   AppSpaces.v10,
                   Obx(
                     () {
-                      if (_controller.invoices.isEmpty) {
+                      if (_controller.isLoading.value) {
+                        return const SizedBox.shrink();
+                      }
+                      if (_controller.invoices.isEmpty &&
+                          !_controller.isLoading.value) {
                         return Expanded(
                           child: Center(
                             child: Text(
