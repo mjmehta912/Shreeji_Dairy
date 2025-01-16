@@ -22,7 +22,7 @@ class StoreCategoryDm {
 class StoreProductDm {
   final String printname;
   final String? pack;
-  final int cartQty;
+  int cartQty;
   final String icode;
   final double rate;
 

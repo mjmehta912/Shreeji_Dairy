@@ -21,6 +21,8 @@ class AppTextFormField extends StatelessWidget {
     this.suffixIcon,
     this.isObscure = false,
     this.inputFormatters,
+    this.onFieldSubmitted,
+    this.fontSize,
   });
 
   final TextEditingController controller;
@@ -35,6 +37,8 @@ class AppTextFormField extends StatelessWidget {
   final Widget? suffixIcon;
   final bool? isObscure;
   final List<TextInputFormatter>? inputFormatters;
+  final void Function(String)? onFieldSubmitted;
+  final double? fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +54,11 @@ class AppTextFormField extends StatelessWidget {
       onChanged: onChanged,
       keyboardType: keyboardType ?? TextInputType.text,
       style: TextStyles.kRegularFredoka(
-        fontSize: FontSizes.k16FontSize,
+        fontSize: fontSize ?? FontSizes.k16FontSize,
         color: kColorTextPrimary,
       ),
       obscureText: isObscure!,
+      onFieldSubmitted: onFieldSubmitted,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyles.kLightFredoka(

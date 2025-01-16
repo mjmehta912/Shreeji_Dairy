@@ -10,6 +10,7 @@ class StoreOrderController extends GetxController {
 
   var storeProducts = <StoreCategoryDm>[].obs;
   var searchController = TextEditingController();
+  final Map<String, TextEditingController> productControllers = {};
 
   Future<void> fetchStoreProducts({
     String icCodes = '',
@@ -33,6 +34,53 @@ class StoreOrderController extends GetxController {
       );
 
       storeProducts.assignAll(fetchedProducts);
+
+      for (var category in storeProducts) {
+        for (var product in category.products) {
+          productControllers[product.icode] = TextEditingController(
+            text: product.cartQty == 0 ? '' : product.cartQty.toString(),
+          );
+        }
+      }
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> addOrUpdateCart({
+    required String iCode,
+  }) async {
+    // Retrieve the quantity entered in the TextEditingController
+    final qty = int.tryParse(productControllers[iCode]?.text ?? '0') ?? 0;
+    final product = storeProducts
+        .expand((category) => category.products)
+        .firstWhere((product) => product.icode == iCode);
+    final rate = product.rate;
+
+    String? storePcode = await SecureStorageHelper.read(
+      'storePCode',
+    );
+
+    isLoading.value = true;
+
+    try {
+      var response = await StoreOrderRepo.addOrUpdateCart(
+        pCode: storePcode!,
+        iCode: iCode,
+        qty: qty,
+        rate: rate,
+      );
+
+      if (response != null && response.containsKey('message')) {
+        fetchStoreProducts(
+          searchText: searchController.text,
+        );
+      }
     } catch (e) {
       showErrorSnackbar(
         'Error',
