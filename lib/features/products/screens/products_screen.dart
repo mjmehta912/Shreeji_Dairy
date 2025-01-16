@@ -156,11 +156,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       }
                       if (_controller.products.isEmpty &&
                           !_controller.isLoading.value) {
-                        return Center(
-                          child: Text(
-                            'No products found',
-                            style: TextStyles.kMediumFredoka(
-                              color: kColorTextPrimary,
+                        return Expanded(
+                          child: Center(
+                            child: Text(
+                              'No products found',
+                              style: TextStyles.kMediumFredoka(
+                                color: kColorTextPrimary,
+                              ),
                             ),
                           ),
                         );

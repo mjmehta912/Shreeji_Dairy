@@ -18,10 +18,14 @@ class BottomNavScreen extends StatelessWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    this.branchCode,
+    this.branchName,
   });
 
   final String pCode;
   final String pName;
+  final String? branchCode;
+  final String? branchName;
   final BottomNavController _controller = Get.put(
     BottomNavController(),
   );

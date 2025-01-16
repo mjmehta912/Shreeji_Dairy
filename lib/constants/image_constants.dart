@@ -38,5 +38,6 @@ const kIconCreditNoteStatus = 'assets/icons/credit_status.svg';
 const kIconCreditNoteApproval = 'assets/icons/credit_approval.svg';
 const kIconChangeCustomer = 'assets/icons/change_customer.svg';
 const kIconViewOutstandings = 'assets/icons/view_outstandings.svg';
+const kIconStoreOrder = 'assets/icons/store_order.svg';
 
 const kLoadingGif = 'assets/images/loading.gif';

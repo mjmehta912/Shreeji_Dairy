@@ -26,7 +26,7 @@ class UserAccessDm {
 class MenuAccessDm {
   final int menuId;
   final String menuName;
-  final bool access;
+  bool access;
 
   MenuAccessDm({
     required this.menuId,
@@ -44,11 +44,11 @@ class MenuAccessDm {
 }
 
 class LedgerDateDm {
-  final String ledgerStart;
+  final String? ledgerStart;
   final String? ledgerEnd;
 
   LedgerDateDm({
-    required this.ledgerStart,
+    this.ledgerStart,
     this.ledgerEnd,
   });
 

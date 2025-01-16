@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shreeji_dairy/constants/color_constants.dart';
+import 'package:shreeji_dairy/features/auth/login/screens/login_screen.dart';
 import 'package:shreeji_dairy/features/products/models/product_dm.dart';
 import 'package:shreeji_dairy/features/products/repositories/products_repo.dart';
+import 'package:shreeji_dairy/styles/font_sizes.dart';
+import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
+import 'package:shreeji_dairy/utils/helpers/device_helper.dart';
+import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
+import 'package:shreeji_dairy/utils/helpers/version_info_service.dart';
 
 class ProductsController extends GetxController {
   var isLoading = false.obs;
@@ -18,24 +26,86 @@ class ProductsController extends GetxController {
     String searchText = '',
     String pCode = '',
   }) async {
-    try {
-      isLoading.value = true;
+    isLoading.value = true;
+    String? version = await VersionService.getVersion();
+    String? deviceId = await DeviceHelper().getDeviceId();
 
+    if (deviceId == null) {
+      showErrorSnackbar(
+        'Login Failed',
+        'Unable to fetch device ID.',
+      );
+      isLoading.value = false;
+      return;
+    }
+
+    try {
       final fetchedProducts = await ProductsRepo.searchProduct(
         icCodes: icCodes,
         igCodes: igCodes,
         ipackgCodes: ipackgCodes,
         searchText: searchText,
         pCode: pCode,
+        deviceId: deviceId,
+        version: version,
       );
 
       products.assignAll(fetchedProducts);
       calculateCartCount();
     } catch (e) {
-      showErrorSnackbar(
-        'Error',
-        e.toString(),
-      );
+      if (e is Map<String, dynamic>) {
+        if (e['status'] == 403) {
+          await SecureStorageHelper.clearAll();
+          Get.offAll(() => LoginScreen());
+          showErrorSnackbar(
+            'Session Expired',
+            e['message'] ?? 'Unauthorized access. Device ID is invalid.',
+          );
+        } else if (e['status'] == 402) {
+          showDialog(
+            context: Get.context!,
+            barrierDismissible: false,
+            builder: (context) => WillPopScope(
+              onWillPop: () async {
+                return false;
+              },
+              child: AlertDialog(
+                title: Text(
+                  e['message'],
+                  style: TextStyles.kMediumFredoka(
+                    fontSize: FontSizes.k18FontSize,
+                    color: kColorTextPrimary,
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      SystemNavigator.pop();
+                    },
+                    child: Text(
+                      'Close App',
+                      style: TextStyles.kMediumFredoka(
+                        fontSize: FontSizes.k18FontSize,
+                        color: kColorSecondary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          showErrorSnackbar(
+            'Error',
+            e['message'] ?? 'An unknown error occurred.',
+          );
+        }
+      } else {
+        showErrorSnackbar(
+          'Error',
+          e.toString(),
+        );
+      }
     } finally {
       isLoading.value = false;
     }
@@ -57,10 +127,7 @@ class ProductsController extends GetxController {
         rate: rate,
       );
 
-      if (response != null && response.containsKey('message')) {
-        // String message = response['message'];
-        // print(message);
-      }
+      if (response != null && response.containsKey('message')) {}
     } catch (e) {
       showErrorSnackbar(
         'Error',

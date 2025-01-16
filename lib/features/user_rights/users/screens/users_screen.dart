@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/user_rights/user_access/screens/user_Access_screen.dart';
+import 'package:shreeji_dairy/features/user_rights/user_access/screens/user_access_screen.dart.dart';
 import 'package:shreeji_dairy/features/user_rights/users/controllers/users_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -34,7 +34,9 @@ class UsersScreen extends StatelessWidget {
             appBar: AppAppbar(
               title: 'Users',
               leading: IconButton(
-                onPressed: () => Get.back(),
+                onPressed: () {
+                  Get.back();
+                },
                 icon: Icon(
                   Icons.arrow_back_ios,
                   size: 25,

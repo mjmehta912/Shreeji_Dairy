@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/features/auth/login/screens/login_screen.dart';
+import 'package:shreeji_dairy/features/profile/repositories/profile_repo.dart';
+import 'package:shreeji_dairy/features/user_rights/user_access/models/user_access_dm.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
@@ -10,12 +12,7 @@ class ProfileController extends GetxController {
   var lastName = ''.obs;
   var userType = ''.obs;
   var mobileNumber = ''.obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    loadUserInfo();
-  }
+  var menuAccess = <MenuAccessDm>[].obs;
 
   String getDynamicGreeting(String userType) {
     switch (userType) {
@@ -64,6 +61,30 @@ class ProfileController extends GetxController {
       showErrorSnackbar(
         'Logout Failed',
         'Something went wrong. Please try again.',
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getUserAccess() async {
+    isLoading.value = true;
+    String? userId = await SecureStorageHelper.read(
+      'userId',
+    );
+
+    try {
+      final fetchedUserAccess = await ProfileRepo.getUserAccess(
+        userId: int.parse(userId!),
+      );
+
+      menuAccess.assignAll(
+        fetchedUserAccess.menuAccess,
+      );
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
       );
     } finally {
       isLoading.value = false;

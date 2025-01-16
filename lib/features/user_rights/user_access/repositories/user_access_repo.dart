@@ -57,4 +57,60 @@ class UserAccessRepo {
       rethrow;
     }
   }
+
+  static Future<dynamic> setMenuAccess({
+    required int userId,
+    required int menuId,
+    required bool menuAccess,
+  }) async {
+    String? token = await SecureStorageHelper.read(
+      'token',
+    );
+
+    final Map<String, dynamic> requestBody = {
+      'UserId': userId,
+      'MENUID': menuId,
+      'Access': menuAccess,
+    };
+
+    try {
+      var response = await ApiService.postRequest(
+        endpoint: '/User/setAccess',
+        requestBody: requestBody,
+        token: token,
+      );
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<dynamic> setLedger({
+    required int userId,
+    String? ledgerStart,
+    String? ledgerEnd,
+  }) async {
+    String? token = await SecureStorageHelper.read(
+      'token',
+    );
+
+    final Map<String, dynamic> requestBody = {
+      'UserId': userId,
+      'LedgerStart': ledgerStart,
+      'LedgerEnd': ledgerEnd,
+    };
+
+    try {
+      var response = await ApiService.postRequest(
+        endpoint: '/User/setLedger',
+        requestBody: requestBody,
+        token: token,
+      );
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

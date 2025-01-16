@@ -6,6 +6,7 @@ import 'package:shreeji_dairy/features/ledger/controllers/ledger_controller.dart
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
+import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
@@ -43,19 +44,35 @@ class _LedgerScreenState extends State<LedgerScreen> {
   void initialize() async {
     await _controller.getCustomers();
 
-    final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
+    String? ledgerStart = await SecureStorageHelper.read('ledgerStart');
+    String? ledgerEnd = await SecureStorageHelper.read('ledgerEnd');
 
-    int currentYear = DateTime.now().year;
-    int startYear = DateTime.now().month < 4 ? currentYear - 1 : currentYear;
-    int endYear = startYear + 1;
+    DateTime today = DateTime.now();
 
-    _controller.fromDateController.text = dateFormat.format(
-      DateTime(startYear, 4, 1),
-    );
+    DateTime financialYearStart;
+    if (today.month < 4) {
+      financialYearStart = DateTime(today.year - 1, 4, 1);
+    } else {
+      financialYearStart = DateTime(today.year, 4, 1);
+    }
 
-    _controller.toDateController.text = dateFormat.format(
-      DateTime(endYear, 3, 31),
-    );
+    if (ledgerStart == null || ledgerStart.isEmpty) {
+      ledgerStart = DateFormat('dd-MM-yyyy').format(financialYearStart);
+    }
+    if (ledgerEnd == null || ledgerEnd.isEmpty) {
+      ledgerEnd = DateFormat('dd-MM-yyyy').format(today);
+    }
+
+    if (ledgerStart.isNotEmpty && ledgerEnd.isEmpty) {
+      ledgerEnd = DateFormat('dd-MM-yyyy').format(today);
+    }
+
+    if (ledgerEnd.isNotEmpty && ledgerStart.isEmpty) {
+      ledgerStart = DateFormat('dd-MM-yyyy').format(financialYearStart);
+    }
+
+    _controller.fromDateController.text = ledgerStart;
+    _controller.toDateController.text = ledgerEnd;
 
     _controller.selectedCustomer.value = widget.pName;
     _controller.selectedCustomerCode.value = widget.pCode;
@@ -200,12 +217,10 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                   .where((ledger) =>
                                       ledger.invNo != null &&
                                       ledger.invNo!.isNotEmpty &&
-                                      ledger.isParent ==
-                                          1) // Filter for valid parents
+                                      ledger.isParent == 1)
                                   .toList()
                                   .length,
                               itemBuilder: (context, index) {
-                                // Get unique parent entries
                                 final parentEntries = _controller.ledgerData
                                     .where((ledger) =>
                                         ledger.invNo != null &&
@@ -215,7 +230,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
 
                                 final parent = parentEntries[index];
 
-                                // Get child entries for the current parent
                                 final childEntries = _controller.ledgerData
                                     .where((ledger) =>
                                         ledger.invNo != null &&
@@ -234,7 +248,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        // Parent Entry Display
                                         Text(
                                           parent.pnameC != null &&
                                                   parent.pnameC!.isNotEmpty
@@ -323,7 +336,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                             ),
                                           ],
                                         ),
-
                                         parent.remarks != null &&
                                                 parent.remarks!.isNotEmpty
                                             ? Text(
@@ -338,7 +350,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                                 ),
                                               )
                                             : SizedBox.shrink(),
-
                                         if (childEntries.isNotEmpty &&
                                             childEntries.any((child) =>
                                                 child.pnameC != null &&
@@ -369,7 +380,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                               AppSpaces.v2,
                                             ],
                                           ),
-
                                         for (var child in childEntries)
                                           if (child.pnameC != null &&
                                               child.pnameC!.isNotEmpty &&
@@ -396,7 +406,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                                 ],
                                               ),
                                             ),
-
                                         if (childEntries.isNotEmpty &&
                                             childEntries.any((child) =>
                                                 child.pnameC != null &&
@@ -426,7 +435,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                               AppSpaces.v2,
                                             ],
                                           ),
-
                                         for (var child in childEntries)
                                           if (child.pnameC != null &&
                                               child.pnameC!.isNotEmpty &&

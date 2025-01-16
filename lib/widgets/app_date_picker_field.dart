@@ -14,6 +14,7 @@ class AppDatePickerTextFormField extends StatefulWidget {
     this.fillColor,
     this.enabled = true,
     this.validator,
+    this.onChanged,
   });
 
   final TextEditingController dateController;
@@ -21,6 +22,7 @@ class AppDatePickerTextFormField extends StatefulWidget {
   final Color? fillColor;
   final bool enabled;
   final String? Function(String? value)? validator;
+  final void Function(String value)? onChanged;
 
   @override
   State<AppDatePickerTextFormField> createState() =>
@@ -85,6 +87,10 @@ class _AppDatePickerTextFormFieldState
               DateFormat(dateFormat).format(pickedDate);
         },
       );
+
+      if (widget.onChanged != null) {
+        widget.onChanged!(widget.dateController.text);
+      }
     }
   }
 

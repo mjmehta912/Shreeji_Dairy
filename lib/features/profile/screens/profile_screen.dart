@@ -6,7 +6,8 @@ import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/auth/reset_password/screens/reset_password_screen.dart';
 import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
-import 'package:shreeji_dairy/features/select_customer/screens/select_customer_screen.dart';
+import 'package:shreeji_dairy/features/select_customer/screens/select_customer_branch_screen.dart';
+import 'package:shreeji_dairy/features/store_order/screens/store_order_screen.dart';
 import 'package:shreeji_dairy/features/user_rights/users/screens/users_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -15,8 +16,8 @@ import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({
     super.key,
     required this.pCode,
     required this.pName,
@@ -25,114 +26,106 @@ class ProfileScreen extends StatelessWidget {
   final String pCode;
   final String pName;
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   final ProfileController _controller = Get.put(
     ProfileController(),
   );
 
-  List<Map<String, dynamic>> get services {
-    List<Map<String, dynamic>> availableServices = [];
-
-    // Add services conditionally
-    if (_controller.userType.value != '3') {
-      availableServices.add(
-        {
-          "icon": kIconChangeCustomer,
-          "title": 'Change \nCustomer',
+  Map<String, Map<String, dynamic>> get menuConfig {
+    return {
+      "Change Customer": {
+        "icon": kIconChangeCustomer,
+        "action": () {
+          Get.offAll(
+            () => SelectCustomerBranchScreen(),
+          );
         },
-      );
-    }
-
-    if (true) {
-      // Replace with actual condition for Reset Password
-      availableServices.add(
-        {
-          "icon": kIconResetPassword,
-          "title": 'Reset \nPassword',
+      },
+      "Reset Password": {
+        "icon": kIconResetPassword,
+        "action": () {
+          Get.to(
+            () => ResetPasswordScreen(
+              mobileNumber: _controller.mobileNumber.value,
+            ),
+          );
         },
-      );
-    }
-
-    if (true) {
-      // Replace with actual condition for Order Status
-      availableServices.add(
-        {
-          "icon": kIconOrderStatus,
-          "title": 'Order \nStatus',
+      },
+      "Order Status": {
+        "icon": kIconOrderStatus,
+        "action": () {},
+      },
+      "View Outstanding": {
+        "icon": kIconViewOutstandings,
+        "action": () {
+          Get.to(
+            () => OutstandingsScreen(
+              pCode: widget.pCode,
+              pName: widget.pName,
+            ),
+          );
         },
-      );
-    }
-
-    if (true) {
-      // Replace with actual condition for Upload Product Image
-      availableServices.add(
-        {
-          "icon": kIconUploadProductImage,
-          "title": 'Upload Product \nImage',
+      },
+      "Upload Product Image": {
+        "icon": kIconUploadProductImage,
+        "action": () {},
+      },
+      "User Management": {
+        "icon": kIconUserManagement,
+        "action": () {},
+      },
+      "User Authorisation": {
+        "icon": kIconUserAuthorisation,
+        "action": () {},
+      },
+      "User Rights": {
+        "icon": kIconUserRights,
+        "action": () {
+          Get.to(
+            () => UsersScreen(),
+          );
         },
-      );
-    }
-
-    if (true) {
-      // Replace with actual condition for User Management
-      availableServices.add(
-        {
-          "icon": kIconUserRights,
-          "title": 'User \nRights',
+      },
+      "Credit Note Entry": {
+        "icon": kIconCreditNoteEntry,
+        "action": () {},
+      },
+      "Credit Note Status": {
+        "icon": kIconCreditNoteStatus,
+        "action": () {},
+      },
+      "Credit Note Approval": {
+        "icon": kIconCreditNoteApproval,
+        "action": () {},
+      },
+      "Store Order": {
+        "icon": kIconStoreOrder,
+        "action": () {
+          Get.to(
+            () => StoreOrderScreen(),
+          );
         },
-      );
-    }
+      },
+    };
+  }
 
-    if (true) {
-      // Replace with actual condition for User Authorisation
-      availableServices.add(
-        {
-          "icon": kIconUserAuthorisation,
-          "title": 'User \nAuthorisation',
-        },
-      );
-    }
+  String? getIconPath(String menuName) {
+    return menuConfig[menuName]?["icon"];
+  }
 
-    if (true) {
-      // Replace with actual condition for Credit Note Entry
-      availableServices.add(
-        {
-          "icon": kIconCreditNoteEntry,
-          "title": 'Credit Note \nEntry',
-        },
-      );
-    }
+  VoidCallback? getAction(String menuName) {
+    return menuConfig[menuName]?["action"];
+  }
 
-    if (true) {
-      // Replace with actual condition for Credit Note Status
-      availableServices.add(
-        {
-          "icon": kIconCreditNoteStatus,
-          "title": 'Credit Note \nStatus',
-        },
-      );
-    }
-
-    if (true) {
-      // Replace with actual condition for Credit Note Approval
-      availableServices.add(
-        {
-          "icon": kIconCreditNoteApproval,
-          "title": 'Credit Note \nApproval',
-        },
-      );
-    }
-
-    if (true) {
-      // Replace with actual condition for View Outstandings
-      availableServices.add(
-        {
-          "icon": kIconViewOutstandings,
-          "title": 'View \nOutstandings',
-        },
-      );
-    }
-
-    return availableServices;
+  @override
+  void initState() {
+    super.initState();
+    _controller.loadUserInfo();
+    _controller.getUserAccess();
   }
 
   @override
@@ -179,23 +172,58 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 _buildWelcomeText(),
                 AppSpaces.v16,
-                Expanded(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 1.5,
-                    ),
-                    itemCount: services.length,
-                    itemBuilder: (context, index) {
-                      return _buildServiceCard(
-                        icon: _getIconForService(index),
-                        title: _getTitleForService(index),
-                        onTap: () => _onServiceTap(index),
+                Obx(
+                  () {
+                    if (_controller.isLoading.value) {
+                      return const SizedBox.shrink();
+                    }
+
+                    if (_controller.menuAccess
+                            .where(
+                              (item) => item.access == true,
+                            )
+                            .isEmpty &&
+                        !_controller.isLoading.value) {
+                      return Expanded(
+                        child: Center(
+                          child: Text(
+                            'Services not available',
+                            style: TextStyles.kMediumFredoka(
+                              color: kColorTextPrimary,
+                            ),
+                          ),
+                        ),
                       );
-                    },
-                  ),
+                    }
+                    return Expanded(
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 1.5,
+                        ),
+                        itemCount: _controller.menuAccess
+                            .where(
+                              (item) => item.access == true,
+                            )
+                            .length,
+                        itemBuilder: (context, index) {
+                          final menuItem = _controller.menuAccess
+                              .where(
+                                (item) => item.access == true,
+                              )
+                              .toList()[index];
+
+                          return _buildServiceCard(
+                            icon: getIconPath(menuItem.menuName) ?? '',
+                            title: menuItem.menuName,
+                            onTap: getAction(menuItem.menuName) ?? () {},
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -242,60 +270,6 @@ class ProfileScreen extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  void _onServiceTap(int index) {
-    switch (index) {
-      case 0:
-        Get.offAll(
-          () => SelectCustomerScreen(),
-        );
-        break;
-      case 1:
-        Get.to(
-          () => ResetPasswordScreen(
-            mobileNumber: _controller.mobileNumber.value,
-          ),
-        );
-        break;
-      case 2:
-        break;
-      case 3:
-        break;
-      case 4:
-        Get.to(
-          () => UsersScreen(),
-        );
-        break;
-      case 5:
-        break;
-      case 6:
-        break;
-      case 7:
-        break;
-      case 8:
-        break;
-      case 9:
-        Get.to(
-          () => OutstandingsScreen(
-            pCode: pCode,
-            pName: pName,
-          ),
-        );
-        break;
-      default:
-        break;
-    }
-  }
-
-  String _getIconForService(int index) {
-    var service = services[index];
-    return service['icon'] ?? kIconHome;
-  }
-
-  String _getTitleForService(int index) {
-    var service = services[index];
-    return service['title'] ?? 'Service';
   }
 
   Widget _buildServiceCard({

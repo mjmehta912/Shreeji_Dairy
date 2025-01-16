@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/features/invoice/invoices/models/invoice_dm.dart';
 import 'package:shreeji_dairy/features/invoice/invoices/repositories/invoices_repo.dart';
 import 'package:shreeji_dairy/features/select_customer/models/customer_dm.dart';
-import 'package:shreeji_dairy/features/select_customer/repositories/select_customer_repo.dart';
+import 'package:shreeji_dairy/features/select_customer/repositories/select_customer_branch_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class InvoicesController extends GetxController {
@@ -25,7 +25,7 @@ class InvoicesController extends GetxController {
     try {
       isLoading.value = true;
 
-      final fetchedCustomers = await SelectCustomerRepo.getCustomers();
+      final fetchedCustomers = await SelectCustomerBranchRepo.getCustomers();
 
       customers.assignAll(fetchedCustomers);
       customerNames.assignAll(

@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/features/user_rights/user_access/models/user_access_dm.dart';
 import 'package:shreeji_dairy/features/user_rights/user_access/repositories/user_access_repo.dart';
 import 'package:shreeji_dairy/features/user_rights/users/controllers/users_controller.dart';
@@ -9,6 +12,8 @@ class UserAccessController extends GetxController {
 
   var menuAccess = <MenuAccessDm>[].obs;
   var ledgerDate = <LedgerDateDm>[].obs;
+  var ledgerStartDateController = TextEditingController();
+  var ledgerEndDateController = TextEditingController();
 
   Future<void> getUserAccess({
     required int userId,
@@ -22,6 +27,11 @@ class UserAccessController extends GetxController {
 
       menuAccess.assignAll(fetchedUserAccess.menuAccess);
       ledgerDate.assignAll(fetchedUserAccess.ledgerDate);
+
+      ledgerStartDateController.text =
+          fetchedUserAccess.ledgerDate.first.ledgerStart ?? '';
+      ledgerEndDateController.text =
+          fetchedUserAccess.ledgerDate.first.ledgerEnd ?? '';
     } catch (e) {
       showErrorSnackbar(
         'Error',
@@ -33,6 +43,7 @@ class UserAccessController extends GetxController {
   }
 
   final UsersController usersController = Get.find<UsersController>();
+  final ProfileController profileController = Get.find<ProfileController>();
 
   Future<void> setAppAccess({
     required int userId,
@@ -50,6 +61,92 @@ class UserAccessController extends GetxController {
         String message = response['message'];
 
         usersController.getUsers();
+
+        showSuccessSnackbar(
+          'Success',
+          message,
+        );
+      }
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> setMenuAccess({
+    required int userId,
+    required int menuId,
+    required bool menuAccess,
+  }) async {
+    isLoading.value = true;
+
+    try {
+      var response = await UserAccessRepo.setMenuAccess(
+        userId: userId,
+        menuId: menuId,
+        menuAccess: menuAccess,
+      );
+
+      if (response != null && response.containsKey('message')) {
+        String message = response['message'];
+
+        getUserAccess(
+          userId: userId,
+        );
+
+        profileController.getUserAccess();
+
+        showSuccessSnackbar(
+          'Success',
+          message,
+        );
+      }
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> setLedger({
+    required int userId,
+  }) async {
+    isLoading.value = true;
+
+    try {
+      var response = await UserAccessRepo.setLedger(
+        userId: userId,
+        ledgerStart: ledgerStartDateController.text.isNotEmpty
+            ? DateFormat('yyyy-MM-dd').format(
+                DateFormat('dd-MM-yyyy').parse(
+                  ledgerStartDateController.text,
+                ),
+              )
+            : null,
+        ledgerEnd: ledgerEndDateController.text.isNotEmpty
+            ? DateFormat('yyyy-MM-dd').format(
+                DateFormat('dd-MM-yyyy').parse(
+                  ledgerEndDateController.text,
+                ),
+              )
+            : null,
+      );
+
+      if (response != null && response.containsKey('message')) {
+        String message = response['message'];
+
+        getUserAccess(
+          userId: userId,
+        );
+
+        profileController.getUserAccess();
 
         showSuccessSnackbar(
           'Success',

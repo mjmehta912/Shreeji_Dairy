@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/features/auth/login/repositories/login_repo.dart';
-import 'package:shreeji_dairy/features/select_customer/screens/select_customer_screen.dart';
+import 'package:shreeji_dairy/features/select_customer/screens/select_customer_branch_screen.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/helpers/device_helper.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
@@ -97,9 +97,26 @@ class LoginController extends GetxController {
         'mobileNo',
         response['mobileNo'],
       );
+      await SecureStorageHelper.write(
+        'userId',
+        response['userId'].toString(),
+      );
+
+      await SecureStorageHelper.write(
+        'ledgerStart',
+        response['ledgerStart'] ?? '',
+      );
+      await SecureStorageHelper.write(
+        'ledgerEnd',
+        response['ledgerEnd'] ?? '',
+      );
+      await SecureStorageHelper.write(
+        'storePCode',
+        response['storePCode'] ?? '',
+      );
 
       Get.offAll(
-        () => SelectCustomerScreen(),
+        () => SelectCustomerBranchScreen(),
       );
     } catch (e) {
       showErrorSnackbar(

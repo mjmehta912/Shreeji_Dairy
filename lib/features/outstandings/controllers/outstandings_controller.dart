@@ -3,7 +3,7 @@ import 'package:shreeji_dairy/features/outstandings/models/outstanding_dm.dart';
 import 'package:shreeji_dairy/features/outstandings/repositories/outstandings_repo.dart';
 import 'package:shreeji_dairy/features/outstandings/screens/outstandings_pdf_screen.dart';
 import 'package:shreeji_dairy/features/select_customer/models/customer_dm.dart';
-import 'package:shreeji_dairy/features/select_customer/repositories/select_customer_repo.dart';
+import 'package:shreeji_dairy/features/select_customer/repositories/select_customer_branch_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class OutstandingsController extends GetxController {
@@ -20,7 +20,7 @@ class OutstandingsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final fetchedCustomers = await SelectCustomerRepo.getCustomers();
+      final fetchedCustomers = await SelectCustomerBranchRepo.getCustomers();
 
       customers.assignAll(fetchedCustomers);
       customerNames.assignAll(

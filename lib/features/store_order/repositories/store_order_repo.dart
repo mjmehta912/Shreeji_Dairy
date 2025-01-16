@@ -1,16 +1,14 @@
-import 'package:shreeji_dairy/features/products/models/product_dm.dart';
+import 'package:shreeji_dairy/features/store_order/models/store_product_dm.dart';
 import 'package:shreeji_dairy/services/api_service.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
-class ProductsRepo {
-  static Future<List<ProductDm>> searchProduct({
+class StoreOrderRepo {
+  static Future<List<StoreCategoryDm>> storeProducts({
     String icCodes = '',
     String igCodes = '',
     String ipackgCodes = '',
     String searchText = '',
     String pCode = '',
-    String deviceId = '',
-    String version = '',
   }) async {
     try {
       String? token = await SecureStorageHelper.read(
@@ -23,12 +21,10 @@ class ProductsRepo {
         "IPACKGCODEs": ipackgCodes,
         "SearchText": searchText,
         "PCODE": pCode,
-        "DeviceID": deviceId,
-        "Version": version,
       };
 
       final response = await ApiService.postRequest(
-        endpoint: '/Product/searchProduct',
+        endpoint: '/Product/storeItem',
         requestBody: requestBody,
         token: token,
       );
@@ -36,7 +32,7 @@ class ProductsRepo {
       if (response['data'] != null) {
         return (response['data'] as List<dynamic>)
             .map(
-              (item) => ProductDm.fromJson(item),
+              (item) => StoreCategoryDm.fromJson(item),
             )
             .toList();
       }
