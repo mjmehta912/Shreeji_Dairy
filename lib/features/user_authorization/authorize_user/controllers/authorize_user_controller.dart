@@ -18,7 +18,9 @@ class AuthorizeUserController extends GetxController {
 
   var selectedUserType = Rxn<int>();
   var customers = <CustomerDm>[].obs;
+  var filteredCustomers = <CustomerDm>[].obs;
   var customerNames = <String>[].obs;
+  var filteredCustomerNames = <String>[].obs;
 
   var selectedPNames = <String>{}.obs;
   var selectedPCodes = <String>{}.obs;
@@ -61,7 +63,16 @@ class AuthorizeUserController extends GetxController {
       final fetchedCustomers = await AuthorizeUserRepo.getCustomers();
 
       customers.assignAll(fetchedCustomers);
+      filteredCustomers.assignAll(fetchedCustomers);
       customerNames.assignAll(
+        fetchedCustomers
+            .map(
+              (customer) => customer.pName,
+            )
+            .toList(),
+      );
+
+      filteredCustomerNames.assignAll(
         fetchedCustomers
             .map(
               (customer) => customer.pName,
@@ -75,6 +86,20 @@ class AuthorizeUserController extends GetxController {
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void filterCustomers(String query) {
+    if (query.isEmpty) {
+      filteredCustomers.assignAll(customers);
+    } else {
+      filteredCustomers.assignAll(
+        customers.where(
+          (cust) {
+            return cust.pName.toLowerCase().contains(query.toLowerCase());
+          },
+        ).toList(),
+      );
     }
   }
 

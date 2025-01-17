@@ -4,6 +4,7 @@ import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/user_authorization/authorize_user/controllers/authorize_user_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
@@ -12,6 +13,7 @@ import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_card2.dart';
 import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
+import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 
 class AuthorizeUserScreen extends StatelessWidget {
   AuthorizeUserScreen({
@@ -36,9 +38,12 @@ class AuthorizeUserScreen extends StatelessWidget {
   void showCustomersSheet() {
     final RxSet<String> tempSelectedPCodes =
         _controller.selectedPCodes.toSet().obs;
-
     final RxSet<String> tempSelectedPNames =
         _controller.selectedPNames.toSet().obs;
+
+    // Reset search query and filtered customers
+    _controller.filteredCustomers.assignAll(_controller.customers);
+    final TextEditingController searchController = TextEditingController();
 
     Get.bottomSheet(
       shape: RoundedRectangleBorder(
@@ -51,7 +56,7 @@ class AuthorizeUserScreen extends StatelessWidget {
         ),
         padding: AppPaddings.p16,
         constraints: BoxConstraints(
-          maxHeight: 0.5.screenHeight,
+          maxHeight: 0.75.screenHeight,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -65,11 +70,19 @@ class AuthorizeUserScreen extends StatelessWidget {
               ),
             ),
             AppSpaces.v10,
+            AppTextFormField(
+              controller: searchController,
+              hintText: 'Search',
+              onChanged: (value) {
+                _controller.filterCustomers(value);
+              },
+            ),
+            AppSpaces.v10,
             Expanded(
               child: Obx(
                 () => ListView(
                   shrinkWrap: true,
-                  children: _controller.customers.map(
+                  children: _controller.filteredCustomers.map(
                     (customer) {
                       return CheckboxListTile(
                         title: Text(
@@ -120,6 +133,71 @@ class AuthorizeUserScreen extends StatelessWidget {
         ),
       ),
       isScrollControlled: true,
+    );
+  }
+
+  void showSelectedCustomersDialog() {
+    final selectedPNames =
+        _controller.selectedPNames.toList(); // Convert RxSet to List
+
+    if (selectedPNames.isEmpty) {
+      showErrorSnackbar('No Customers', 'No customers are selected.');
+      return;
+    }
+
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Container(
+          height: 0.5.screenHeight,
+          width: 0.8.screenWidth,
+          padding: EdgeInsets.all(16.0), // Add padding inside the dialog
+          child: Column(
+            children: [
+              Text(
+                'Selected Customers',
+                style: TextStyles.kRegularFredoka(
+                  fontSize: FontSizes.k20FontSize,
+                  color: kColorTextPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: selectedPNames.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Text(
+                        selectedPNames[index],
+                        style: TextStyles.kRegularFredoka(
+                          fontSize: FontSizes.k16FontSize,
+                          color: kColorTextPrimary,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 10),
+              AppButton(
+                buttonWidth: 0.3.screenWidth,
+                buttonColor: kColorPrimary,
+                titleColor: kColorTextPrimary,
+                buttonHeight: 45,
+                onPressed: () {
+                  Get.back();
+                },
+                title: 'OK',
+              ),
+            ],
+          ),
+        ),
+      ),
+      useSafeArea: true, // Ensure the dialog respects safe areas
     );
   }
 
@@ -205,6 +283,9 @@ class AuthorizeUserScreen extends StatelessWidget {
                             onTap: () {
                               showCustomersSheet();
                             },
+                            onLongPress: () {
+                              showSelectedCustomersDialog();
+                            },
                             child: SizedBox(
                               width: double.infinity,
                               height: 45,
@@ -214,7 +295,7 @@ class AuthorizeUserScreen extends StatelessWidget {
                                 child: Padding(
                                   padding: AppPaddings.combined(
                                     horizontal: 16.appWidth,
-                                    vertical: 8.appHeight,
+                                    vertical: 16.appHeight,
                                   ),
                                   child: _controller.selectedPNames.isEmpty
                                       ? Text(

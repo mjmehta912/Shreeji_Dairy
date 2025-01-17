@@ -44,12 +44,16 @@ class UnauthorizedUsersScreen extends StatelessWidget {
               padding: AppPaddings.p10,
               child: Column(
                 children: [
-                  AppTextFormField(
-                    controller: _controller.searchController,
-                    hintText: 'Search',
-                    onChanged: (value) {
-                      _controller.filterUsers(value);
-                    },
+                  Obx(
+                    () => _controller.unAuthorizedUsers.isNotEmpty
+                        ? AppTextFormField(
+                            controller: _controller.searchController,
+                            hintText: 'Search',
+                            onChanged: (value) {
+                              _controller.filterUsers(value);
+                            },
+                          )
+                        : const SizedBox.shrink(),
                   ),
                   AppSpaces.v10,
                   Obx(

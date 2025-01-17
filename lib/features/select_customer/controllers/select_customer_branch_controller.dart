@@ -24,11 +24,11 @@ class SelectCustomerBranchController extends GetxController {
   var userType = ''.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     loadUserInfo();
-    getCustomers();
-    getBranches();
+    await getCustomers();
+    await getBranches();
   }
 
   Future<void> loadUserInfo() async {
