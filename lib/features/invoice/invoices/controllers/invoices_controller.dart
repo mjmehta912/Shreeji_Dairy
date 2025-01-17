@@ -74,10 +74,17 @@ class InvoicesController extends GetxController {
 
       invoices.assignAll(fetchedInvoices);
     } catch (e) {
-      showErrorSnackbar(
-        'Error',
-        e.toString(),
-      );
+      if (e is Map<String, dynamic>) {
+        showErrorSnackbar(
+          'Error',
+          e['message'],
+        );
+      } else {
+        showErrorSnackbar(
+          'Error',
+          e.toString(),
+        );
+      }
     } finally {
       isLoading.value = false;
     }

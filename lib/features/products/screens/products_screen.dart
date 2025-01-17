@@ -49,46 +49,60 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void showGroupFilter() {
+    final RxSet<String> tempSelectedIgCodes =
+        _controller.selectedIgCodes.toSet().obs;
+
     Get.bottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       Container(
-        color: kColorWhite,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: kColorWhite,
+        ),
         padding: AppPaddings.p16,
+        constraints: BoxConstraints(
+          maxHeight: 0.5.screenHeight,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Obx(
-              () => ListView(
-                shrinkWrap: true,
-                children: _controller.groups.map(
-                  (group) {
-                    return CheckboxListTile(
-                      title: Text(
-                        group.igName,
-                        style: TextStyles.kRegularFredoka(
-                          fontSize: FontSizes.k18FontSize,
-                          color: kColorTextPrimary,
+            Text(
+              'Group',
+              style: TextStyles.kRegularFredoka(
+                fontSize: FontSizes.k20FontSize,
+                color: kColorTextPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            AppSpaces.v10,
+            Expanded(
+              child: Obx(
+                () => ListView(
+                  shrinkWrap: true,
+                  children: _controller.groups.map(
+                    (group) {
+                      return CheckboxListTile(
+                        title: Text(
+                          group.igName,
+                          style: TextStyles.kRegularFredoka(
+                            fontSize: FontSizes.k16FontSize,
+                            color: kColorTextPrimary,
+                          ),
                         ),
-                      ),
-                      value: _controller.selectedIgCodes.contains(
-                        group.igCode,
-                      ),
-                      activeColor: kColorSecondary,
-                      onChanged: (isSelected) {
-                        if (isSelected == true) {
-                          _controller.selectedIgCodes.add(
-                            group.igCode,
-                          );
-                        } else {
-                          _controller.selectedIgCodes.remove(
-                            group.igCode,
-                          );
-                        }
-
-                        print(_controller.selectedIgCodes);
-                      },
-                    );
-                  },
-                ).toList(),
+                        contentPadding: EdgeInsets.zero,
+                        value: tempSelectedIgCodes.contains(group.igCode),
+                        activeColor: kColorSecondary,
+                        onChanged: (isSelected) {
+                          if (isSelected == true) {
+                            tempSelectedIgCodes.add(group.igCode);
+                          } else {
+                            tempSelectedIgCodes.remove(group.igCode);
+                          }
+                        },
+                      );
+                    },
+                  ).toList(),
+                ),
               ),
             ),
             AppSpaces.v10,
@@ -98,6 +112,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
               buttonColor: kColorPrimary,
               titleColor: kColorTextPrimary,
               onPressed: () {
+                _controller.selectedIgCodes
+                  ..clear()
+                  ..addAll(tempSelectedIgCodes);
                 _controller.searchProduct(
                   searchText: _controller.searchController.text,
                   pCode: widget.pCode,
@@ -114,45 +131,60 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void showSubGroupFilter() {
+    final RxSet<String> tempSelectedIcCodes =
+        _controller.selectedIcCodes.toSet().obs;
+
     Get.bottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       Container(
-        color: kColorWhite,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: kColorWhite,
+        ),
         padding: AppPaddings.p16,
+        constraints: BoxConstraints(
+          maxHeight: 0.5.screenHeight,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Obx(
-              () => ListView(
-                shrinkWrap: true,
-                children: _controller.subGroups.map(
-                  (subGroup) {
-                    return CheckboxListTile(
-                      title: Text(
-                        subGroup.icName,
-                        style: TextStyles.kRegularFredoka(
-                          fontSize: FontSizes.k18FontSize,
-                          color: kColorTextPrimary,
+            Text(
+              'Sub Group',
+              style: TextStyles.kRegularFredoka(
+                fontSize: FontSizes.k20FontSize,
+                color: kColorTextPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            AppSpaces.v10,
+            Expanded(
+              child: Obx(
+                () => ListView(
+                  shrinkWrap: true,
+                  children: _controller.subGroups.map(
+                    (subGroup) {
+                      return CheckboxListTile(
+                        title: Text(
+                          subGroup.icName,
+                          style: TextStyles.kRegularFredoka(
+                            fontSize: FontSizes.k16FontSize,
+                            color: kColorTextPrimary,
+                          ),
                         ),
-                      ),
-                      activeColor: kColorSecondary,
-                      value: _controller.selectedIcCodes.contains(
-                        subGroup.icCode,
-                      ),
-                      onChanged: (isSelected) {
-                        if (isSelected == true) {
-                          _controller.selectedIcCodes.add(
-                            subGroup.icCode,
-                          );
-                        } else {
-                          _controller.selectedIcCodes.remove(
-                            subGroup.icCode,
-                          );
-                        }
-                        print(_controller.selectedIcCodes);
-                      },
-                    );
-                  },
-                ).toList(),
+                        contentPadding: EdgeInsets.zero,
+                        value: tempSelectedIcCodes.contains(subGroup.icCode),
+                        activeColor: kColorSecondary,
+                        onChanged: (isSelected) {
+                          if (isSelected == true) {
+                            tempSelectedIcCodes.add(subGroup.icCode);
+                          } else {
+                            tempSelectedIcCodes.remove(subGroup.icCode);
+                          }
+                        },
+                      );
+                    },
+                  ).toList(),
+                ),
               ),
             ),
             AppSpaces.v10,
@@ -162,6 +194,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
               buttonColor: kColorPrimary,
               titleColor: kColorTextPrimary,
               onPressed: () {
+                _controller.selectedIcCodes
+                  ..clear()
+                  ..addAll(tempSelectedIcCodes);
                 _controller.searchProduct(
                   searchText: _controller.searchController.text,
                   pCode: widget.pCode,
@@ -178,43 +213,64 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void showSubGroup2Filter() {
+    final RxSet<String> tempSelectedIpackgCodes =
+        _controller.selectedIpackgCodes.toSet().obs;
+
     Get.bottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       Container(
-        color: kColorWhite,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: kColorWhite,
+        ),
         padding: AppPaddings.p16,
+        constraints: BoxConstraints(
+          maxHeight: 0.5.screenHeight,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Obx(
-              () => ListView(
-                shrinkWrap: true,
-                children: _controller.subGroups2.map(
-                  (subGroup2) {
-                    return CheckboxListTile(
-                      title: Text(
-                        subGroup2.ipackgName,
-                        style: TextStyles.kRegularFredoka(
-                          fontSize: FontSizes.k18FontSize,
-                          color: kColorTextPrimary,
+            Text(
+              'Sub Group 2',
+              style: TextStyles.kRegularFredoka(
+                fontSize: FontSizes.k20FontSize,
+                color: kColorTextPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            AppSpaces.v10,
+            Expanded(
+              child: Obx(
+                () => ListView(
+                  shrinkWrap: true,
+                  children: _controller.subGroups2.map(
+                    (subGroup2) {
+                      return CheckboxListTile(
+                        title: Text(
+                          subGroup2.ipackgName,
+                          style: TextStyles.kRegularFredoka(
+                            fontSize: FontSizes.k16FontSize,
+                            color: kColorTextPrimary,
+                          ),
                         ),
-                      ),
-                      value: _controller.selectedIpackgCodes
-                          .contains(subGroup2.ipackgCode),
-                      activeColor: kColorSecondary,
-                      onChanged: (isSelected) {
-                        if (isSelected == true) {
-                          _controller.selectedIpackgCodes
-                              .add(subGroup2.ipackgCode);
-                        } else {
-                          _controller.selectedIpackgCodes
-                              .remove(subGroup2.ipackgCode);
-                        }
-
-                        print(_controller.selectedIpackgCodes);
-                      },
-                    );
-                  },
-                ).toList(),
+                        contentPadding: EdgeInsets.zero,
+                        value: tempSelectedIpackgCodes
+                            .contains(subGroup2.ipackgCode),
+                        activeColor: kColorSecondary,
+                        onChanged: (isSelected) {
+                          if (isSelected == true) {
+                            tempSelectedIpackgCodes.add(subGroup2.ipackgCode);
+                          } else {
+                            tempSelectedIpackgCodes
+                                .remove(subGroup2.ipackgCode);
+                          }
+                        },
+                      );
+                    },
+                  ).toList(),
+                ),
               ),
             ),
             AppSpaces.v10,
@@ -224,6 +280,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
               buttonColor: kColorPrimary,
               titleColor: kColorTextPrimary,
               onPressed: () {
+                _controller.selectedIpackgCodes
+                  ..clear()
+                  ..addAll(tempSelectedIpackgCodes);
                 _controller.searchProduct(
                   searchText: _controller.searchController.text,
                   pCode: widget.pCode,
