@@ -17,6 +17,7 @@ class AppDropdown extends StatelessWidget {
     this.showSearchBox,
     required this.onChanged,
     this.validatorText,
+    this.enabled,
   });
 
   final List<String> items;
@@ -27,6 +28,7 @@ class AppDropdown extends StatelessWidget {
   final bool? showSearchBox;
   final ValueChanged<String?>? onChanged;
   final String? validatorText;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class AppDropdown extends StatelessWidget {
         return null;
       },
       items: (filter, infiniteScrollProps) => items,
+      enabled: enabled ?? true,
       decoratorProps: DropDownDecoratorProps(
         baseStyle: TextStyles.kRegularFredoka(
           fontSize: FontSizes.k16FontSize,
@@ -66,6 +69,10 @@ class AppDropdown extends StatelessWidget {
             borderWidth: 1,
           ),
           enabledBorder: outlineInputBorder(
+            borderColor: kColorLightGrey,
+            borderWidth: 1,
+          ),
+          disabledBorder: outlineInputBorder(
             borderColor: kColorLightGrey,
             borderWidth: 1,
           ),
