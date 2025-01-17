@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/auth/login/screens/login_screen.dart';
+import 'package:shreeji_dairy/features/products/models/group_dm.dart';
 import 'package:shreeji_dairy/features/products/models/product_dm.dart';
+import 'package:shreeji_dairy/features/products/models/subgroup2_dm.dart';
+import 'package:shreeji_dairy/features/products/models/subgroup_dm.dart';
 import 'package:shreeji_dairy/features/products/repositories/products_repo.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -19,10 +22,14 @@ class ProductsController extends GetxController {
   var searchController = TextEditingController();
   var cartCount = 0.obs;
 
+  var groups = <GroupDm>[].obs;
+  var selectedIgCodes = <String>{}.obs;
+  var subGroups = <SubgroupDm>[].obs;
+  var selectedIcCodes = <String>{}.obs;
+  var subGroups2 = <Subgroup2Dm>[].obs;
+  var selectedIpackgCodes = <String>{}.obs;
+
   Future<void> searchProduct({
-    String icCodes = '',
-    String igCodes = '',
-    String ipackgCodes = '',
     String searchText = '',
     String pCode = '',
   }) async {
@@ -41,9 +48,9 @@ class ProductsController extends GetxController {
 
     try {
       final fetchedProducts = await ProductsRepo.searchProduct(
-        icCodes: icCodes,
-        igCodes: igCodes,
-        ipackgCodes: ipackgCodes,
+        icCodes: selectedIcCodes.join(','),
+        igCodes: selectedIgCodes.join(','),
+        ipackgCodes: selectedIpackgCodes.join(','),
         searchText: searchText,
         pCode: pCode,
         deviceId: deviceId,
@@ -144,5 +151,56 @@ class ProductsController extends GetxController {
       (sum, product) =>
           sum + product.skus.where((sku) => sku.cartQty > 0).length,
     );
+  }
+
+  Future<void> getGroups() async {
+    try {
+      isLoading.value = true;
+
+      final fetchedGroups = await ProductsRepo.getGroups();
+
+      groups.assignAll(fetchedGroups);
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getSubGroups() async {
+    try {
+      isLoading.value = true;
+
+      final fetchedSubGroups = await ProductsRepo.getSubGroups();
+
+      subGroups.assignAll(fetchedSubGroups);
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getSubGroups2() async {
+    try {
+      isLoading.value = true;
+
+      final fetchedSubGroups2 = await ProductsRepo.getSubGroups2();
+
+      subGroups2.assignAll(fetchedSubGroups2);
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

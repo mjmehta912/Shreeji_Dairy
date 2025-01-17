@@ -38,11 +38,205 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   void initState() {
+    _controller.getGroups();
+    _controller.getSubGroups();
+    _controller.getSubGroups2();
     _controller.searchProduct(
       pCode: widget.pCode,
       searchText: _controller.searchController.text,
     );
     super.initState();
+  }
+
+  void showGroupFilter() {
+    Get.bottomSheet(
+      Container(
+        color: kColorWhite,
+        padding: AppPaddings.p16,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(
+              () => ListView(
+                shrinkWrap: true,
+                children: _controller.groups.map(
+                  (group) {
+                    return CheckboxListTile(
+                      title: Text(
+                        group.igName,
+                        style: TextStyles.kRegularFredoka(
+                          fontSize: FontSizes.k18FontSize,
+                          color: kColorTextPrimary,
+                        ),
+                      ),
+                      value: _controller.selectedIgCodes.contains(
+                        group.igCode,
+                      ),
+                      activeColor: kColorSecondary,
+                      onChanged: (isSelected) {
+                        if (isSelected == true) {
+                          _controller.selectedIgCodes.add(
+                            group.igCode,
+                          );
+                        } else {
+                          _controller.selectedIgCodes.remove(
+                            group.igCode,
+                          );
+                        }
+
+                        print(_controller.selectedIgCodes);
+                      },
+                    );
+                  },
+                ).toList(),
+              ),
+            ),
+            AppSpaces.v10,
+            AppButton(
+              buttonWidth: 0.5.screenWidth,
+              buttonHeight: 40,
+              buttonColor: kColorPrimary,
+              titleColor: kColorTextPrimary,
+              onPressed: () {
+                _controller.searchProduct(
+                  searchText: _controller.searchController.text,
+                  pCode: widget.pCode,
+                );
+                Get.back();
+              },
+              title: 'Apply Filter',
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  void showSubGroupFilter() {
+    Get.bottomSheet(
+      Container(
+        color: kColorWhite,
+        padding: AppPaddings.p16,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(
+              () => ListView(
+                shrinkWrap: true,
+                children: _controller.subGroups.map(
+                  (subGroup) {
+                    return CheckboxListTile(
+                      title: Text(
+                        subGroup.icName,
+                        style: TextStyles.kRegularFredoka(
+                          fontSize: FontSizes.k18FontSize,
+                          color: kColorTextPrimary,
+                        ),
+                      ),
+                      activeColor: kColorSecondary,
+                      value: _controller.selectedIcCodes.contains(
+                        subGroup.icCode,
+                      ),
+                      onChanged: (isSelected) {
+                        if (isSelected == true) {
+                          _controller.selectedIcCodes.add(
+                            subGroup.icCode,
+                          );
+                        } else {
+                          _controller.selectedIcCodes.remove(
+                            subGroup.icCode,
+                          );
+                        }
+                        print(_controller.selectedIcCodes);
+                      },
+                    );
+                  },
+                ).toList(),
+              ),
+            ),
+            AppSpaces.v10,
+            AppButton(
+              buttonWidth: 0.5.screenWidth,
+              buttonHeight: 40,
+              buttonColor: kColorPrimary,
+              titleColor: kColorTextPrimary,
+              onPressed: () {
+                _controller.searchProduct(
+                  searchText: _controller.searchController.text,
+                  pCode: widget.pCode,
+                );
+                Get.back();
+              },
+              title: 'Apply Filter',
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  void showSubGroup2Filter() {
+    Get.bottomSheet(
+      Container(
+        color: kColorWhite,
+        padding: AppPaddings.p16,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(
+              () => ListView(
+                shrinkWrap: true,
+                children: _controller.subGroups2.map(
+                  (subGroup2) {
+                    return CheckboxListTile(
+                      title: Text(
+                        subGroup2.ipackgName,
+                        style: TextStyles.kRegularFredoka(
+                          fontSize: FontSizes.k18FontSize,
+                          color: kColorTextPrimary,
+                        ),
+                      ),
+                      value: _controller.selectedIpackgCodes
+                          .contains(subGroup2.ipackgCode),
+                      activeColor: kColorSecondary,
+                      onChanged: (isSelected) {
+                        if (isSelected == true) {
+                          _controller.selectedIpackgCodes
+                              .add(subGroup2.ipackgCode);
+                        } else {
+                          _controller.selectedIpackgCodes
+                              .remove(subGroup2.ipackgCode);
+                        }
+
+                        print(_controller.selectedIpackgCodes);
+                      },
+                    );
+                  },
+                ).toList(),
+              ),
+            ),
+            AppSpaces.v10,
+            AppButton(
+              buttonWidth: 0.5.screenWidth,
+              buttonHeight: 40,
+              buttonColor: kColorPrimary,
+              titleColor: kColorTextPrimary,
+              onPressed: () {
+                _controller.searchProduct(
+                  searchText: _controller.searchController.text,
+                  pCode: widget.pCode,
+                );
+                Get.back();
+              },
+              title: 'Apply Filter',
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
   }
 
   @override
@@ -147,6 +341,68 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         pCode: widget.pCode,
                       );
                     },
+                  ),
+                  AppSpaces.v10,
+                  Obx(
+                    () => Wrap(
+                      spacing: 8.0,
+                      children: [
+                        ChoiceChip(
+                          label: Text(
+                            'Group',
+                            style: TextStyles.kRegularFredoka(
+                              fontSize: FontSizes.k12FontSize,
+                              color: _controller.selectedIgCodes.isNotEmpty
+                                  ? kColorWhite
+                                  : kColorTextPrimary,
+                            ),
+                          ),
+                          showCheckmark: false,
+                          backgroundColor: kColorWhite,
+                          selectedColor: kColorSecondary,
+                          selected: _controller.selectedIgCodes.isNotEmpty,
+                          onSelected: (selected) {
+                            showGroupFilter();
+                          },
+                        ),
+                        ChoiceChip(
+                          label: Text(
+                            'Sub Group',
+                            style: TextStyles.kRegularFredoka(
+                              fontSize: FontSizes.k12FontSize,
+                              color: _controller.selectedIcCodes.isNotEmpty
+                                  ? kColorWhite
+                                  : kColorTextPrimary,
+                            ),
+                          ),
+                          showCheckmark: false,
+                          backgroundColor: kColorWhite,
+                          selectedColor: kColorSecondary,
+                          selected: _controller.selectedIcCodes.isNotEmpty,
+                          onSelected: (selected) {
+                            showSubGroupFilter();
+                          },
+                        ),
+                        ChoiceChip(
+                          label: Text(
+                            'Sub Group 2',
+                            style: TextStyles.kRegularFredoka(
+                              fontSize: FontSizes.k12FontSize,
+                              color: _controller.selectedIpackgCodes.isNotEmpty
+                                  ? kColorWhite
+                                  : kColorTextPrimary,
+                            ),
+                          ),
+                          showCheckmark: false,
+                          backgroundColor: kColorWhite,
+                          selectedColor: kColorSecondary,
+                          selected: _controller.selectedIpackgCodes.isNotEmpty,
+                          onSelected: (selected) {
+                            showSubGroup2Filter();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                   AppSpaces.v10,
                   Obx(

@@ -1,4 +1,7 @@
+import 'package:shreeji_dairy/features/products/models/group_dm.dart';
 import 'package:shreeji_dairy/features/products/models/product_dm.dart';
+import 'package:shreeji_dairy/features/products/models/subgroup2_dm.dart';
+import 'package:shreeji_dairy/features/products/models/subgroup_dm.dart';
 import 'package:shreeji_dairy/services/api_service.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
@@ -77,6 +80,90 @@ class ProductsRepo {
         token: token,
       );
       return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<List<GroupDm>> getGroups() async {
+    String? token = await SecureStorageHelper.read(
+      'token',
+    );
+
+    try {
+      final response = await ApiService.getRequest(
+        endpoint: '/Master/itemgroup',
+        token: token,
+      );
+      if (response == null) {
+        return [];
+      }
+
+      if (response['data'] != null) {
+        return (response['data'] as List<dynamic>)
+            .map(
+              (item) => GroupDm.fromJson(item),
+            )
+            .toList();
+      }
+
+      return [];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<List<SubgroupDm>> getSubGroups() async {
+    String? token = await SecureStorageHelper.read(
+      'token',
+    );
+
+    try {
+      final response = await ApiService.getRequest(
+        endpoint: '/Master/itemcompany',
+        token: token,
+      );
+      if (response == null) {
+        return [];
+      }
+
+      if (response['data'] != null) {
+        return (response['data'] as List<dynamic>)
+            .map(
+              (item) => SubgroupDm.fromJson(item),
+            )
+            .toList();
+      }
+
+      return [];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<List<Subgroup2Dm>> getSubGroups2() async {
+    String? token = await SecureStorageHelper.read(
+      'token',
+    );
+
+    try {
+      final response = await ApiService.getRequest(
+        endpoint: '/Master/itempackgroup',
+        token: token,
+      );
+      if (response == null) {
+        return [];
+      }
+
+      if (response['data'] != null) {
+        return (response['data'] as List<dynamic>)
+            .map(
+              (item) => Subgroup2Dm.fromJson(item),
+            )
+            .toList();
+      }
+
+      return [];
     } catch (e) {
       rethrow;
     }
