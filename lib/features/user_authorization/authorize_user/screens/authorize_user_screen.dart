@@ -41,7 +41,6 @@ class AuthorizeUserScreen extends StatelessWidget {
     final RxSet<String> tempSelectedPNames =
         _controller.selectedPNames.toSet().obs;
 
-    // Reset search query and filtered customers
     _controller.filteredCustomers.assignAll(_controller.customers);
     final TextEditingController searchController = TextEditingController();
 
@@ -137,8 +136,7 @@ class AuthorizeUserScreen extends StatelessWidget {
   }
 
   void showSelectedCustomersDialog() {
-    final selectedPNames =
-        _controller.selectedPNames.toList(); // Convert RxSet to List
+    final selectedPNames = _controller.selectedPNames.toList();
 
     if (selectedPNames.isEmpty) {
       showErrorSnackbar('No Customers', 'No customers are selected.');
@@ -153,7 +151,7 @@ class AuthorizeUserScreen extends StatelessWidget {
         child: Container(
           height: 0.5.screenHeight,
           width: 0.8.screenWidth,
-          padding: EdgeInsets.all(16.0), // Add padding inside the dialog
+          padding: AppPaddings.p16,
           child: Column(
             children: [
               Text(
@@ -164,13 +162,13 @@ class AuthorizeUserScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              AppSpaces.v10,
               Expanded(
                 child: ListView.builder(
                   itemCount: selectedPNames.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      padding: AppPaddings.pv4,
                       child: Text(
                         selectedPNames[index],
                         style: TextStyles.kRegularFredoka(
@@ -182,7 +180,7 @@ class AuthorizeUserScreen extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(height: 10),
+              AppSpaces.v10,
               AppButton(
                 buttonWidth: 0.3.screenWidth,
                 buttonColor: kColorPrimary,
@@ -197,7 +195,7 @@ class AuthorizeUserScreen extends StatelessWidget {
           ),
         ),
       ),
-      useSafeArea: true, // Ensure the dialog respects safe areas
+      useSafeArea: true,
     );
   }
 
