@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shreeji_dairy/features/products/models/group_dm.dart';
 import 'package:shreeji_dairy/features/store_order/models/store_product_dm.dart';
 import 'package:shreeji_dairy/features/store_order/repositories/store_order_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
@@ -11,6 +12,10 @@ class StoreOrderController extends GetxController {
   var storeProducts = <StoreCategoryDm>[].obs;
   var searchController = TextEditingController();
   final Map<String, TextEditingController> productControllers = {};
+  var groups = <GroupDm>[].obs;
+  var selectedIgCode = ''.obs;
+
+  var isCartFilterActive = false.obs;
 
   Future<void> fetchStoreProducts({
     String icCodes = '',
@@ -33,7 +38,26 @@ class StoreOrderController extends GetxController {
         pCode: storePcode!,
       );
 
-      storeProducts.assignAll(fetchedProducts);
+      if (isCartFilterActive.value) {
+        final filteredProducts = fetchedProducts
+            .map((category) {
+              final filteredCategoryProducts =
+                  category.products.where((p) => p.cartQty > 0).toList();
+              if (filteredCategoryProducts.isNotEmpty) {
+                return StoreCategoryDm(
+                  icname: category.icname,
+                  products: filteredCategoryProducts,
+                );
+              }
+              return null;
+            })
+            .whereType<StoreCategoryDm>()
+            .toList();
+
+        storeProducts.assignAll(filteredProducts);
+      } else {
+        storeProducts.assignAll(fetchedProducts);
+      }
 
       for (var category in storeProducts) {
         for (var product in category.products) {
@@ -52,10 +76,18 @@ class StoreOrderController extends GetxController {
     }
   }
 
+  void toggleCartFilter() {
+    isCartFilterActive.value = !isCartFilterActive.value;
+
+    fetchStoreProducts(
+      searchText: searchController.text,
+      igCodes: selectedIgCode.value,
+    );
+  }
+
   Future<void> addOrUpdateCart({
     required String iCode,
   }) async {
-    // Retrieve the quantity entered in the TextEditingController
     final qty = int.tryParse(productControllers[iCode]?.text ?? '0') ?? 0;
     final product = storeProducts
         .expand((category) => category.products)
@@ -81,6 +113,55 @@ class StoreOrderController extends GetxController {
           searchText: searchController.text,
         );
       }
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> placeOrder() async {
+    String? storePcode = await SecureStorageHelper.read(
+      'storePCode',
+    );
+
+    isLoading.value = true;
+
+    try {
+      var response = await StoreOrderRepo.placeOrder(
+        pCode: storePcode!,
+      );
+
+      if (response != null && response.containsKey('message')) {
+        String message = response['message'];
+
+        await fetchStoreProducts();
+
+        showSuccessSnackbar(
+          'Order Placed!',
+          message,
+        );
+      }
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getGroups() async {
+    try {
+      isLoading.value = true;
+
+      final fetchedGroups = await StoreOrderRepo.getGroups();
+
+      groups.assignAll(fetchedGroups);
     } catch (e) {
       showErrorSnackbar(
         'Error',

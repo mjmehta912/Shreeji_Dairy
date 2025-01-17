@@ -23,6 +23,7 @@ class AppTextFormField extends StatelessWidget {
     this.inputFormatters,
     this.onFieldSubmitted,
     this.fontSize,
+    this.fontWeight,
   });
 
   final TextEditingController controller;
@@ -39,6 +40,7 @@ class AppTextFormField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final void Function(String)? onFieldSubmitted;
   final double? fontSize;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,8 @@ class AppTextFormField extends StatelessWidget {
       style: TextStyles.kRegularFredoka(
         fontSize: fontSize ?? FontSizes.k16FontSize,
         color: kColorTextPrimary,
+      ).copyWith(
+        fontWeight: fontWeight ?? FontWeight.w400,
       ),
       obscureText: isObscure!,
       onFieldSubmitted: onFieldSubmitted,
