@@ -339,7 +339,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                         parent.remarks != null &&
                                                 parent.remarks!.isNotEmpty
                                             ? Text(
-                                                parent.remarks!,
+                                                parent.remarks!
+                                                    .replaceAll("\\n ", "\n")
+                                                    .replaceAll("\\n", ''),
                                                 style:
                                                     TextStyles.kRegularFredoka(
                                                   color: kColorTextPrimary,

@@ -293,7 +293,7 @@ class AuthorizeUserScreen extends StatelessWidget {
                                 child: Padding(
                                   padding: AppPaddings.combined(
                                     horizontal: 16.appWidth,
-                                    vertical: 16.appHeight,
+                                    vertical: 8.appHeight,
                                   ),
                                   child: _controller.selectedPNames.isEmpty
                                       ? Text(
