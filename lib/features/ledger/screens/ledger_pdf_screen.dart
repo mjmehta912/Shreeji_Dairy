@@ -23,7 +23,10 @@ class LedgerPdfScreen extends StatelessWidget {
     try {
       final tempDir = await getTemporaryDirectory();
 
-      final sanitizedTitle = title.replaceAll(RegExp(r'[^\w\s]+'), '_');
+      final sanitizedTitle = title.replaceAll(
+        RegExp(r'[^\w\s]+'),
+        '_',
+      );
       final fileName = '$sanitizedTitle.pdf';
 
       final file = File('${tempDir.path}/$fileName');

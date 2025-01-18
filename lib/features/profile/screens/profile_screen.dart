@@ -9,6 +9,7 @@ import 'package:shreeji_dairy/features/profile/controllers/profile_controller.da
 import 'package:shreeji_dairy/features/select_customer/screens/select_customer_branch_screen.dart';
 import 'package:shreeji_dairy/features/store_order/screens/store_order_screen.dart';
 import 'package:shreeji_dairy/features/user_authorization/unauthorized_users/screens/unauthorized_users_screen.dart';
+import 'package:shreeji_dairy/features/user_management/all_users/screens/all_users_screen.dart';
 import 'package:shreeji_dairy/features/user_rights/users/screens/users_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -78,7 +79,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
       "User Management": {
         "icon": kIconUserManagement,
-        "action": () {},
+        "action": () {
+          Get.to(
+            () => AllUsersScreen(),
+          );
+        },
       },
       "User Authorisation": {
         "icon": kIconUserAuthorisation,

@@ -256,7 +256,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                           style: TextStyles.kMediumFredoka(
                                             color: kColorSecondary,
                                             fontSize: FontSizes.k16FontSize,
-                                          ).copyWith(height: 1),
+                                          ).copyWith(
+                                            height: 1,
+                                          ),
                                         ),
                                         AppSpaces.v4,
                                         Row(

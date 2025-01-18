@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/user_rights/users/controllers/users_controller.dart';
-import 'package:shreeji_dairy/features/user_rights/users/widgets/users_card.dart';
+import 'package:shreeji_dairy/features/user_management/all_users/controllers/all_users_controller.dart';
+import 'package:shreeji_dairy/features/user_management/all_users/widgets/all_users_card.dart';
+import 'package:shreeji_dairy/features/user_management/manage_user/screens/manage_user_screen.dart';
+import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
@@ -10,13 +12,13 @@ import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 
-class UsersScreen extends StatelessWidget {
-  UsersScreen({
+class AllUsersScreen extends StatelessWidget {
+  AllUsersScreen({
     super.key,
   });
 
-  final UsersController _controller = Get.put(
-    UsersController(),
+  final AllUsersController _controller = Get.put(
+    AllUsersController(),
   );
 
   @override
@@ -41,6 +43,24 @@ class UsersScreen extends StatelessWidget {
                   color: kColorTextPrimary,
                 ),
               ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Get.to(
+                      () => ManageUserScreen(
+                        isEdit: false,
+                      ),
+                    );
+                  },
+                  child: Text(
+                    '+ New User',
+                    style: TextStyles.kRegularFredoka(
+                      color: kColorSecondary,
+                      fontSize: FontSizes.k16FontSize,
+                    ),
+                  ),
+                ),
+              ],
             ),
             body: Padding(
               padding: AppPaddings.p10,
@@ -82,7 +102,7 @@ class UsersScreen extends StatelessWidget {
                             final user = _controller.filteredUsers[index];
                             return Column(
                               children: [
-                                UsersCard(
+                                AllUsersCard(
                                   user: user,
                                   controller: _controller,
                                 ),
