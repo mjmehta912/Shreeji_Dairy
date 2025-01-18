@@ -66,7 +66,7 @@ class ResetPasswordScreen extends StatelessWidget {
                               _controller.toggleNewPasswordVisibility();
                             },
                             icon: Icon(
-                              _controller.obscuredConfirmPassword.value
+                              _controller.obscuredNewPassword.value
                                   ? Icons.visibility
                                   : Icons.visibility_off,
                               size: 20,
