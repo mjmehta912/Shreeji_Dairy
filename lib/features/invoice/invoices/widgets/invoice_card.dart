@@ -13,9 +13,11 @@ class InvoiceCard extends StatelessWidget {
   const InvoiceCard({
     super.key,
     required this.invoice,
+    required this.onPressed,
   });
 
   final InvoiceDm invoice;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +94,7 @@ class InvoiceCard extends StatelessWidget {
                       titleSize: FontSizes.k16FontSize,
                       titleColor: kColorTextPrimary,
                       title: 'View',
-                      onPressed: () {},
+                      onPressed: onPressed,
                     ),
                   ],
                 ),

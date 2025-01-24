@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/auth/login/screens/login_screen.dart';
-import 'package:shreeji_dairy/features/select_customer/screens/select_customer_branch_screen.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/screens/select_customer_branch_screen.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 import 'package:video_player/video_player.dart';
 
@@ -26,20 +26,28 @@ class _SplashScreenState extends State<SplashScreen> {
     _controller = VideoPlayerController.asset(kVideoSplash)
       ..initialize().then(
         (_) {
-          setState(() {});
+          setState(
+            () {},
+          );
           _controller.play();
 
           Future.delayed(
-            const Duration(seconds: 3),
+            const Duration(
+              seconds: 3,
+            ),
             () async {
               if (_controller.value.isInitialized) {
                 _controller.pause();
               }
 
-              String? token = await SecureStorageHelper.read('token');
+              String? token = await SecureStorageHelper.read(
+                'token',
+              );
 
               Future.delayed(
-                const Duration(seconds: 1),
+                const Duration(
+                  seconds: 1,
+                ),
                 () {
                   if (token != null && token.isNotEmpty) {
                     Get.offAll(

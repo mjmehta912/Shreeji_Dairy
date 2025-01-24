@@ -44,12 +44,12 @@ class RegisterScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Register',
-                        style: TextStyles.kMediumFredoka(
+                        style: TextStyles.kRegularFredoka(
                           color: kColorTextPrimary,
-                          fontSize: FontSizes.k36FontSize,
+                          fontSize: FontSizes.k40FontSize,
                         ),
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v30,
                       AppTextFormField(
                         controller: _controller.businessNameController,
                         hintText: 'Business Name',
@@ -63,7 +63,7 @@ class RegisterScreen extends StatelessWidget {
                           TitleCaseTextInputFormatter(),
                         ],
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -101,7 +101,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       AppTextFormField(
                         controller: _controller.mobileNumberController,
                         hintText: 'Mobile Number',
@@ -121,7 +121,7 @@ class RegisterScreen extends StatelessWidget {
                           LengthLimitingTextInputFormatter(10),
                         ],
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       Obx(
                         () => AppTextFormField(
                           controller: _controller.passwordController,
@@ -146,7 +146,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       Obx(
                         () => AppTextFormField(
                           controller: _controller.confirmPasswordController,
@@ -174,7 +174,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      AppSpaces.v40,
+                      AppSpaces.v30,
                       AppButton(
                         title: 'Register',
                         titleColor: kColorTextPrimary,

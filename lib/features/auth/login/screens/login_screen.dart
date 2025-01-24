@@ -45,12 +45,12 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Login',
-                        style: TextStyles.kMediumFredoka(
+                        style: TextStyles.kRegularFredoka(
                           color: kColorTextPrimary,
-                          fontSize: FontSizes.k36FontSize,
+                          fontSize: FontSizes.k40FontSize,
                         ),
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v30,
                       AppTextFormField(
                         controller: _controller.mobileNumberController,
                         hintText: 'Mobile Number',
@@ -70,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                           LengthLimitingTextInputFormatter(10),
                         ],
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       Obx(
                         () => AppTextFormField(
                           controller: _controller.passwordController,
@@ -107,15 +107,18 @@ class LoginScreen extends StatelessWidget {
                             },
                             child: Text(
                               'Forgot Password?',
-                              style: TextStyles.kRegularFredoka(
+                              style: TextStyles.kLightFredoka(
                                 color: kColorSecondary,
                                 fontSize: FontSizes.k16FontSize,
+                              ).copyWith(
+                                decoration: TextDecoration.underline,
+                                decorationColor: kColorSecondary,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      AppSpaces.v40,
+                      AppSpaces.v30,
                       AppButton(
                         title: 'Login',
                         titleColor: kColorTextPrimary,
@@ -129,13 +132,13 @@ class LoginScreen extends StatelessWidget {
                           }
                         },
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v30,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             'Don\'t have an account? ',
-                            style: TextStyles.kRegularFredoka(
+                            style: TextStyles.kLightFredoka(
                               color: kColorTextPrimary,
                               fontSize: FontSizes.k16FontSize,
                             ),
@@ -149,9 +152,12 @@ class LoginScreen extends StatelessWidget {
                             },
                             child: Text(
                               'Register',
-                              style: TextStyles.kRegularFredoka(
+                              style: TextStyles.kLightFredoka(
                                 color: kColorSecondary,
                                 fontSize: FontSizes.k16FontSize,
+                              ).copyWith(
+                                decoration: TextDecoration.underline,
+                                decorationColor: kColorSecondary,
                               ),
                             ),
                           ),

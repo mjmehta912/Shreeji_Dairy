@@ -43,17 +43,17 @@ class OtpScreen extends StatelessWidget {
                   children: [
                     Text(
                       'OTP Verification',
-                      style: TextStyles.kMediumFredoka(
+                      style: TextStyles.kRegularFredoka(
                         color: kColorTextPrimary,
-                        fontSize: FontSizes.k36FontSize,
+                        fontSize: FontSizes.k40FontSize,
                       ),
                     ),
                     Text(
-                      'Enter the 6-digit OTP sent to your mobile number.',
+                      'Enter the 6-digit OTP sent to your mobile number',
                       style: TextStyles.kRegularFredoka(
                         color: kColorGrey,
-                        fontSize: FontSizes.k16FontSize,
-                      ).copyWith(height: 1.25),
+                        fontSize: FontSizes.k14FontSize,
+                      ),
                     ),
                     AppSpaces.v30,
                     PinCodeTextField(
@@ -78,7 +78,7 @@ class OtpScreen extends StatelessWidget {
                       ),
                       validator: (_) => null,
                     ),
-                    AppSpaces.v40,
+                    AppSpaces.v30,
                     AppButton(
                       title: 'Verify OTP',
                       titleColor: kColorTextPrimary,
@@ -111,11 +111,14 @@ class OtpScreen extends StatelessWidget {
                               _controller.resendEnabled.value
                                   ? 'Resend OTP'
                                   : 'Resend in ${_controller.timerValue.value}s',
-                              style: TextStyles.kRegularFredoka(
+                              style: TextStyles.kLightFredoka(
                                 color: _controller.resendEnabled.value
                                     ? kColorSecondary
                                     : kColorTextPrimary,
                                 fontSize: FontSizes.k16FontSize,
+                              ).copyWith(
+                                decoration: TextDecoration.underline,
+                                decorationColor: kColorSecondary,
                               ),
                             ),
                           );

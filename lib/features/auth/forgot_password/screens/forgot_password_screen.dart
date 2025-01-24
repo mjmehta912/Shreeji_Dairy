@@ -43,12 +43,19 @@ class ForgotPasswordScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Forgot Password',
-                        style: TextStyles.kMediumFredoka(
+                        style: TextStyles.kRegularFredoka(
                           color: kColorTextPrimary,
-                          fontSize: FontSizes.k36FontSize,
+                          fontSize: FontSizes.k40FontSize,
                         ),
                       ),
-                      AppSpaces.v20,
+                      Text(
+                        'Please enter your 10-digit mobile number to get an OTP.',
+                        style: TextStyles.kRegularFredoka(
+                          fontSize: FontSizes.k14FontSize,
+                          color: kColorGrey,
+                        ),
+                      ),
+                      AppSpaces.v30,
                       AppTextFormField(
                         controller: _controller.mobileNumberController,
                         hintText: 'Mobile Number',
@@ -68,7 +75,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                           LengthLimitingTextInputFormatter(10),
                         ],
                       ),
-                      AppSpaces.v40,
+                      AppSpaces.v30,
                       AppButton(
                         title: 'Get OTP',
                         titleColor: kColorTextPrimary,

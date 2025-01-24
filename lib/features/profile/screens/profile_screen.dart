@@ -6,7 +6,7 @@ import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/auth/reset_password/screens/reset_password_screen.dart';
 import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
-import 'package:shreeji_dairy/features/select_customer/screens/select_customer_branch_screen.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/screens/select_customer_branch_screen.dart';
 import 'package:shreeji_dairy/features/store_order/screens/store_order_screen.dart';
 import 'package:shreeji_dairy/features/user_authorization/unauthorized_users/screens/unauthorized_users_screen.dart';
 import 'package:shreeji_dairy/features/user_management/all_users/screens/all_users_screen.dart';
@@ -24,10 +24,12 @@ class ProfileScreen extends StatefulWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.branchCode,
   });
 
   final String pCode;
   final String pName;
+  final String branchCode;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -69,6 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             () => OutstandingsScreen(
               pCode: widget.pCode,
               pName: widget.pName,
+              branchCode: widget.branchCode,
             ),
           );
         },

@@ -162,6 +162,12 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
                             final invoice = _controller.invoices[index];
                             return InvoiceCard(
                               invoice: invoice,
+                              onPressed: () async {
+                                await _controller.downloadInvoice(
+                                  invNo: invoice.invNo,
+                                  financialYear: invoice.finYear,
+                                );
+                              },
                             );
                           },
                         ),

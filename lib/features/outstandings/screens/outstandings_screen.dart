@@ -5,10 +5,12 @@ import 'package:shreeji_dairy/features/outstandings/controllers/outstandings_con
 import 'package:shreeji_dairy/features/outstandings/widgets/outstanding_row.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_card2.dart';
+import 'package:shreeji_dairy/widgets/app_date_picker_field.dart';
 import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 
@@ -17,10 +19,12 @@ class OutstandingsScreen extends StatefulWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.branchCode,
   });
 
   final String pCode;
   final String pName;
+  final String branchCode;
 
   @override
   State<OutstandingsScreen> createState() => _OutstandingsScreenState();
@@ -38,6 +42,33 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
   }
 
   void initialize() async {
+    DateTime now = DateTime.now();
+    DateTime fromDate;
+    DateTime toDate;
+
+    if (now.month >= 4) {
+      fromDate = DateTime(now.year, 4, 1);
+      toDate = DateTime(now.year + 1, 3, 31);
+    } else {
+      fromDate = DateTime(now.year - 1, 4, 1);
+      toDate = DateTime(now.year, 3, 31);
+    }
+
+    final formattedFromDate =
+        "${fromDate.day.toString().padLeft(2, '0')}-${fromDate.month.toString().padLeft(2, '0')}-${fromDate.year}";
+    final formattedToDate =
+        "${toDate.day.toString().padLeft(2, '0')}-${toDate.month.toString().padLeft(2, '0')}-${toDate.year}";
+
+    _controller.fromDateController.text = formattedFromDate;
+    _controller.toDateController.text = formattedToDate;
+
+    _controller.fromDateController.addListener(() {
+      _onDateChanged();
+    });
+    _controller.toDateController.addListener(() {
+      _onDateChanged();
+    });
+
     await _controller.getCustomers();
 
     _controller.selectedCustomer.value = widget.pName;
@@ -45,6 +76,14 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
 
     await _controller.getOutstandings(
       pCode: widget.pCode,
+      branchCode: widget.branchCode,
+    );
+  }
+
+  void _onDateChanged() async {
+    await _controller.getOutstandings(
+      pCode: _controller.selectedCustomerCode.value,
+      branchCode: widget.branchCode,
     );
   }
 
@@ -85,6 +124,28 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
               padding: AppPaddings.p10,
               child: Column(
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 0.4.screenWidth,
+                        child: AppDatePickerTextFormField(
+                          dateController: _controller.fromDateController,
+                          hintText: 'From Date',
+                          fillColor: kColorWhite,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 0.4.screenWidth,
+                        child: AppDatePickerTextFormField(
+                          dateController: _controller.toDateController,
+                          hintText: 'To Date',
+                          fillColor: kColorWhite,
+                        ),
+                      )
+                    ],
+                  ),
+                  AppSpaces.v10,
                   Obx(
                     () => AppDropdown(
                       fillColor: kColorWhite,
@@ -96,7 +157,10 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                       hintText: 'Select Customer',
                       searchHintText: 'Search Customer',
                       onChanged: (value) {
-                        _controller.onCustomerSelected(value!);
+                        _controller.onCustomerSelected(
+                          value!,
+                          widget.branchCode,
+                        );
                       },
                     ),
                   ),
@@ -122,7 +186,10 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                             _controller.outstandingAmount.value.toString(),
                             style: TextStyles.kMediumFredoka(
                               fontSize: FontSizes.k18FontSize,
-                              color: kColorSecondary,
+                              color: _controller.outstandingAmount.value
+                                      .contains('-')
+                                  ? kColorRed
+                                  : kColorBlue,
                             ),
                           ),
                         ],
@@ -154,52 +221,77 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                           itemBuilder: (context, index) {
                             final outstanding = _controller.outstandings[index];
 
-                            return AppCard2(
-                              child: Padding(
-                                padding: AppPaddings.p8,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      outstanding.invNo,
-                                      style: TextStyles.kMediumFredoka(
-                                        fontSize: FontSizes.k16FontSize,
-                                        color: kColorTextPrimary,
-                                      ).copyWith(
-                                        height: 1.25,
-                                      ),
-                                    ),
-                                    Text(
-                                      outstanding.date,
-                                      style: TextStyles.kRegularFredoka(
-                                        fontSize: FontSizes.k14FontSize,
-                                        color: kColorTextPrimary,
-                                      ).copyWith(
-                                        height: 1.25,
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                            return Column(
+                              children: [
+                                AppCard2(
+                                  child: Padding(
+                                    padding: AppPaddings.p8,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        OutstandingRow(
-                                          title: 'Amount',
-                                          value: outstanding.amount.toString(),
+                                        Text(
+                                          outstanding.invNo,
+                                          style: TextStyles.kMediumFredoka(
+                                            fontSize: FontSizes.k16FontSize,
+                                            color: kColorTextPrimary,
+                                          ).copyWith(
+                                            height: 1.25,
+                                          ),
                                         ),
-                                        OutstandingRow(
-                                          title: 'Outstanding',
-                                          value: outstanding.outstanding
-                                              .toString(),
+                                        Text(
+                                          outstanding.date,
+                                          style: TextStyles.kRegularFredoka(
+                                            fontSize: FontSizes.k14FontSize,
+                                            color: kColorTextPrimary,
+                                          ).copyWith(
+                                            height: 1.25,
+                                          ),
                                         ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            OutstandingRow(
+                                              title: 'Amount',
+                                              value:
+                                                  outstanding.amount.toString(),
+                                            ),
+                                            OutstandingRow(
+                                              title: 'Outstanding',
+                                              value: outstanding.outstanding
+                                                  .toString(),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            OutstandingRow(
+                                              title: 'Paid',
+                                              value: outstanding.paidAmount,
+                                            ),
+                                            Text(
+                                              outstanding.runningTotal,
+                                              style: TextStyles.kMediumFredoka(
+                                                color: outstanding.runningTotal
+                                                        .contains('-')
+                                                    ? kColorRed
+                                                    : kColorBlue,
+                                                fontSize: FontSizes.k16FontSize,
+                                              ),
+                                            ),
+                                          ],
+                                        )
                                       ],
                                     ),
-                                    OutstandingRow(
-                                      title: 'Status',
-                                      value: outstanding.status,
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                                AppSpaces.v2,
+                              ],
                             );
                           },
                         ),

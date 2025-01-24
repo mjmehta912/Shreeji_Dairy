@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/bottom_nav/screens/bottom_nav_screen.dart';
-import 'package:shreeji_dairy/features/select_customer/controllers/select_customer_branch_controller.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/controllers/select_customer_branch_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
@@ -43,13 +43,13 @@ class SelectCustomerBranchScreen extends StatelessWidget {
                       Obx(
                         () => Text(
                           'Welcome, ${_controller.firstName.value}!',
-                          style: TextStyles.kMediumFredoka(
+                          style: TextStyles.kRegularFredoka(
                             color: kColorTextPrimary,
-                            fontSize: FontSizes.k36FontSize,
+                            fontSize: FontSizes.k40FontSize,
                           ),
                         ),
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v30,
                       Obx(
                         () => AppDropdown(
                           items: _controller.customerNames,
@@ -80,7 +80,7 @@ class SelectCustomerBranchScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      AppSpaces.v40,
+                      AppSpaces.v30,
                       AppButton(
                         title: 'Let\'s shop',
                         titleColor: kColorTextPrimary,

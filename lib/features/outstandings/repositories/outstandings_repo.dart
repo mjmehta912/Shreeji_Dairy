@@ -7,22 +7,32 @@ import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 class OutstandingsRepo {
   static Future<OutstandingDm> getOutstandings({
     required String pCode,
+    required String fromDate,
+    required String toDate,
+    required String branchCode,
   }) async {
-    String? token = await SecureStorageHelper.read('token');
+    String? token = await SecureStorageHelper.read(
+      'token',
+    );
 
     try {
-      final response = await ApiService.getRequest(
-        endpoint: '/Invoice/getOutstanding',
-        queryParams: {
-          'PCODE': pCode,
-        },
+      Map<String, dynamic> requestBody = {
+        "FromDate": fromDate,
+        "ToDate": toDate,
+        "PCODE": pCode,
+        "BranchCode": branchCode,
+      };
+
+      final response = await ApiService.postRequest(
+        endpoint: '/Invoice/getNewOutstanding',
+        requestBody: requestBody,
         token: token,
       );
 
       if (response == null) {
         return OutstandingDm(
           outstandings: [],
-          outstandingAmount: 0.0,
+          outstandingAmount: '',
         );
       }
 
@@ -55,7 +65,7 @@ class OutstandingsRepo {
         throw 'Failed to generate PDF. Unexpected response format.';
       }
     } catch (e) {
-      throw 'Error downloading ledger: $e';
+      throw 'Error downloading outstandings: $e';
     }
   }
 }

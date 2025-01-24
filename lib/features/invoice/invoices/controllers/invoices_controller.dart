@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/features/invoice/invoices/models/invoice_dm.dart';
 import 'package:shreeji_dairy/features/invoice/invoices/repositories/invoices_repo.dart';
-import 'package:shreeji_dairy/features/select_customer/models/customer_dm.dart';
-import 'package:shreeji_dairy/features/select_customer/repositories/select_customer_branch_repo.dart';
+import 'package:shreeji_dairy/features/invoice/invoices/screens/invoice_pdf_screen.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/repositories/select_customer_branch_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class InvoicesController extends GetxController {
@@ -85,6 +86,35 @@ class InvoicesController extends GetxController {
           e.toString(),
         );
       }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> downloadInvoice({
+    required String invNo,
+    required String financialYear,
+  }) async {
+    try {
+      isLoading.value = true;
+      final pdfBytes = await InvoicesRepo.downloadInvoice(
+        invNo: invNo,
+        financialYear: financialYear,
+      );
+
+      if (pdfBytes != null && pdfBytes.isNotEmpty) {
+        Get.to(
+          () => InvoicePdfScreen(
+            pdfBytes: pdfBytes,
+            title: selectedCustomerCode.value,
+          ),
+        );
+      }
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
     } finally {
       isLoading.value = false;
     }

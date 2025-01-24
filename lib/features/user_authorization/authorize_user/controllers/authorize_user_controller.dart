@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:shreeji_dairy/features/select_customer/models/customer_dm.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
 import 'package:shreeji_dairy/features/user_authorization/authorize_user/models/salesman_dm.dart';
 import 'package:shreeji_dairy/features/user_authorization/authorize_user/repositories/authorize_user_repo.dart';
 import 'package:shreeji_dairy/features/user_authorization/unauthorized_users/controllers/unauthorized_users_controller.dart';

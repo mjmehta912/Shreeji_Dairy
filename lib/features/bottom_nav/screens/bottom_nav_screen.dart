@@ -53,6 +53,7 @@ class BottomNavScreen extends StatelessWidget {
         ProfileScreen(
           pCode: pCode,
           pName: pName,
+          branchCode: branchCode!,
         ),
       ];
 
@@ -165,7 +166,7 @@ class BottomNavScreen extends StatelessWidget {
             Text(
               label,
               style: isSelected
-                  ? TextStyles.kMediumFredoka(
+                  ? TextStyles.kRegularFredoka(
                       color: kColorSecondary,
                       fontSize: FontSizes.k12FontSize,
                     )

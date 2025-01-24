@@ -1,5 +1,5 @@
-import 'package:shreeji_dairy/features/select_customer/models/branch_dm.dart';
-import 'package:shreeji_dairy/features/select_customer/models/customer_dm.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/models/branch_dm.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
 import 'package:shreeji_dairy/services/api_service.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 

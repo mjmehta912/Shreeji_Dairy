@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/features/outstandings/models/outstanding_dm.dart';
 import 'package:shreeji_dairy/features/outstandings/repositories/outstandings_repo.dart';
 import 'package:shreeji_dairy/features/outstandings/screens/outstandings_pdf_screen.dart';
-import 'package:shreeji_dairy/features/select_customer/models/customer_dm.dart';
-import 'package:shreeji_dairy/features/select_customer/repositories/select_customer_branch_repo.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/repositories/select_customer_branch_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class OutstandingsController extends GetxController {
@@ -14,7 +16,10 @@ class OutstandingsController extends GetxController {
   var selectedCustomer = ''.obs;
   var selectedCustomerCode = ''.obs;
   var outstandings = <OutstandingDataDm>[].obs;
-  var outstandingAmount = 0.0.obs;
+  var outstandingAmount = ''.obs;
+
+  var fromDateController = TextEditingController();
+  var toDateController = TextEditingController();
 
   Future<void> getCustomers() async {
     try {
@@ -40,7 +45,10 @@ class OutstandingsController extends GetxController {
     }
   }
 
-  void onCustomerSelected(String customer) {
+  void onCustomerSelected(
+    String customer,
+    String branchCode,
+  ) {
     selectedCustomer.value = customer;
 
     var customerObj = customers.firstWhere(
@@ -49,27 +57,44 @@ class OutstandingsController extends GetxController {
 
     selectedCustomerCode.value = customerObj.pCode;
 
-    getOutstandings(pCode: selectedCustomerCode.value);
+    getOutstandings(
+      pCode: selectedCustomerCode.value,
+      branchCode: branchCode,
+    );
   }
 
   Future<void> getOutstandings({
     required String pCode,
+    required String branchCode,
   }) async {
     try {
       isLoading.value = true;
 
       final fetchedOutstandings = await OutstandingsRepo.getOutstandings(
         pCode: pCode,
+        branchCode: branchCode,
+        fromDate: DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(fromDateController.text),
+        ),
+        toDate: DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(toDateController.text),
+        ),
       );
 
-      // Update both the list and the outstandingAmount
       outstandings.assignAll(fetchedOutstandings.outstandings);
       outstandingAmount.value = fetchedOutstandings.outstandingAmount;
     } catch (e) {
-      showErrorSnackbar(
-        'Error',
-        e.toString(),
-      );
+      if (e is Map<String, dynamic>) {
+        showErrorSnackbar(
+          'Error',
+          e['message'],
+        );
+      } else {
+        showErrorSnackbar(
+          'Error',
+          e.toString(),
+        );
+      }
     } finally {
       isLoading.value = false;
     }

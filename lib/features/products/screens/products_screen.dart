@@ -53,7 +53,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
         _controller.selectedIgCodes.toSet().obs;
 
     Get.bottomSheet(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -387,7 +389,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ],
             ),
             body: Padding(
-              padding: AppPaddings.p14,
+              padding: AppPaddings.p16,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -503,7 +505,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                           clipBehavior: Clip.antiAlias,
                                           child: Image.asset(
                                             kImageMAndM,
-                                            height: 50.appHeight,
+                                            height: 100.appHeight,
                                           ),
                                         ),
                                         AppSpaces.h10,

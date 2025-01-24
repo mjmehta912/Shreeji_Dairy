@@ -4,13 +4,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/features/auth/login/repositories/login_repo.dart';
-import 'package:shreeji_dairy/features/select_customer/screens/select_customer_branch_screen.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/screens/select_customer_branch_screen.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/helpers/device_helper.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
 class LoginController extends GetxController {
   var isLoading = false.obs;
+  final loginFormKey = GlobalKey<FormState>();
 
   var obscuredText = true.obs;
   void togglePasswordVisibility() {
@@ -20,7 +21,6 @@ class LoginController extends GetxController {
   var mobileNumberController = TextEditingController();
   var passwordController = TextEditingController();
   var hasAttemptedLogin = false.obs;
-  final loginFormKey = GlobalKey<FormState>();
 
   @override
   void onInit() {
@@ -53,7 +53,6 @@ class LoginController extends GetxController {
 
     String? fcmToken;
     if (Platform.isAndroid) {
-      // Fetch FCM Token only on Android
       fcmToken = await FirebaseMessaging.instance.getToken();
 
       if (fcmToken == null) {
@@ -65,7 +64,6 @@ class LoginController extends GetxController {
         return;
       }
     } else {
-      // Pass blank token for iOS
       fcmToken = '';
     }
 

@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/features/ledger/models/ledger_dm.dart';
 import 'package:shreeji_dairy/features/ledger/repositories/ledger_repo.dart';
 import 'package:shreeji_dairy/features/ledger/screens/ledger_pdf_screen.dart';
-import 'package:shreeji_dairy/features/select_customer/models/customer_dm.dart';
-import 'package:shreeji_dairy/features/select_customer/repositories/select_customer_branch_repo.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/repositories/select_customer_branch_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class LedgerController extends GetxController {

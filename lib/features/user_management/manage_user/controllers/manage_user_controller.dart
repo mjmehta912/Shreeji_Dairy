@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shreeji_dairy/features/select_customer/models/customer_dm.dart';
+import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
 import 'package:shreeji_dairy/features/user_authorization/authorize_user/models/salesman_dm.dart';
 import 'package:shreeji_dairy/features/user_management/all_users/controllers/all_users_controller.dart';
 import 'package:shreeji_dairy/features/user_management/manage_user/repositories/manage_user_repo.dart';

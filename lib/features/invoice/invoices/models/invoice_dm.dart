@@ -10,6 +10,7 @@ class InvoiceDm {
   final String dbc;
   final int days;
   final String seCode;
+  final String finYear;
 
   InvoiceDm({
     required this.pname,
@@ -23,6 +24,7 @@ class InvoiceDm {
     required this.dbc,
     required this.days,
     required this.seCode,
+    required this.finYear,
   });
 
   factory InvoiceDm.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class InvoiceDm {
       dbc: json['DBC'],
       days: json['DAYS'],
       seCode: json['SECODE'],
+      finYear: json['FINYEAR'],
     );
   }
 }
