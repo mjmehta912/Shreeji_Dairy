@@ -72,6 +72,7 @@ class ProductsController extends GetxController {
           showDialog(
             context: Get.context!,
             barrierDismissible: false,
+            // ignore: deprecated_member_use
             builder: (context) => WillPopScope(
               onWillPop: () async {
                 return false;

@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String kBaseUrl = 'http://43.250.164.139:8080/api';
+  // static const String kBaseUrl = 'http://43.250.164.139:8080/api';
+
+  static const String kBaseUrl = 'http://192.168.0.135:8083/api';
 
   static Future<dynamic> getRequest({
     required String endpoint,

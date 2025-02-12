@@ -79,51 +79,84 @@ class _ProductsScreenState extends State<ProductsScreen> {
             AppSpaces.v10,
             Expanded(
               child: Obx(
-                () => ListView(
-                  shrinkWrap: true,
-                  children: _controller.groups.map(
-                    (group) {
-                      return CheckboxListTile(
-                        title: Text(
-                          group.igName,
-                          style: TextStyles.kRegularFredoka(
-                            fontSize: FontSizes.k16FontSize,
-                            color: kColorTextPrimary,
+                () {
+                  final sortedGroups = _controller.groups.toList()
+                    ..sort(
+                      (a, b) {
+                        bool aSelected = tempSelectedIgCodes.contains(a.igCode);
+                        bool bSelected = tempSelectedIgCodes.contains(b.igCode);
+                        return (bSelected ? 1 : 0).compareTo(aSelected ? 1 : 0);
+                      },
+                    );
+
+                  return ListView(
+                    shrinkWrap: true,
+                    children: sortedGroups.map(
+                      (group) {
+                        return CheckboxListTile(
+                          title: Text(
+                            group.igName,
+                            style: TextStyles.kRegularFredoka(
+                              fontSize: FontSizes.k16FontSize,
+                              color: kColorTextPrimary,
+                            ),
                           ),
-                        ),
-                        contentPadding: EdgeInsets.zero,
-                        value: tempSelectedIgCodes.contains(group.igCode),
-                        activeColor: kColorSecondary,
-                        onChanged: (isSelected) {
-                          if (isSelected == true) {
-                            tempSelectedIgCodes.add(group.igCode);
-                          } else {
-                            tempSelectedIgCodes.remove(group.igCode);
-                          }
-                        },
-                      );
-                    },
-                  ).toList(),
-                ),
+                          contentPadding: EdgeInsets.zero,
+                          value: tempSelectedIgCodes.contains(group.igCode),
+                          activeColor: kColorSecondary,
+                          onChanged: (isSelected) {
+                            if (isSelected == true) {
+                              tempSelectedIgCodes.add(group.igCode);
+                            } else {
+                              tempSelectedIgCodes.remove(group.igCode);
+                            }
+                          },
+                        );
+                      },
+                    ).toList(),
+                  );
+                },
               ),
             ),
             AppSpaces.v10,
-            AppButton(
-              buttonWidth: 0.5.screenWidth,
-              buttonHeight: 40,
-              buttonColor: kColorPrimary,
-              titleColor: kColorTextPrimary,
-              onPressed: () {
-                _controller.selectedIgCodes
-                  ..clear()
-                  ..addAll(tempSelectedIgCodes);
-                _controller.searchProduct(
-                  searchText: _controller.searchController.text,
-                  pCode: widget.pCode,
-                );
-                Get.back();
-              },
-              title: 'Apply Filter',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                AppButton(
+                  buttonWidth: 0.3.screenWidth,
+                  buttonHeight: 40,
+                  buttonColor: kColorGrey,
+                  titleColor: kColorTextPrimary,
+                  titleSize: FontSizes.k16FontSize,
+                  onPressed: () {
+                    _controller.selectedIgCodes.clear();
+                    _controller.searchProduct(
+                      searchText: _controller.searchController.text,
+                      pCode: widget.pCode,
+                    );
+                    Get.back();
+                  },
+                  title: 'Clear Filter',
+                ),
+                AppButton(
+                  buttonWidth: 0.5.screenWidth,
+                  buttonHeight: 40,
+                  buttonColor: kColorPrimary,
+                  titleColor: kColorTextPrimary,
+                  titleSize: FontSizes.k16FontSize,
+                  onPressed: () {
+                    _controller.selectedIgCodes
+                      ..clear()
+                      ..addAll(tempSelectedIgCodes);
+                    _controller.searchProduct(
+                      searchText: _controller.searchController.text,
+                      pCode: widget.pCode,
+                    );
+                    Get.back();
+                  },
+                  title: 'Apply Filter',
+                ),
+              ],
             ),
           ],
         ),
@@ -161,51 +194,82 @@ class _ProductsScreenState extends State<ProductsScreen> {
             AppSpaces.v10,
             Expanded(
               child: Obx(
-                () => ListView(
-                  shrinkWrap: true,
-                  children: _controller.subGroups.map(
-                    (subGroup) {
-                      return CheckboxListTile(
-                        title: Text(
-                          subGroup.icName,
-                          style: TextStyles.kRegularFredoka(
-                            fontSize: FontSizes.k16FontSize,
-                            color: kColorTextPrimary,
+                () {
+                  final sortedSubGroups = _controller.subGroups.toList()
+                    ..sort((a, b) {
+                      bool aSelected = tempSelectedIcCodes.contains(a.icCode);
+                      bool bSelected = tempSelectedIcCodes.contains(b.icCode);
+                      return (bSelected ? 1 : 0).compareTo(aSelected ? 1 : 0);
+                    });
+
+                  return ListView(
+                    shrinkWrap: true,
+                    children: sortedSubGroups.map(
+                      (subGroup) {
+                        return CheckboxListTile(
+                          title: Text(
+                            subGroup.icName,
+                            style: TextStyles.kRegularFredoka(
+                              fontSize: FontSizes.k16FontSize,
+                              color: kColorTextPrimary,
+                            ),
                           ),
-                        ),
-                        contentPadding: EdgeInsets.zero,
-                        value: tempSelectedIcCodes.contains(subGroup.icCode),
-                        activeColor: kColorSecondary,
-                        onChanged: (isSelected) {
-                          if (isSelected == true) {
-                            tempSelectedIcCodes.add(subGroup.icCode);
-                          } else {
-                            tempSelectedIcCodes.remove(subGroup.icCode);
-                          }
-                        },
-                      );
-                    },
-                  ).toList(),
-                ),
+                          contentPadding: EdgeInsets.zero,
+                          value: tempSelectedIcCodes.contains(subGroup.icCode),
+                          activeColor: kColorSecondary,
+                          onChanged: (isSelected) {
+                            if (isSelected == true) {
+                              tempSelectedIcCodes.add(subGroup.icCode);
+                            } else {
+                              tempSelectedIcCodes.remove(subGroup.icCode);
+                            }
+                          },
+                        );
+                      },
+                    ).toList(),
+                  );
+                },
               ),
             ),
             AppSpaces.v10,
-            AppButton(
-              buttonWidth: 0.5.screenWidth,
-              buttonHeight: 40,
-              buttonColor: kColorPrimary,
-              titleColor: kColorTextPrimary,
-              onPressed: () {
-                _controller.selectedIcCodes
-                  ..clear()
-                  ..addAll(tempSelectedIcCodes);
-                _controller.searchProduct(
-                  searchText: _controller.searchController.text,
-                  pCode: widget.pCode,
-                );
-                Get.back();
-              },
-              title: 'Apply Filter',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                AppButton(
+                  buttonWidth: 0.3.screenWidth,
+                  buttonHeight: 40,
+                  buttonColor: kColorGrey,
+                  titleColor: kColorTextPrimary,
+                  titleSize: FontSizes.k16FontSize,
+                  onPressed: () {
+                    _controller.selectedIcCodes.clear();
+                    _controller.searchProduct(
+                      searchText: _controller.searchController.text,
+                      pCode: widget.pCode,
+                    );
+                    Get.back();
+                  },
+                  title: 'Clear Filter',
+                ),
+                AppButton(
+                  buttonWidth: 0.5.screenWidth,
+                  buttonHeight: 40,
+                  buttonColor: kColorPrimary,
+                  titleColor: kColorTextPrimary,
+                  titleSize: FontSizes.k16FontSize,
+                  onPressed: () {
+                    _controller.selectedIcCodes
+                      ..clear()
+                      ..addAll(tempSelectedIcCodes);
+                    _controller.searchProduct(
+                      searchText: _controller.searchController.text,
+                      pCode: widget.pCode,
+                    );
+                    Get.back();
+                  },
+                  title: 'Apply Filter',
+                ),
+              ],
             ),
           ],
         ),
@@ -245,10 +309,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
             AppSpaces.v10,
             Expanded(
               child: Obx(
-                () => ListView(
-                  shrinkWrap: true,
-                  children: _controller.subGroups2.map(
-                    (subGroup2) {
+                () {
+                  final sortedSubGroups2 = _controller.subGroups2.toList()
+                    ..sort((a, b) {
+                      bool aSelected =
+                          tempSelectedIpackgCodes.contains(a.ipackgCode);
+                      bool bSelected =
+                          tempSelectedIpackgCodes.contains(b.ipackgCode);
+                      return (bSelected ? 1 : 0).compareTo(aSelected ? 1 : 0);
+                    });
+
+                  return ListView(
+                    shrinkWrap: true,
+                    children: sortedSubGroups2.map((subGroup2) {
                       return CheckboxListTile(
                         title: Text(
                           subGroup2.ipackgName,
@@ -270,28 +343,50 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           }
                         },
                       );
-                    },
-                  ).toList(),
-                ),
+                    }).toList(),
+                  );
+                },
               ),
             ),
             AppSpaces.v10,
-            AppButton(
-              buttonWidth: 0.5.screenWidth,
-              buttonHeight: 40,
-              buttonColor: kColorPrimary,
-              titleColor: kColorTextPrimary,
-              onPressed: () {
-                _controller.selectedIpackgCodes
-                  ..clear()
-                  ..addAll(tempSelectedIpackgCodes);
-                _controller.searchProduct(
-                  searchText: _controller.searchController.text,
-                  pCode: widget.pCode,
-                );
-                Get.back();
-              },
-              title: 'Apply Filter',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                AppButton(
+                  buttonWidth: 0.3.screenWidth,
+                  buttonHeight: 40,
+                  buttonColor: kColorGrey,
+                  titleColor: kColorTextPrimary,
+                  titleSize: FontSizes.k16FontSize,
+                  onPressed: () {
+                    _controller.selectedIpackgCodes.clear();
+                    _controller.searchProduct(
+                      searchText: _controller.searchController.text,
+                      pCode: widget.pCode,
+                    );
+                    Get.back();
+                  },
+                  title: 'Clear Filter',
+                ),
+                AppButton(
+                  buttonWidth: 0.5.screenWidth,
+                  buttonHeight: 40,
+                  buttonColor: kColorPrimary,
+                  titleColor: kColorTextPrimary,
+                  titleSize: FontSizes.k16FontSize,
+                  onPressed: () {
+                    _controller.selectedIpackgCodes
+                      ..clear()
+                      ..addAll(tempSelectedIpackgCodes);
+                    _controller.searchProduct(
+                      searchText: _controller.searchController.text,
+                      pCode: widget.pCode,
+                    );
+                    Get.back();
+                  },
+                  title: 'Apply Filter',
+                ),
+              ],
             ),
           ],
         ),
@@ -505,7 +600,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                           clipBehavior: Clip.antiAlias,
                                           child: Image.asset(
                                             kImageMAndM,
-                                            height: 100.appHeight,
+                                            height: 75.appHeight,
                                           ),
                                         ),
                                         AppSpaces.h10,

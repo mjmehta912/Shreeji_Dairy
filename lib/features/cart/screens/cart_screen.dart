@@ -106,7 +106,7 @@ class _CartScreenState extends State<CartScreen> {
                                         clipBehavior: Clip.antiAlias,
                                         child: Image.asset(
                                           kImageMAndM,
-                                          height: 50.appHeight,
+                                          height: 75.appHeight,
                                         ),
                                       ),
                                       AppSpaces.h10,

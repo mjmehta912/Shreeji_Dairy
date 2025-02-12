@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/auth/reset_password/screens/reset_password_screen.dart';
+import 'package:shreeji_dairy/features/credit_note/screens/credit_note_screen.dart';
 import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/features/auth/select_customer/screens/select_customer_branch_screen.dart';
@@ -106,7 +107,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
       "Credit Note Entry": {
         "icon": kIconCreditNoteEntry,
-        "action": () {},
+        "action": () {
+          Get.to(
+            () => CreditNoteScreen(
+              pCode: widget.pCode,
+              pName: widget.pName,
+            ),
+          );
+        },
       },
       "Credit Note Status": {
         "icon": kIconCreditNoteStatus,
