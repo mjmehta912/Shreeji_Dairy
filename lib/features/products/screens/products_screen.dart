@@ -51,6 +51,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void showGroupFilter() {
     final RxSet<String> tempSelectedIgCodes =
         _controller.selectedIgCodes.toSet().obs;
+    final RxString searchQuery = ''.obs;
 
     Get.bottomSheet(
       shape: RoundedRectangleBorder(
@@ -77,10 +78,24 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ),
             ),
             AppSpaces.v10,
+            AppTextFormField(
+              controller: _controller.groupSearchController,
+              hintText: 'Search Group',
+              onChanged: (value) {
+                searchQuery.value = value.toLowerCase();
+              },
+            ),
+            AppSpaces.v10,
             Expanded(
               child: Obx(
                 () {
-                  final sortedGroups = _controller.groups.toList()
+                  final sortedGroups = _controller.groups
+                      .where(
+                        (group) => group.igName
+                            .toLowerCase()
+                            .contains(searchQuery.value),
+                      )
+                      .toList()
                     ..sort(
                       (a, b) {
                         bool aSelected = tempSelectedIgCodes.contains(a.igCode);
@@ -168,18 +183,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void showSubGroupFilter() {
     final RxSet<String> tempSelectedIcCodes =
         _controller.selectedIcCodes.toSet().obs;
+    final RxString searchQuery = ''.obs;
 
     Get.bottomSheet(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: kColorWhite,
         ),
         padding: AppPaddings.p16,
-        constraints: BoxConstraints(
-          maxHeight: 0.5.screenHeight,
-        ),
+        constraints: BoxConstraints(maxHeight: 0.5.screenHeight),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -192,15 +208,31 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ),
             ),
             AppSpaces.v10,
+            AppTextFormField(
+              controller: _controller.subGroupSearchController,
+              hintText: 'Search Subgroup',
+              onChanged: (value) {
+                searchQuery.value = value.toLowerCase();
+              },
+            ),
+            AppSpaces.v10,
             Expanded(
               child: Obx(
                 () {
-                  final sortedSubGroups = _controller.subGroups.toList()
-                    ..sort((a, b) {
-                      bool aSelected = tempSelectedIcCodes.contains(a.icCode);
-                      bool bSelected = tempSelectedIcCodes.contains(b.icCode);
-                      return (bSelected ? 1 : 0).compareTo(aSelected ? 1 : 0);
-                    });
+                  final sortedSubGroups = _controller.subGroups
+                      .where(
+                        (subGroup) => subGroup.icName
+                            .toLowerCase()
+                            .contains(searchQuery.value),
+                      )
+                      .toList()
+                    ..sort(
+                      (a, b) {
+                        bool aSelected = tempSelectedIcCodes.contains(a.icCode);
+                        bool bSelected = tempSelectedIcCodes.contains(b.icCode);
+                        return (bSelected ? 1 : 0).compareTo(aSelected ? 1 : 0);
+                      },
+                    );
 
                   return ListView(
                     shrinkWrap: true,
@@ -281,6 +313,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void showSubGroup2Filter() {
     final RxSet<String> tempSelectedIpackgCodes =
         _controller.selectedIpackgCodes.toSet().obs;
+    final RxString searchQuery = ''.obs;
 
     Get.bottomSheet(
       shape: RoundedRectangleBorder(
@@ -307,43 +340,61 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ),
             ),
             AppSpaces.v10,
+            AppTextFormField(
+              controller: _controller.subGroup2SearchController,
+              hintText: 'Search Subgroup 2',
+              onChanged: (value) {
+                searchQuery.value = value.toLowerCase();
+              },
+            ),
+            AppSpaces.v10,
             Expanded(
               child: Obx(
                 () {
-                  final sortedSubGroups2 = _controller.subGroups2.toList()
-                    ..sort((a, b) {
-                      bool aSelected =
-                          tempSelectedIpackgCodes.contains(a.ipackgCode);
-                      bool bSelected =
-                          tempSelectedIpackgCodes.contains(b.ipackgCode);
-                      return (bSelected ? 1 : 0).compareTo(aSelected ? 1 : 0);
-                    });
+                  final sortedSubGroups2 = _controller.subGroups2
+                      .where(
+                        (subGroup2) => subGroup2.ipackgName
+                            .toLowerCase()
+                            .contains(searchQuery.value),
+                      )
+                      .toList()
+                    ..sort(
+                      (a, b) {
+                        bool aSelected =
+                            tempSelectedIpackgCodes.contains(a.ipackgCode);
+                        bool bSelected =
+                            tempSelectedIpackgCodes.contains(b.ipackgCode);
+                        return (bSelected ? 1 : 0).compareTo(aSelected ? 1 : 0);
+                      },
+                    );
 
                   return ListView(
                     shrinkWrap: true,
-                    children: sortedSubGroups2.map((subGroup2) {
-                      return CheckboxListTile(
-                        title: Text(
-                          subGroup2.ipackgName,
-                          style: TextStyles.kRegularFredoka(
-                            fontSize: FontSizes.k16FontSize,
-                            color: kColorTextPrimary,
+                    children: sortedSubGroups2.map(
+                      (subGroup2) {
+                        return CheckboxListTile(
+                          title: Text(
+                            subGroup2.ipackgName,
+                            style: TextStyles.kRegularFredoka(
+                              fontSize: FontSizes.k16FontSize,
+                              color: kColorTextPrimary,
+                            ),
                           ),
-                        ),
-                        contentPadding: EdgeInsets.zero,
-                        value: tempSelectedIpackgCodes
-                            .contains(subGroup2.ipackgCode),
-                        activeColor: kColorSecondary,
-                        onChanged: (isSelected) {
-                          if (isSelected == true) {
-                            tempSelectedIpackgCodes.add(subGroup2.ipackgCode);
-                          } else {
-                            tempSelectedIpackgCodes
-                                .remove(subGroup2.ipackgCode);
-                          }
-                        },
-                      );
-                    }).toList(),
+                          contentPadding: EdgeInsets.zero,
+                          value: tempSelectedIpackgCodes
+                              .contains(subGroup2.ipackgCode),
+                          activeColor: kColorSecondary,
+                          onChanged: (isSelected) {
+                            if (isSelected == true) {
+                              tempSelectedIpackgCodes.add(subGroup2.ipackgCode);
+                            } else {
+                              tempSelectedIpackgCodes
+                                  .remove(subGroup2.ipackgCode);
+                            }
+                          },
+                        );
+                      },
+                    ).toList(),
                   );
                 },
               ),

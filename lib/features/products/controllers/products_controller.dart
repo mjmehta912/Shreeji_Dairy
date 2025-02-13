@@ -24,10 +24,13 @@ class ProductsController extends GetxController {
 
   var groups = <GroupDm>[].obs;
   var selectedIgCodes = <String>{}.obs;
+  var groupSearchController = TextEditingController();
   var subGroups = <SubgroupDm>[].obs;
   var selectedIcCodes = <String>{}.obs;
+  var subGroupSearchController = TextEditingController();
   var subGroups2 = <Subgroup2Dm>[].obs;
   var selectedIpackgCodes = <String>{}.obs;
+  var subGroup2SearchController = TextEditingController();
 
   Future<void> searchProduct({
     String searchText = '',
