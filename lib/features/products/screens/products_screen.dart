@@ -36,6 +36,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
     ProductsController(),
   );
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     _controller.getGroups();
@@ -633,6 +635,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
                       return Expanded(
                         child: ListView.builder(
+                          controller: _scrollController,
                           shrinkWrap: true,
                           itemCount: _controller.products.length,
                           itemBuilder: (context, index) {
@@ -742,10 +745,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                                                             child:
                                                                                 AppButton(
                                                                               onPressed: () async {
+                                                                                double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
+
                                                                                 await _controller.addOrUpdateCart(
                                                                                   pCode: widget.pCode,
                                                                                   iCode: sku.skuIcode,
-                                                                                  qty: sku.cartQty + 1,
+                                                                                  qty: sku.cartQty + 1, // or -1 for remove
                                                                                   rate: sku.rate,
                                                                                 );
 
@@ -753,6 +758,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                                                                   pCode: widget.pCode,
                                                                                   searchText: _controller.searchController.text,
                                                                                 );
+
+                                                                                // ✅ Restore scroll position after UI updates
+                                                                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                                  if (_scrollController.hasClients) {
+                                                                                    _scrollController.jumpTo(offset);
+                                                                                  }
+                                                                                });
                                                                               },
                                                                               title: 'Add +',
                                                                               titleSize: FontSizes.k14FontSize,
@@ -765,6 +777,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                                                             children: [
                                                                               InkWell(
                                                                                 onTap: () async {
+                                                                                  double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
+
                                                                                   await _controller.addOrUpdateCart(
                                                                                     pCode: widget.pCode,
                                                                                     iCode: sku.skuIcode,
@@ -776,6 +790,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                                                                     pCode: widget.pCode,
                                                                                     searchText: _controller.searchController.text,
                                                                                   );
+
+                                                                                  // ✅ Restore scroll position after UI updates
+                                                                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                                    if (_scrollController.hasClients) {
+                                                                                      _scrollController.jumpTo(offset);
+                                                                                    }
+                                                                                  });
                                                                                 },
                                                                                 child: const Icon(
                                                                                   Icons.remove,
@@ -794,10 +815,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                                                               AppSpaces.h10,
                                                                               InkWell(
                                                                                 onTap: () async {
+                                                                                  double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
+
                                                                                   await _controller.addOrUpdateCart(
                                                                                     pCode: widget.pCode,
                                                                                     iCode: sku.skuIcode,
-                                                                                    qty: sku.cartQty + 1,
+                                                                                    qty: sku.cartQty + 1, // or -1 for remove
                                                                                     rate: sku.rate,
                                                                                   );
 
@@ -805,6 +828,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                                                                     pCode: widget.pCode,
                                                                                     searchText: _controller.searchController.text,
                                                                                   );
+
+                                                                                  // ✅ Restore scroll position after UI updates
+                                                                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                                    if (_scrollController.hasClients) {
+                                                                                      _scrollController.jumpTo(offset);
+                                                                                    }
+                                                                                  });
                                                                                 },
                                                                                 child: const Icon(
                                                                                   Icons.add,
