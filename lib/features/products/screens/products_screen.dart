@@ -139,21 +139,27 @@ class _ProductsScreenState extends State<ProductsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                AppButton(
-                  buttonWidth: 0.3.screenWidth,
-                  buttonHeight: 40,
-                  buttonColor: kColorGrey,
-                  titleColor: kColorTextPrimary,
-                  titleSize: FontSizes.k16FontSize,
+                TextButton(
+                  child: Text(
+                    'Clear Filter',
+                    style: TextStyles.kRegularFredoka(
+                      fontSize: FontSizes.k18FontSize,
+                      color: kColorSecondary,
+                    ).copyWith(
+                      decoration: TextDecoration.underline,
+                      decorationColor: kColorSecondary,
+                    ),
+                  ),
                   onPressed: () {
                     _controller.selectedIgCodes.clear();
+                    _controller.getSubGroups();
+                    _controller.getSubGroups2();
                     _controller.searchProduct(
                       searchText: _controller.searchController.text,
                       pCode: widget.pCode,
                     );
                     Get.back();
                   },
-                  title: 'Clear Filter',
                 ),
                 AppButton(
                   buttonWidth: 0.5.screenWidth,
@@ -165,6 +171,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     _controller.selectedIgCodes
                       ..clear()
                       ..addAll(tempSelectedIgCodes);
+                    _controller.selectedIcCodes.clear();
+                    _controller.selectedIpackgCodes.clear();
+
+                    _controller.getSubGroups();
+                    _controller.getSubGroups2();
+
                     _controller.searchProduct(
                       searchText: _controller.searchController.text,
                       pCode: widget.pCode,
@@ -269,21 +281,26 @@ class _ProductsScreenState extends State<ProductsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                AppButton(
-                  buttonWidth: 0.3.screenWidth,
-                  buttonHeight: 40,
-                  buttonColor: kColorGrey,
-                  titleColor: kColorTextPrimary,
-                  titleSize: FontSizes.k16FontSize,
+                TextButton(
+                  child: Text(
+                    'Clear Filter',
+                    style: TextStyles.kRegularFredoka(
+                      fontSize: FontSizes.k18FontSize,
+                      color: kColorSecondary,
+                    ).copyWith(
+                      decoration: TextDecoration.underline,
+                      decorationColor: kColorSecondary,
+                    ),
+                  ),
                   onPressed: () {
                     _controller.selectedIcCodes.clear();
+                    _controller.getSubGroups2();
                     _controller.searchProduct(
                       searchText: _controller.searchController.text,
                       pCode: widget.pCode,
                     );
                     Get.back();
                   },
-                  title: 'Clear Filter',
                 ),
                 AppButton(
                   buttonWidth: 0.5.screenWidth,
@@ -295,6 +312,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     _controller.selectedIcCodes
                       ..clear()
                       ..addAll(tempSelectedIcCodes);
+
+                    _controller.selectedIpackgCodes.clear();
+
+                    _controller.getSubGroups2();
                     _controller.searchProduct(
                       searchText: _controller.searchController.text,
                       pCode: widget.pCode,
@@ -405,12 +426,17 @@ class _ProductsScreenState extends State<ProductsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                AppButton(
-                  buttonWidth: 0.3.screenWidth,
-                  buttonHeight: 40,
-                  buttonColor: kColorGrey,
-                  titleColor: kColorTextPrimary,
-                  titleSize: FontSizes.k16FontSize,
+                TextButton(
+                  child: Text(
+                    'Clear Filter',
+                    style: TextStyles.kRegularFredoka(
+                      fontSize: FontSizes.k18FontSize,
+                      color: kColorSecondary,
+                    ).copyWith(
+                      decoration: TextDecoration.underline,
+                      decorationColor: kColorSecondary,
+                    ),
+                  ),
                   onPressed: () {
                     _controller.selectedIpackgCodes.clear();
                     _controller.searchProduct(
@@ -419,7 +445,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     );
                     Get.back();
                   },
-                  title: 'Clear Filter',
                 ),
                 AppButton(
                   buttonWidth: 0.5.screenWidth,
@@ -616,9 +641,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   AppSpaces.v10,
                   Obx(
                     () {
-                      if (_controller.isLoading.value) {
-                        return const SizedBox.shrink();
-                      }
                       if (_controller.products.isEmpty &&
                           !_controller.isLoading.value) {
                         return Expanded(
@@ -652,9 +674,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                         Card(
                                           color: kColorWhite,
                                           clipBehavior: Clip.antiAlias,
-                                          child: Image.asset(
-                                            kImageMAndM,
-                                            height: 75.appHeight,
+                                          child: SizedBox(
+                                            width: 100,
+                                            height: 100,
+                                            child: Image.network(
+                                              'http://43.250.164.139:8080/api/Product/Image?ICODE=${product.icode}',
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                         AppSpaces.h10,

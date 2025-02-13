@@ -113,7 +113,9 @@ class ProductsRepo {
     }
   }
 
-  static Future<List<SubgroupDm>> getSubGroups() async {
+  static Future<List<SubgroupDm>> getSubGroups({
+    String igCodes = '',
+  }) async {
     String? token = await SecureStorageHelper.read(
       'token',
     );
@@ -121,6 +123,9 @@ class ProductsRepo {
     try {
       final response = await ApiService.getRequest(
         endpoint: '/Master/itemcompany',
+        queryParams: {
+          'IGCODES': igCodes,
+        },
         token: token,
       );
       if (response == null) {
@@ -141,7 +146,10 @@ class ProductsRepo {
     }
   }
 
-  static Future<List<Subgroup2Dm>> getSubGroups2() async {
+  static Future<List<Subgroup2Dm>> getSubGroups2({
+    String igCodes = '',
+    String icCodes = '',
+  }) async {
     String? token = await SecureStorageHelper.read(
       'token',
     );
@@ -149,6 +157,10 @@ class ProductsRepo {
     try {
       final response = await ApiService.getRequest(
         endpoint: '/Master/itempackgroup',
+        queryParams: {
+          'IGCODES': igCodes,
+          'ICCODES': icCodes,
+        },
         token: token,
       );
       if (response == null) {

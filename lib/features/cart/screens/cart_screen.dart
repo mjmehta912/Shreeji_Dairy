@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/cart/controllers/cart_controller.dart';
 import 'package:shreeji_dairy/features/products/controllers/products_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
@@ -32,6 +31,8 @@ class _CartScreenState extends State<CartScreen> {
   final CartController _controller = Get.put(
     CartController(),
   );
+
+  final ScrollController _scrollController = ScrollController();
 
   final ProductsController productsController = Get.find<ProductsController>();
 
@@ -88,6 +89,7 @@ class _CartScreenState extends State<CartScreen> {
 
                     return Expanded(
                       child: ListView.builder(
+                        controller: _scrollController,
                         shrinkWrap: true,
                         itemCount: _controller.cartProducts.length,
                         itemBuilder: (context, index) {
@@ -104,9 +106,13 @@ class _CartScreenState extends State<CartScreen> {
                                       Card(
                                         color: kColorWhite,
                                         clipBehavior: Clip.antiAlias,
-                                        child: Image.asset(
-                                          kImageMAndM,
-                                          height: 75.appHeight,
+                                        child: SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Image.network(
+                                            'http://43.250.164.139:8080/api/Product/Image?ICODE=${product.icode}',
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
                                       AppSpaces.h10,
@@ -217,6 +223,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                               height: 30,
                                                                               child: AppButton(
                                                                                 onPressed: () async {
+                                                                                  double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
                                                                                   await _controller.addOrUpdateCart(
                                                                                     pCode: widget.pCode,
                                                                                     iCode: sku.skuIcode,
@@ -231,6 +238,12 @@ class _CartScreenState extends State<CartScreen> {
                                                                                   await productsController.searchProduct(
                                                                                     pCode: widget.pCode,
                                                                                   );
+
+                                                                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                                    if (_scrollController.hasClients) {
+                                                                                      _scrollController.jumpTo(offset);
+                                                                                    }
+                                                                                  });
                                                                                 },
                                                                                 title: 'Add +',
                                                                                 titleSize: FontSizes.k14FontSize,
@@ -243,6 +256,8 @@ class _CartScreenState extends State<CartScreen> {
                                                                               children: [
                                                                                 InkWell(
                                                                                   onTap: () async {
+                                                                                    double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
+
                                                                                     await _controller.addOrUpdateCart(
                                                                                       pCode: widget.pCode,
                                                                                       iCode: sku.skuIcode,
@@ -257,6 +272,12 @@ class _CartScreenState extends State<CartScreen> {
                                                                                     await productsController.searchProduct(
                                                                                       pCode: widget.pCode,
                                                                                     );
+
+                                                                                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                                      if (_scrollController.hasClients) {
+                                                                                        _scrollController.jumpTo(offset);
+                                                                                      }
+                                                                                    });
                                                                                   },
                                                                                   child: const Icon(
                                                                                     Icons.remove,
@@ -275,6 +296,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                                 AppSpaces.h10,
                                                                                 InkWell(
                                                                                   onTap: () async {
+                                                                                    double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
                                                                                     await _controller.addOrUpdateCart(
                                                                                       pCode: widget.pCode,
                                                                                       iCode: sku.skuIcode,
@@ -289,6 +311,12 @@ class _CartScreenState extends State<CartScreen> {
                                                                                     await productsController.searchProduct(
                                                                                       pCode: widget.pCode,
                                                                                     );
+
+                                                                                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                                      if (_scrollController.hasClients) {
+                                                                                        _scrollController.jumpTo(offset);
+                                                                                      }
+                                                                                    });
                                                                                   },
                                                                                   child: const Icon(
                                                                                     Icons.add,

@@ -178,7 +178,9 @@ class ProductsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final fetchedSubGroups = await ProductsRepo.getSubGroups();
+      final fetchedSubGroups = await ProductsRepo.getSubGroups(
+        igCodes: selectedIgCodes.join(','),
+      );
 
       subGroups.assignAll(fetchedSubGroups);
     } catch (e) {
@@ -195,7 +197,10 @@ class ProductsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final fetchedSubGroups2 = await ProductsRepo.getSubGroups2();
+      final fetchedSubGroups2 = await ProductsRepo.getSubGroups2(
+        igCodes: selectedIgCodes.join(','),
+        icCodes: selectedIcCodes.join(','),
+      );
 
       subGroups2.assignAll(fetchedSubGroups2);
     } catch (e) {
