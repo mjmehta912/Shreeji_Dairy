@@ -8,7 +8,9 @@ import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class UploadProductImageController extends GetxController {
   var isLoading = false.obs;
-  var iCodeController = TextEditingController();
+
+  final imageUploadFormKey = GlobalKey<FormState>();
+
   var selectedImage = Rx<File?>(null);
 
   var items = <AllItemDm>[].obs;
@@ -77,14 +79,17 @@ class UploadProductImageController extends GetxController {
 
     try {
       var response = await UploadProductImageRepo.uploadProductImage(
-        iCode: iCodeController.text,
+        iCode: selectedICode.value,
         imageFile: selectedImage.value!,
       );
 
       if (response != null && response.containsKey('message')) {
         String message = response['message'];
 
-        Get.back();
+        // Get.back();
+        selectedICode.value = '';
+        selectedIName.value = '';
+        selectedImage.value = null;
         showSuccessSnackbar(
           'Success',
           message,

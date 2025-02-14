@@ -9,10 +9,12 @@ import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/upload_product_image/controllers/upload_product_image_controller.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
+import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 
@@ -61,75 +63,135 @@ class UploadProductImageScreen extends StatelessWidget {
               padding: AppPaddings.p14,
               child: Column(
                 children: [
-                  Obx(
-                    () => AppDropdown(
-                      items: _controller.itemNames,
-                      hintText: 'Item',
-                      onChanged: (value) {
-                        _controller.onItemSelected(value!);
-                      },
-                      selectedItem: _controller.selectedIName.value.isNotEmpty
-                          ? _controller.selectedIName.value
-                          : null,
-                    ),
-                  ),
-                  AppSpaces.v10,
-                  Obx(
-                    () {
-                      if (_controller.selectedImage.value == null) {
-                        return GestureDetector(
-                          onTap: pickImage,
-                          child: Container(
-                            height: 0.2.screenHeight,
-                            width: 0.75.screenHeight,
-                            decoration: BoxDecoration(
-                              color: kColorLightGrey,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                CustomPaint(
-                                  size: Size(
-                                    double.infinity,
-                                    double.infinity,
-                                  ),
-                                  painter: DashedBorderPainter(),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      kIconUploadProductImage,
-                                      height: 30,
-                                      width: 30,
-                                      colorFilter: ColorFilter.mode(
-                                        kColorSecondary,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                    AppSpaces.h10,
-                                    Text(
-                                      'Upload Product Image',
-                                      style: TextStyles.kRegularFredoka(
-                                        color: kColorSecondary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                  Expanded(
+                    child: Form(
+                      key: _controller.imageUploadFormKey,
+                      child: Column(
+                        children: [
+                          Obx(
+                            () => AppDropdown(
+                              items: _controller.itemNames,
+                              hintText: 'Item',
+                              onChanged: (value) {
+                                _controller.onItemSelected(value!);
+                              },
+                              selectedItem:
+                                  _controller.selectedIName.value.isNotEmpty
+                                      ? _controller.selectedIName.value
+                                      : null,
+                              validatorText: 'Please select an item',
                             ),
                           ),
-                        );
-                      } else {
-                        return Image.file(
-                          _controller.selectedImage.value!,
-                          fit: BoxFit.cover,
-                        );
+                          AppSpaces.v20,
+                          Obx(
+                            () {
+                              return GestureDetector(
+                                onTap: pickImage,
+                                child: Container(
+                                  height: 0.75.screenWidth,
+                                  width: 0.75.screenHeight,
+                                  decoration: BoxDecoration(
+                                    color: kColorLightGrey,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      CustomPaint(
+                                        size: Size(
+                                          double.infinity,
+                                          double.infinity,
+                                        ),
+                                        painter: DashedBorderPainter(),
+                                      ),
+                                      if (_controller.selectedImage.value ==
+                                          null) ...[
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              kIconUploadProductImage,
+                                              height: 30,
+                                              width: 30,
+                                              colorFilter: ColorFilter.mode(
+                                                kColorSecondary,
+                                                BlendMode.srcIn,
+                                              ),
+                                            ),
+                                            AppSpaces.h10,
+                                            Text(
+                                              'Upload Product Image',
+                                              style: TextStyles.kRegularFredoka(
+                                                color: kColorSecondary,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ] else
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Stack(
+                                            children: [
+                                              Image.file(
+                                                _controller
+                                                    .selectedImage.value!,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              Positioned(
+                                                top: 8,
+                                                right: 8,
+                                                child: GestureDetector(
+                                                  onTap: () => _controller
+                                                      .selectedImage
+                                                      .value = null,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.black54,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    padding: EdgeInsets.all(5),
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      color: kColorWhite,
+                                                      size: 18,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  AppButton(
+                    title: 'Upload',
+                    onPressed: () {
+                      if (_controller.imageUploadFormKey.currentState!
+                          .validate()) {
+                        if (_controller.selectedImage.value == null) {
+                          showErrorSnackbar(
+                            'Oops',
+                            'Please select an image to continue',
+                          );
+                        } else {
+                          _controller.uploadProductImage();
+                        }
                       }
                     },
                   ),
+                  AppSpaces.v20,
                 ],
               ),
             ),
@@ -157,7 +219,10 @@ class DashedBorderPainter extends CustomPainter {
       ..strokeWidth = 2;
 
     final Path path = Path()
-      ..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
+      ..addRRect(RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, size.width, size.height),
+        Radius.circular(12),
+      ));
 
     _drawDashedBorder(canvas, path, paint);
   }

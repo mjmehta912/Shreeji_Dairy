@@ -162,6 +162,7 @@ class ApiService {
             ? json.decode(responseBody)
             : {'error': 'Unknown error occurred'};
 
+        print(errorResponse);
         throw {
           'status': response.statusCode,
           'message': errorResponse['error'] ?? 'Failed to process request.',
