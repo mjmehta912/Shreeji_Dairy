@@ -34,13 +34,13 @@ class CreditNoteDetailDm {
       case 0:
         return "Pending";
       case 1:
-        return "QC Checked";
+        return "DOCK Checked";
       case 2:
-        return "Passed by Accounting Team";
+        return "QC Done";
       case 3:
-        return "Approved";
+        return "Passed by Accounting team";
       case 4:
-        return "Rejected";
+        return "Approved";
       default:
         return "Unknown";
     }

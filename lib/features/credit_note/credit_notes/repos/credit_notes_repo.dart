@@ -7,6 +7,7 @@ class CreditNotesRepo {
     int pageNumber = 1,
     int pageSize = 1000,
     String searchText = '',
+    required String pCode,
   }) async {
     String? token = await SecureStorageHelper.read(
       'token',
@@ -19,6 +20,7 @@ class CreditNotesRepo {
           'PageNumber': pageNumber.toString(),
           'PageSize': pageSize.toString(),
           'SearchText': searchText,
+          'PCODE': pCode,
         },
         token: token,
       );

@@ -2,14 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/all_item_dm.dart';
+import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/item_party_wise_inv_no_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/repos/credit_note_entry_repo.dart';
+import 'package:shreeji_dairy/features/credit_note/credit_notes/controllers/credit_notes_controller.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class CreditNoteEntryController extends GetxController {
   var isLoading = false.obs;
+  var creditNoteEntryFormKey = GlobalKey<FormState>();
+
   var items = <AllItemDm>[].obs;
   var skus = <ItemSkuDm>[].obs;
   var itemNames = <String>[].obs;
@@ -18,36 +20,14 @@ class CreditNoteEntryController extends GetxController {
   var selectedSkuIcode = ''.obs;
   var selectedPack = ''.obs;
   var qtyController = TextEditingController();
-  var invNoController = TextEditingController();
+  var invNos = <ItemPartyWiseInvNoDm>[].obs;
+  var invNoNos = <String>[].obs;
+  var selectedInvNo = ''.obs;
 
   var selectedImage = Rx<File?>(null);
 
   var addedItems = <Map<String, dynamic>>[].obs;
   var remarkController = TextEditingController();
-
-  final picker = ImagePicker();
-
-  Future<void> pickImage() async {
-    PermissionStatus status = await Permission.photos.request();
-
-    if (status.isGranted) {
-      try {
-        final pickedFile = await picker.pickImage(
-          source: ImageSource.gallery,
-        );
-        if (pickedFile != null) {
-          selectedImage.value = File(pickedFile.path);
-        }
-      } catch (e) {
-        // print('Error picking image: $e');
-      }
-    } else {
-      showErrorSnackbar(
-        'Error',
-        'Permission to access photos was denied',
-      );
-    }
-  }
 
   void addItemToList({
     required String itemName,
@@ -56,14 +36,29 @@ class CreditNoteEntryController extends GetxController {
     required String qty,
     required String invNo,
   }) {
-    addedItems.add({
-      'itemName': itemName,
-      'skuPack': skuPack,
-      'skuICode': skuICode,
-      'qty': qty,
-      'invNo': invNo,
-      'image': selectedImage.value, // Store the image file
-    });
+    int serialNo = addedItems.length + 1;
+
+    addedItems.add(
+      {
+        'serialNo': serialNo,
+        'itemName': itemName,
+        'skuPack': skuPack,
+        'skuICode': skuICode,
+        'qty': qty,
+        'invNo': invNo,
+        'image': selectedImage.value,
+      },
+    );
+  }
+
+  void deleteItem(int serialNo) {
+    addedItems.removeWhere(
+      (item) => item['serialNo'] == serialNo,
+    );
+
+    for (int i = 0; i < addedItems.length; i++) {
+      addedItems[i]['serialNo'] = i + 1;
+    }
   }
 
   void clearForm() {
@@ -71,7 +66,9 @@ class CreditNoteEntryController extends GetxController {
     selectedPack.value = '';
     selectedSkuIcode.value = '';
     qtyController.clear();
-    invNoController.clear();
+    invNos.clear();
+    invNoNos.clear();
+    selectedInvNo.value = '';
     selectedImage.value = null;
   }
 
@@ -88,7 +85,9 @@ class CreditNoteEntryController extends GetxController {
 
       items.assignAll(fetchedItems);
 
-      itemNames.assignAll(fetchedItems.map((item) => item.printName).toList());
+      itemNames.assignAll(
+        fetchedItems.map((item) => item.printName).toList(),
+      );
 
       skus.clear();
       skuPacks.clear();
@@ -110,6 +109,8 @@ class CreditNoteEntryController extends GetxController {
   }
 
   void onItemSelected(AllItemDm selected) {
+    selectedPack.value = '';
+    selectedSkuIcode.value = '';
     selectedItem.value = selected;
 
     skus.assignAll(selected.skus);
@@ -122,5 +123,96 @@ class CreditNoteEntryController extends GetxController {
   void onSkuSelected(ItemSkuDm selectedSku) {
     selectedSkuIcode.value = selectedSku.skuIcode;
     selectedPack.value = selectedSku.pack;
+  }
+
+  Future<void> getInvNos({
+    required String pCode,
+    required String iCode,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      final fetchedInvNos = await CreditNoteEntryRepo.getInvNos(
+        pCode: pCode,
+        iCode: iCode,
+      );
+
+      invNos.assignAll(fetchedInvNos);
+      invNoNos.assignAll(
+        fetchedInvNos
+            .map(
+              (invno) => invno.invNo,
+            )
+            .toList(),
+      );
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void onInvNoSelected(String invNo) {
+    selectedInvNo.value = invNo;
+  }
+
+  final CreditNotesController creditNotesController =
+      Get.find<CreditNotesController>();
+
+  Future<void> saveCreditNote({
+    required String pCode,
+  }) async {
+    isLoading.value = true;
+
+    try {
+      List<Map<String, dynamic>> details = addedItems.map(
+        (item) {
+          return {
+            'SRNO': item['serialNo'].toString(),
+            'ICODE': item['skuICode'],
+            'QTY': item['qty'],
+            'INVNO': item['invNo'],
+            'Image': item['image'],
+          };
+        },
+      ).toList();
+
+      var response = await CreditNoteEntryRepo.saveCreditNote(
+        pcode: pCode,
+        remark: remarkController.text,
+        details: details,
+      );
+
+      if (response != null && response.containsKey('message')) {
+        String message = response['message'];
+        creditNotesController.getAllCreditNotes(
+          pCode: pCode,
+        );
+        Get.back();
+        showSuccessSnackbar(
+          'Success',
+          message,
+        );
+        addedItems.clear();
+        remarkController.clear();
+      }
+    } catch (e) {
+      if (e is Map<String, dynamic>) {
+        showErrorSnackbar(
+          'Error',
+          e['message'],
+        );
+      } else {
+        showErrorSnackbar(
+          'Error',
+          e.toString(),
+        );
+      }
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

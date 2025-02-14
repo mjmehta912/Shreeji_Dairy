@@ -9,6 +9,7 @@ import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/features/auth/select_customer/screens/select_customer_branch_screen.dart';
 import 'package:shreeji_dairy/features/store_order/screens/store_order_screen.dart';
+import 'package:shreeji_dairy/features/upload_product_image/screens/upload_product_image_screen.dart';
 import 'package:shreeji_dairy/features/user_authorization/unauthorized_users/screens/unauthorized_users_screen.dart';
 import 'package:shreeji_dairy/features/user_management/all_users/screens/all_users_screen.dart';
 import 'package:shreeji_dairy/features/user_rights/users/screens/users_screen.dart';
@@ -79,7 +80,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
       "Upload Product Image": {
         "icon": kIconUploadProductImage,
-        "action": () {},
+        "action": () {
+          Get.to(
+            () => UploadProductImageScreen(),
+          );
+        },
       },
       "User Management": {
         "icon": kIconUserManagement,

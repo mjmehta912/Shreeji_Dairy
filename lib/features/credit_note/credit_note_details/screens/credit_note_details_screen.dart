@@ -143,18 +143,32 @@ class _CreditNoteDetailsScreenState extends State<CreditNoteDetailsScreen> {
                                         detail.iName,
                                         style: TextStyles.kMediumFredoka(
                                           fontSize: FontSizes.k18FontSize,
+                                        ).copyWith(
+                                          height: 1.25,
                                         ),
                                       ),
                                       Text(
                                         'Qty : ${detail.qty}',
                                         style: TextStyles.kRegularFredoka(
                                           fontSize: FontSizes.k18FontSize,
+                                        ).copyWith(
+                                          height: 1.25,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Inv No : ${detail.invNo}',
+                                        style: TextStyles.kRegularFredoka(
+                                          fontSize: FontSizes.k18FontSize,
+                                        ).copyWith(
+                                          height: 1.25,
                                         ),
                                       ),
                                       Text(
                                         'Status : ${detail.statusText}',
                                         style: TextStyles.kRegularFredoka(
                                           fontSize: FontSizes.k18FontSize,
+                                        ).copyWith(
+                                          height: 1.25,
                                         ),
                                       ),
                                     ],

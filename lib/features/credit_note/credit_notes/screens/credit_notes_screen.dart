@@ -10,10 +10,11 @@ import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_card1.dart';
+import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 
-class CreditNotesScreen extends StatelessWidget {
-  CreditNotesScreen({
+class CreditNotesScreen extends StatefulWidget {
+  const CreditNotesScreen({
     super.key,
     required this.pName,
     required this.pCode,
@@ -22,9 +23,23 @@ class CreditNotesScreen extends StatelessWidget {
   final String pName;
   final String pCode;
 
+  @override
+  State<CreditNotesScreen> createState() => _CreditNotesScreenState();
+}
+
+class _CreditNotesScreenState extends State<CreditNotesScreen> {
   final CreditNotesController _controller = Get.put(
     CreditNotesController(),
   );
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.getAllCreditNotes(
+      pCode: widget.pCode,
+    );
+    _controller.debounceSearchQuery(widget.pCode);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +53,7 @@ class CreditNotesScreen extends StatelessWidget {
             backgroundColor: kColorWhite,
             appBar: AppAppbar(
               title: 'Credit Notes',
-              subtitle: pName,
+              subtitle: widget.pName,
               leading: IconButton(
                 onPressed: () => Get.back(),
                 icon: Icon(
@@ -50,7 +65,9 @@ class CreditNotesScreen extends StatelessWidget {
             ),
             body: RefreshIndicator(
               onRefresh: () async {
-                await _controller.getAllCreditNotes();
+                await _controller.getAllCreditNotes(
+                  pCode: widget.pCode,
+                );
               },
               child: Padding(
                 padding: AppPaddings.p10,
@@ -72,7 +89,7 @@ class CreditNotesScreen extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 'No credit notes found.',
-                                style: TextStyles.kMediumFredoka(),
+                                style: TextStyles.kRegularFredoka(),
                               ),
                             ),
                           );
@@ -83,14 +100,16 @@ class CreditNotesScreen extends StatelessWidget {
                               if (scrollNotification is ScrollEndNotification &&
                                   scrollNotification.metrics.extentAfter == 0) {
                                 _controller.getAllCreditNotes(
-                                  loadMore: true,
-                                );
+                                    pCode: widget.pCode,
+                                    loadMore:
+                                        true); // Trigger loadMore when end is reached
                               }
                               return false;
                             },
                             child: Obx(
                               () => ListView.builder(
-                                itemCount: _controller.creditNotes.length + 1,
+                                itemCount: _controller.creditNotes.length +
+                                    1, // Add 1 for the loading indicator
                                 itemBuilder: (context, index) {
                                   if (index == _controller.creditNotes.length) {
                                     return _controller.isLoadingMore.value
@@ -202,8 +221,8 @@ class CreditNotesScreen extends StatelessWidget {
               onPressed: () {
                 Get.to(
                   () => CreditNoteEntryScreen(
-                    pCode: pCode,
-                    pName: pName,
+                    pCode: widget.pCode,
+                    pName: widget.pName,
                   ),
                 );
               },
@@ -216,6 +235,11 @@ class CreditNotesScreen extends StatelessWidget {
                 color: kColorTextPrimary,
               ),
             ),
+          ),
+        ),
+        Obx(
+          () => AppLoadingOverlay(
+            isLoading: _controller.isLoading.value,
           ),
         ),
       ],

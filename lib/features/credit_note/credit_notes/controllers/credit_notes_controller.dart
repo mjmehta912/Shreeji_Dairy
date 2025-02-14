@@ -18,17 +18,12 @@ class CreditNotesController extends GetxController {
   var currentPage = 1;
   var pageSize = 10;
 
-  @override
-  void onInit() {
-    super.onInit();
-    getAllCreditNotes();
-    debounceSearchQuery();
-  }
-
-  void debounceSearchQuery() {
+  void debounceSearchQuery(String pCode) {
     debounce(
       searchQuery,
-      (_) => getAllCreditNotes(),
+      (_) => getAllCreditNotes(
+        pCode: pCode,
+      ),
       time: const Duration(
         milliseconds: 300,
       ),
@@ -37,11 +32,16 @@ class CreditNotesController extends GetxController {
 
   Future<void> getAllCreditNotes({
     bool loadMore = false,
+    required String pCode,
   }) async {
-    if (loadMore && !hasMoreData.value) return;
+    if (loadMore && !hasMoreData.value) {
+      return;
+    }
     if (isFetchingData) return;
+
     try {
       isFetchingData = true;
+
       if (!loadMore) {
         isLoading.value = true;
         currentPage = 1;
@@ -54,6 +54,7 @@ class CreditNotesController extends GetxController {
         pageNumber: currentPage,
         pageSize: pageSize,
         searchText: searchQuery.value,
+        pCode: pCode,
       );
 
       if (fetchedCreditNotes.isNotEmpty) {

@@ -128,4 +128,50 @@ class ApiService {
       };
     }
   }
+
+  static Future<dynamic> postFormData({
+    required String endpoint,
+    required Map<String, String> fields,
+    required List<http.MultipartFile> files,
+    Map<String, String>? headers,
+    String? token,
+  }) async {
+    try {
+      Uri url = Uri.parse('$kBaseUrl$endpoint');
+
+      var request = http.MultipartRequest('POST', url);
+
+      headers ??= {};
+      if (token != null && token.isNotEmpty) {
+        headers['Authorization'] = 'Bearer $token';
+      }
+      request.headers.addAll(headers);
+
+      request.fields.addAll(fields);
+
+      request.files.addAll(files);
+
+      final response = await request.send();
+
+      final responseBody = await response.stream.bytesToString();
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return json.decode(responseBody);
+      } else {
+        var errorResponse = responseBody.isNotEmpty
+            ? json.decode(responseBody)
+            : {'error': 'Unknown error occurred'};
+
+        throw {
+          'status': response.statusCode,
+          'message': errorResponse['error'] ?? 'Failed to process request.',
+        };
+      }
+    } catch (e) {
+      throw {
+        'status': 500,
+        'message': e.toString(),
+      };
+    }
+  }
 }
