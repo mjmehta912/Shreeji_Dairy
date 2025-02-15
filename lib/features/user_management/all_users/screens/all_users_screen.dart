@@ -63,7 +63,7 @@ class AllUsersScreen extends StatelessWidget {
               ],
             ),
             body: Padding(
-              padding: AppPaddings.p10,
+              padding: AppPaddings.p12,
               child: Column(
                 children: [
                   AppTextFormField(
@@ -86,9 +86,7 @@ class AllUsersScreen extends StatelessWidget {
                           child: Center(
                             child: Text(
                               'No users found.',
-                              style: TextStyles.kMediumFredoka(
-                                color: kColorTextPrimary,
-                              ),
+                              style: TextStyles.kRegularFredoka(),
                             ),
                           ),
                         );

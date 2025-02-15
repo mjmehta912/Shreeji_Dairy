@@ -8,7 +8,7 @@ import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
-import 'package:shreeji_dairy/widgets/app_card2.dart';
+import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_date_picker_field.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 
@@ -69,7 +69,7 @@ class _UserAccessScreenState extends State<UserAccessScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  AppCard2(
+                  AppCard1(
                     child: Padding(
                       padding: AppPaddings.p10,
                       child: Row(

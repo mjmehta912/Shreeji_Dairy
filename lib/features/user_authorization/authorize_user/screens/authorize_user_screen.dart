@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/user_authorization/authorize_user/controllers/authorize_user_controller.dart';
+import 'package:shreeji_dairy/features/user_authorization/authorize_user/widgets/user_detail_card.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
@@ -10,7 +11,6 @@ import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
-import 'package:shreeji_dairy/widgets/app_card2.dart';
 import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
@@ -221,46 +221,15 @@ class AuthorizeUserScreen extends StatelessWidget {
               ),
             ),
             body: Padding(
-              padding: AppPaddings.p10,
+              padding: AppPaddings.p12,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  AppCard2(
-                    child: Padding(
-                      padding: AppPaddings.p10,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '$firstName $lastName',
-                            style: TextStyles.kMediumFredoka(
-                              color: kColorSecondary,
-                            ).copyWith(
-                              height: 1.25,
-                            ),
-                          ),
-                          Text(
-                            'Buisness : $business',
-                            style: TextStyles.kRegularFredoka(
-                              color: kColorTextPrimary,
-                              fontSize: FontSizes.k16FontSize,
-                            ).copyWith(
-                              height: 1.25,
-                            ),
-                          ),
-                          Text(
-                            'Mobile : $mobileNo',
-                            style: TextStyles.kRegularFredoka(
-                              color: kColorTextPrimary,
-                              fontSize: FontSizes.k16FontSize,
-                            ).copyWith(
-                              height: 1.25,
-                            ),
-                          ),
-                          Row(),
-                        ],
-                      ),
-                    ),
+                  UserDetailCard(
+                    firstName: firstName,
+                    lastName: lastName,
+                    business: business,
+                    mobileNo: mobileNo,
                   ),
                   AppSpaces.v10,
                   AppDropdown(

@@ -59,7 +59,7 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
               ),
             ),
             body: Padding(
-              padding: AppPaddings.p10,
+              padding: AppPaddings.p12,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

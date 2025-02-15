@@ -297,7 +297,7 @@ class _ManageUserScreenState extends State<ManageUserScreen> {
               ),
             ),
             body: Padding(
-              padding: AppPaddings.p10,
+              padding: AppPaddings.p12,
               child: SingleChildScrollView(
                 child: Form(
                   key: _controller.manageUserFormKey,
@@ -495,6 +495,7 @@ class _ManageUserScreenState extends State<ManageUserScreen> {
                           ),
                         ),
                       ),
+                      AppSpaces.v10,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -518,20 +519,26 @@ class _ManageUserScreenState extends State<ManageUserScreen> {
                           ),
                         ],
                       ),
-                      AppSpaces.v40,
-                      AppButton(
-                        buttonColor: kColorPrimary,
-                        title: 'Save',
-                        titleColor: kColorTextPrimary,
-                        onPressed: () {
-                          _controller.hasAttemptedSubmit.value = true;
-                          if (_controller.manageUserFormKey.currentState!
-                              .validate()) {
-                            _controller.manageUser(
-                              userId: widget.isEdit ? widget.userId! : 0,
-                            );
-                          }
-                        },
+                      AppSpaces.v30,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          AppButton(
+                            buttonColor: kColorPrimary,
+                            buttonWidth: 0.5.screenWidth,
+                            title: 'Save',
+                            titleColor: kColorTextPrimary,
+                            onPressed: () {
+                              _controller.hasAttemptedSubmit.value = true;
+                              if (_controller.manageUserFormKey.currentState!
+                                  .validate()) {
+                                _controller.manageUser(
+                                  userId: widget.isEdit ? widget.userId! : 0,
+                                );
+                              }
+                            },
+                          ),
+                        ],
                       )
                     ],
                   ),

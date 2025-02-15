@@ -90,7 +90,6 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
                         () => SizedBox(
                           width: 0.75.screenWidth,
                           child: AppDropdown(
-                            fillColor: kColorWhite,
                             items: _controller.customerNames,
                             selectedItem:
                                 _controller.selectedCustomer.value.isNotEmpty
@@ -122,7 +121,6 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
                         child: AppDatePickerTextFormField(
                           dateController: _controller.fromDateController,
                           hintText: 'From Date',
-                          fillColor: kColorWhite,
                         ),
                       ),
                       SizedBox(
@@ -130,7 +128,6 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
                         child: AppDatePickerTextFormField(
                           dateController: _controller.toDateController,
                           hintText: 'To Date',
-                          fillColor: kColorWhite,
                         ),
                       ),
                     ],
@@ -147,9 +144,7 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
                           child: Center(
                             child: Text(
                               'No invoices found.',
-                              style: TextStyles.kMediumFredoka(
-                                color: kColorTextPrimary,
-                              ),
+                              style: TextStyles.kRegularFredoka(),
                             ),
                           ),
                         );
@@ -210,7 +205,6 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
             AppSpaces.v10,
             Obx(
               () => AppDropdown(
-                fillColor: kColorWhite,
                 items: [
                   'ALL',
                   'PAID',
@@ -229,13 +223,12 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
             AppTextFormField(
               controller: _controller.searchController,
               hintText: 'Search Inv No.',
-              fillColor: kColorWhite,
             ),
             AppSpaces.v20,
             AppButton(
               onPressed: () {
                 _controller.getInvoices();
-                Get.back(); // Close the Bottom Sheet
+                Get.back();
               },
               buttonWidth: 0.5.screenWidth,
               buttonColor: kColorPrimary,

@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/outstandings/controllers/outstandings_controller.dart';
-import 'package:shreeji_dairy/features/outstandings/widgets/outstanding_row.dart';
-import 'package:shreeji_dairy/styles/font_sizes.dart';
+import 'package:shreeji_dairy/features/outstandings/widgets/outstanding_card.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
-import 'package:shreeji_dairy/widgets/app_card2.dart';
 import 'package:shreeji_dairy/widgets/app_date_picker_field.dart';
 import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
@@ -128,19 +126,17 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: 0.4.screenWidth,
+                        width: 0.45.screenWidth,
                         child: AppDatePickerTextFormField(
                           dateController: _controller.fromDateController,
                           hintText: 'From Date',
-                          fillColor: kColorWhite,
                         ),
                       ),
                       SizedBox(
-                        width: 0.4.screenWidth,
+                        width: 0.45.screenWidth,
                         child: AppDatePickerTextFormField(
                           dateController: _controller.toDateController,
                           hintText: 'To Date',
-                          fillColor: kColorWhite,
                         ),
                       )
                     ],
@@ -148,7 +144,6 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                   AppSpaces.v10,
                   Obx(
                     () => AppDropdown(
-                      fillColor: kColorWhite,
                       items: _controller.customerNames,
                       selectedItem:
                           _controller.selectedCustomer.value.isNotEmpty
@@ -178,14 +173,12 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                           Text(
                             'Total Outstanding',
                             style: TextStyles.kMediumFredoka(
-                              fontSize: FontSizes.k18FontSize,
                               color: kColorTextPrimary,
                             ),
                           ),
                           Text(
                             _controller.outstandingAmount.value.toString(),
                             style: TextStyles.kMediumFredoka(
-                              fontSize: FontSizes.k18FontSize,
                               color: _controller.outstandingAmount.value
                                       .contains('-')
                                   ? kColorRed
@@ -208,9 +201,7 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                           child: Center(
                             child: Text(
                               'No outstandings found.',
-                              style: TextStyles.kMediumFredoka(
-                                color: kColorTextPrimary,
-                              ),
+                              style: TextStyles.kRegularFredoka(),
                             ),
                           ),
                         );
@@ -221,77 +212,8 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                           itemBuilder: (context, index) {
                             final outstanding = _controller.outstandings[index];
 
-                            return Column(
-                              children: [
-                                AppCard2(
-                                  child: Padding(
-                                    padding: AppPaddings.p8,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          outstanding.invNo,
-                                          style: TextStyles.kMediumFredoka(
-                                            fontSize: FontSizes.k16FontSize,
-                                            color: kColorTextPrimary,
-                                          ).copyWith(
-                                            height: 1.25,
-                                          ),
-                                        ),
-                                        Text(
-                                          outstanding.date,
-                                          style: TextStyles.kRegularFredoka(
-                                            fontSize: FontSizes.k14FontSize,
-                                            color: kColorTextPrimary,
-                                          ).copyWith(
-                                            height: 1.25,
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            OutstandingRow(
-                                              title: 'Amount',
-                                              value:
-                                                  outstanding.amount.toString(),
-                                            ),
-                                            OutstandingRow(
-                                              title: 'Outstanding',
-                                              value: outstanding.outstanding
-                                                  .toString(),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            OutstandingRow(
-                                              title: 'Paid',
-                                              value: outstanding.paidAmount,
-                                            ),
-                                            Text(
-                                              outstanding.runningTotal,
-                                              style: TextStyles.kMediumFredoka(
-                                                color: outstanding.runningTotal
-                                                        .contains('-')
-                                                    ? kColorRed
-                                                    : kColorBlue,
-                                                fontSize: FontSizes.k16FontSize,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                AppSpaces.v2,
-                              ],
+                            return OutstandingCard(
+                              outstanding: outstanding,
                             );
                           },
                         ),

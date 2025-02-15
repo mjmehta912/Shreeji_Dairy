@@ -4,10 +4,10 @@ import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/user_rights/user_access/screens/user_access_screen.dart.dart';
 import 'package:shreeji_dairy/features/user_rights/users/controllers/users_controller.dart';
 import 'package:shreeji_dairy/features/user_rights/users/models/user_dm.dart';
-import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
-import 'package:shreeji_dairy/widgets/app_card2.dart';
+import 'package:shreeji_dairy/widgets/app_card1.dart';
+import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
 class UsersCard extends StatelessWidget {
   const UsersCard({
@@ -32,9 +32,9 @@ class UsersCard extends StatelessWidget {
           ),
         );
       },
-      child: AppCard2(
+      child: AppCard1(
         child: Padding(
-          padding: AppPaddings.p8,
+          padding: AppPaddings.p10,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -44,15 +44,14 @@ class UsersCard extends StatelessWidget {
                   Text(
                     '${user.firstName} ${user.lastName}',
                     style: TextStyles.kMediumFredoka(
-                      color: kColorTextPrimary,
+                      color: kColorSecondary,
+                    ).copyWith(
+                      height: 1.25,
                     ),
                   ),
-                  Text(
-                    _controller.getUserDesignation(user.userType),
-                    style: TextStyles.kRegularFredoka(
-                      fontSize: FontSizes.k16FontSize,
-                      color: kColorTextPrimary,
-                    ),
+                  AppTitleValueRow(
+                    title: 'Designation',
+                    value: _controller.getUserDesignation(user.userType),
                   ),
                 ],
               ),

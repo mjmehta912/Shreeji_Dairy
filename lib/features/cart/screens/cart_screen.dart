@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/cart/controllers/cart_controller.dart';
+import 'package:shreeji_dairy/features/cart/widgets/cart_card.dart';
 import 'package:shreeji_dairy/features/products/controllers/products_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -10,7 +11,6 @@ import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
-import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 
 class CartScreen extends StatefulWidget {
@@ -63,7 +63,7 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ),
           body: Padding(
-            padding: AppPaddings.p16,
+            padding: AppPaddings.p12,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -79,9 +79,7 @@ class _CartScreenState extends State<CartScreen> {
                         child: Center(
                           child: Text(
                             'Please add a product to continue.',
-                            style: TextStyles.kMediumFredoka(
-                              color: kColorTextPrimary,
-                            ),
+                            style: TextStyles.kRegularFredoka(),
                           ),
                         ),
                       );
@@ -95,256 +93,12 @@ class _CartScreenState extends State<CartScreen> {
                         itemBuilder: (context, index) {
                           final product = _controller.cartProducts[index];
 
-                          return AppCard1(
-                            child: Padding(
-                              padding: AppPaddings.p10,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Card(
-                                        color: kColorWhite,
-                                        clipBehavior: Clip.antiAlias,
-                                        child: SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: Image.network(
-                                            'http://43.250.164.139:8080/api/Product/Image?ICODE=${product.icode}',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      AppSpaces.h10,
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              product.printName,
-                                              style: TextStyles.kMediumFredoka(
-                                                color: kColorTextPrimary,
-                                                fontSize: FontSizes.k18FontSize,
-                                              ).copyWith(
-                                                height: 1,
-                                              ),
-                                            ),
-                                            AppSpaces.v10,
-                                            SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: Row(
-                                                children: product.skus.isEmpty
-                                                    ? [
-                                                        Text(
-                                                          'No packaging available',
-                                                          style: TextStyles
-                                                              .kMediumFredoka(
-                                                            color:
-                                                                kColorTextPrimary,
-                                                            fontSize: FontSizes
-                                                                .k14FontSize,
-                                                          ),
-                                                        )
-                                                      ]
-                                                    : product.skus.map(
-                                                        (sku) {
-                                                          return AppCard1(
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Padding(
-                                                                  padding:
-                                                                      AppPaddings
-                                                                          .p2,
-                                                                  child:
-                                                                      InkWell(
-                                                                    onTap: () {
-                                                                      _controller
-                                                                          .removeProduct(
-                                                                        pCode: widget
-                                                                            .pCode,
-                                                                        iCode: sku
-                                                                            .skuIcode,
-                                                                      );
-                                                                    },
-                                                                    child: Icon(
-                                                                      Icons
-                                                                          .cancel_outlined,
-                                                                      color:
-                                                                          kColorTextPrimary,
-                                                                      size: 20,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Padding(
-                                                                  padding:
-                                                                      AppPaddings
-                                                                          .ph10,
-                                                                  child: Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      AppSpaces
-                                                                          .v4,
-                                                                      Text(
-                                                                        sku.pack,
-                                                                        style: TextStyles
-                                                                            .kMediumFredoka(
-                                                                          fontSize:
-                                                                              FontSizes.k14FontSize,
-                                                                        ).copyWith(
-                                                                          height:
-                                                                              1,
-                                                                        ),
-                                                                      ),
-                                                                      AppSpaces
-                                                                          .v4,
-                                                                      Text(
-                                                                        '₹ ${sku.rate}',
-                                                                        style: TextStyles
-                                                                            .kRegularFredoka(
-                                                                          fontSize:
-                                                                              FontSizes.k14FontSize,
-                                                                        ).copyWith(
-                                                                          height:
-                                                                              1,
-                                                                        ),
-                                                                      ),
-                                                                      AppSpaces
-                                                                          .v4,
-                                                                      sku.cartQty ==
-                                                                              0
-                                                                          ? SizedBox(
-                                                                              width: 0.2.screenWidth,
-                                                                              height: 30,
-                                                                              child: AppButton(
-                                                                                onPressed: () async {
-                                                                                  double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
-                                                                                  await _controller.addOrUpdateCart(
-                                                                                    pCode: widget.pCode,
-                                                                                    iCode: sku.skuIcode,
-                                                                                    qty: sku.cartQty + 1,
-                                                                                    rate: sku.rate,
-                                                                                  );
-
-                                                                                  await _controller.getCartProducts(
-                                                                                    pCode: widget.pCode,
-                                                                                  );
-
-                                                                                  await productsController.searchProduct(
-                                                                                    pCode: widget.pCode,
-                                                                                  );
-
-                                                                                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                                                    if (_scrollController.hasClients) {
-                                                                                      _scrollController.jumpTo(offset);
-                                                                                    }
-                                                                                  });
-                                                                                },
-                                                                                title: 'Add +',
-                                                                                titleSize: FontSizes.k14FontSize,
-                                                                                buttonColor: kColorWhite,
-                                                                                borderColor: kColorSecondary,
-                                                                                titleColor: kColorSecondary,
-                                                                              ),
-                                                                            )
-                                                                          : Row(
-                                                                              children: [
-                                                                                InkWell(
-                                                                                  onTap: () async {
-                                                                                    double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
-
-                                                                                    await _controller.addOrUpdateCart(
-                                                                                      pCode: widget.pCode,
-                                                                                      iCode: sku.skuIcode,
-                                                                                      qty: sku.cartQty == 1 ? 0 : sku.cartQty - 1,
-                                                                                      rate: sku.rate,
-                                                                                    );
-
-                                                                                    await _controller.getCartProducts(
-                                                                                      pCode: widget.pCode,
-                                                                                    );
-
-                                                                                    await productsController.searchProduct(
-                                                                                      pCode: widget.pCode,
-                                                                                    );
-
-                                                                                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                                                      if (_scrollController.hasClients) {
-                                                                                        _scrollController.jumpTo(offset);
-                                                                                      }
-                                                                                    });
-                                                                                  },
-                                                                                  child: const Icon(
-                                                                                    Icons.remove,
-                                                                                    color: kColorSecondary,
-                                                                                    size: 20,
-                                                                                  ),
-                                                                                ),
-                                                                                AppSpaces.h10,
-                                                                                Text(
-                                                                                  '${sku.cartQty}',
-                                                                                  style: TextStyles.kMediumFredoka(
-                                                                                    fontSize: FontSizes.k16FontSize,
-                                                                                    color: kColorTextPrimary,
-                                                                                  ),
-                                                                                ),
-                                                                                AppSpaces.h10,
-                                                                                InkWell(
-                                                                                  onTap: () async {
-                                                                                    double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
-                                                                                    await _controller.addOrUpdateCart(
-                                                                                      pCode: widget.pCode,
-                                                                                      iCode: sku.skuIcode,
-                                                                                      qty: sku.cartQty + 1,
-                                                                                      rate: sku.rate,
-                                                                                    );
-
-                                                                                    await _controller.getCartProducts(
-                                                                                      pCode: widget.pCode,
-                                                                                    );
-
-                                                                                    await productsController.searchProduct(
-                                                                                      pCode: widget.pCode,
-                                                                                    );
-
-                                                                                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                                                      if (_scrollController.hasClients) {
-                                                                                        _scrollController.jumpTo(offset);
-                                                                                      }
-                                                                                    });
-                                                                                  },
-                                                                                  child: const Icon(
-                                                                                    Icons.add,
-                                                                                    color: kColorSecondary,
-                                                                                    size: 20,
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                AppSpaces.v6
-                                                              ],
-                                                            ),
-                                                          );
-                                                        },
-                                                      ).toList(),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                          return CardCard(
+                            product: product,
+                            controller: _controller,
+                            widget: widget,
+                            scrollController: _scrollController,
+                            productsController: productsController,
                           );
                         },
                       ),
@@ -393,6 +147,7 @@ class _CartScreenState extends State<CartScreen> {
                         )
                       : const SizedBox.shrink(),
                 ),
+                AppSpaces.v10,
               ],
             ),
           ),

@@ -7,7 +7,8 @@ import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
-import 'package:shreeji_dairy/widgets/app_card2.dart';
+import 'package:shreeji_dairy/widgets/app_card1.dart';
+import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
 class InvoiceCard extends StatelessWidget {
   const InvoiceCard({
@@ -23,7 +24,7 @@ class InvoiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AppCard2(
+        AppCard1(
           child: Padding(
             padding: AppPaddings.p10,
             child: Column(
@@ -44,46 +45,42 @@ class InvoiceCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          invoice.invNo,
-                          style: TextStyles.kRegularFredoka(
-                            color: kColorTextPrimary,
-                            fontSize: FontSizes.k14FontSize,
-                          ).copyWith(
-                            height: 1.25,
-                          ),
+                        AppTitleValueRow(
+                          title: 'Inv No.',
+                          value: invoice.invNo,
                         ),
+                        AppTitleValueRow(
+                          title: 'Date',
+                          value: invoice.date,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
                         Text(
-                          invoice.date,
-                          style: TextStyles.kRegularFredoka(
-                            color: kColorTextPrimary,
-                            fontSize: FontSizes.k14FontSize,
+                          '₹ ${invoice.amount.toString()}',
+                          style: TextStyles.kMediumFredoka(
+                            color: kColorSecondary,
+                            fontSize: FontSizes.k18FontSize,
                           ).copyWith(
                             height: 1.25,
                           ),
                         ),
                         Text(
                           invoice.status,
-                          style: TextStyles.kRegularFredoka(
-                            color: kColorTextPrimary,
-                            fontSize: FontSizes.k14FontSize,
+                          style: TextStyles.kMediumFredoka(
+                            color: kColorSecondary,
+                            fontSize: FontSizes.k18FontSize,
                           ).copyWith(
                             height: 1.25,
                           ),
                         ),
                       ],
                     ),
-                    Text(
-                      '₹ ${invoice.amount.toString()}',
-                      style: TextStyles.kMediumFredoka(
-                        color: kColorSecondary,
-                        fontSize: FontSizes.k18FontSize,
-                      ).copyWith(
-                        height: 1.25,
-                      ),
-                    ),
                   ],
                 ),
+                AppSpaces.v10,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

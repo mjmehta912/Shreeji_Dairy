@@ -11,7 +11,7 @@ import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
-import 'package:shreeji_dairy/widgets/app_card2.dart';
+import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_date_picker_field.dart';
 import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
@@ -119,7 +119,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
                         () => SizedBox(
                           width: 0.75.screenWidth,
                           child: AppDropdown(
-                            fillColor: kColorWhite,
                             items: _controller.customerNames,
                             selectedItem:
                                 _controller.selectedCustomer.value.isNotEmpty
@@ -152,7 +151,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
                         child: AppDatePickerTextFormField(
                           dateController: _controller.fromDateController,
                           hintText: 'From Date',
-                          fillColor: kColorWhite,
                         ),
                       ),
                       SizedBox(
@@ -160,7 +158,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
                         child: AppDatePickerTextFormField(
                           dateController: _controller.toDateController,
                           hintText: 'To Date',
-                          fillColor: kColorWhite,
                         ),
                       ),
                     ],
@@ -175,7 +172,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                 _controller.ledgerData.first.remarks!
                                     .toLowerCase()
                                     .contains('opening'))
-                        ? AppCard2(
+                        ? AppCard1(
                             child: Padding(
                               padding: AppPaddings.p8,
                               child: Row(
@@ -238,7 +235,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                         ledger.isParent == 0)
                                     .toList();
 
-                                return AppCard2(
+                                return AppCard1(
                                   child: Padding(
                                     padding: AppPaddings.combined(
                                       horizontal: 8.appWidth,
@@ -487,7 +484,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                             ledg.remarks!.toLowerCase() == 'closing balance',
                       );
 
-                      return AppCard2(
+                      return AppCard1(
                         child: Padding(
                           padding: AppPaddings.p10,
                           child: Row(

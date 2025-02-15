@@ -43,7 +43,7 @@ class UsersScreen extends StatelessWidget {
               ),
             ),
             body: Padding(
-              padding: AppPaddings.p10,
+              padding: AppPaddings.p12,
               child: Column(
                 children: [
                   AppTextFormField(

@@ -13,13 +13,13 @@ class ItemForApprovalDm {
   final double? docWeight;
   final String? docRemark;
   final String? docDate;
-  final int? qcStatus;
+  final bool? qcStatus;
   final String? qcRemark;
   final String? qcDate;
   final double? rate;
   final String? accRemark;
   final String? accDate;
-  final int? approve;
+  final bool? approve;
   final String? approveRemark;
   final String? approveDate;
   final String? imagePath;
@@ -72,17 +72,34 @@ class ItemForApprovalDm {
           : null,
       docRemark: json['DocRemark'] as String?,
       docDate: json['DocDate'] as String?,
-      qcStatus: json['QCStatus'] as int?,
+      qcStatus: json['QCStatus'] as bool?,
       qcRemark: json['QCRemark'] as String?,
       qcDate: json['QCDate'] as String?,
       rate: (json['Rate'] != null) ? (json['Rate'] as num).toDouble() : null,
       accRemark: json['AccRemark'] as String?,
       accDate: json['AccDate'] as String?,
-      approve: json['Approve'] as int?,
+      approve: json['Approve'] as bool?,
       approveRemark: json['ApproveRemark'] as String?,
       approveDate: json['ApproveDate'] as String?,
       imagePath: json['ImagePath'] as String?,
       docImagePath: json['DocImagePath'] as String?,
     );
+  }
+
+  String get statusText {
+    switch (status) {
+      case 0:
+        return "DOCK Pending";
+      case 1:
+        return "DOCK Checked";
+      case 2:
+        return "QC Done";
+      case 3:
+        return "Passed by Accounting team";
+      case 4:
+        return "Approved";
+      default:
+        return "Unknown";
+    }
   }
 }

@@ -41,7 +41,7 @@ class UnauthorizedUsersScreen extends StatelessWidget {
               ),
             ),
             body: Padding(
-              padding: AppPaddings.p10,
+              padding: AppPaddings.p12,
               child: Column(
                 children: [
                   Obx(
@@ -68,9 +68,7 @@ class UnauthorizedUsersScreen extends StatelessWidget {
                           child: Center(
                             child: Text(
                               'No unauthorised users.',
-                              style: TextStyles.kMediumFredoka(
-                                color: kColorTextPrimary,
-                              ),
+                              style: TextStyles.kRegularFredoka(),
                             ),
                           ),
                         );

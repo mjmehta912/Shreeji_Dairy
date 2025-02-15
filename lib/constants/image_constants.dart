@@ -41,3 +41,8 @@ const kIconViewOutstandings = 'assets/icons/view_outstandings.svg';
 const kIconStoreOrder = 'assets/icons/store_order.svg';
 
 const kLoadingGif = 'assets/images/loading.gif';
+
+const kIconDockApproval = 'assets/icons/dock_approval.svg';
+const kIconQcApproval = 'assets/icons/qc_approval.svg';
+const kIconAccountingApproval = 'assets/icons/accounting_approval.svg';
+const kIconManagementApproval = 'assets/icons/management_approval.svg';

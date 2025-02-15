@@ -69,9 +69,6 @@ class UploadProductImageController extends GetxController {
     );
 
     selectedICode.value = selectedItemObj.icode;
-
-    print(selectedIName.value);
-    print(selectedICode.value);
   }
 
   Future<void> uploadProductImage() async {

@@ -91,7 +91,7 @@ class UploadProductImageScreen extends StatelessWidget {
                                   height: 0.75.screenWidth,
                                   width: 0.75.screenHeight,
                                   decoration: BoxDecoration(
-                                    color: kColorLightGrey,
+                                    color: kColorWhite,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Stack(

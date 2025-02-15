@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/credit_note/credit_note_details/screens/credit_note_details_screen.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/screens/credit_note_entry_screen.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_notes/controllers/credit_notes_controller.dart';
-import 'package:shreeji_dairy/styles/font_sizes.dart';
+import 'package:shreeji_dairy/features/credit_note/credit_notes/widgets/credit_notes_card.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
-import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 
@@ -38,7 +36,9 @@ class _CreditNotesScreenState extends State<CreditNotesScreen> {
     _controller.getAllCreditNotes(
       pCode: widget.pCode,
     );
-    _controller.debounceSearchQuery(widget.pCode);
+    _controller.debounceSearchQuery(
+      widget.pCode,
+    );
   }
 
   @override
@@ -100,16 +100,13 @@ class _CreditNotesScreenState extends State<CreditNotesScreen> {
                               if (scrollNotification is ScrollEndNotification &&
                                   scrollNotification.metrics.extentAfter == 0) {
                                 _controller.getAllCreditNotes(
-                                    pCode: widget.pCode,
-                                    loadMore:
-                                        true); // Trigger loadMore when end is reached
+                                    pCode: widget.pCode, loadMore: true);
                               }
                               return false;
                             },
                             child: Obx(
                               () => ListView.builder(
-                                itemCount: _controller.creditNotes.length +
-                                    1, // Add 1 for the loading indicator
+                                itemCount: _controller.creditNotes.length + 1,
                                 itemBuilder: (context, index) {
                                   if (index == _controller.creditNotes.length) {
                                     return _controller.isLoadingMore.value
@@ -125,86 +122,8 @@ class _CreditNotesScreenState extends State<CreditNotesScreen> {
                                   }
                                   final creditNote =
                                       _controller.creditNotes[index];
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Get.to(
-                                        () => CreditNoteDetailsScreen(
-                                          invNo: creditNote.invNo,
-                                        ),
-                                      );
-                                    },
-                                    child: AppCard1(
-                                      child: Padding(
-                                        padding: AppPaddings.p10,
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'Inv No.',
-                                                  style:
-                                                      TextStyles.kLightFredoka(
-                                                    fontSize:
-                                                        FontSizes.k16FontSize,
-                                                  ),
-                                                ),
-                                                AppSpaces.h10,
-                                                Text(
-                                                  creditNote.invNo,
-                                                  style:
-                                                      TextStyles.kMediumFredoka(
-                                                    fontSize:
-                                                        FontSizes.k16FontSize,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'Party Name',
-                                                  style:
-                                                      TextStyles.kLightFredoka(
-                                                    fontSize:
-                                                        FontSizes.k16FontSize,
-                                                  ),
-                                                ),
-                                                AppSpaces.h10,
-                                                Text(
-                                                  creditNote.pName,
-                                                  style:
-                                                      TextStyles.kMediumFredoka(
-                                                    fontSize:
-                                                        FontSizes.k16FontSize,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'Remark',
-                                                  style:
-                                                      TextStyles.kLightFredoka(
-                                                    fontSize:
-                                                        FontSizes.k16FontSize,
-                                                  ),
-                                                ),
-                                                AppSpaces.h10,
-                                                Text(
-                                                  creditNote.remark,
-                                                  style:
-                                                      TextStyles.kMediumFredoka(
-                                                    fontSize:
-                                                        FontSizes.k16FontSize,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                  return CreditNotesCard(
+                                    creditNote: creditNote,
                                   );
                                 },
                               ),

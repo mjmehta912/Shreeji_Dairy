@@ -2,13 +2,13 @@ class CreditNoteDm {
   final String pCode;
   final String pName;
   final String invNo;
-  final String remark;
+  final String? remark;
 
   CreditNoteDm({
     required this.pCode,
     required this.pName,
     required this.invNo,
-    required this.remark,
+    this.remark,
   });
 
   factory CreditNoteDm.fromJson(Map<String, dynamic> json) {

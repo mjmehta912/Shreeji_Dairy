@@ -4,10 +4,10 @@ import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/user_management/all_users/controllers/all_users_controller.dart';
 import 'package:shreeji_dairy/features/user_management/manage_user/screens/manage_user_screen.dart';
 import 'package:shreeji_dairy/features/user_rights/users/models/user_dm.dart';
-import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
-import 'package:shreeji_dairy/widgets/app_card2.dart';
+import 'package:shreeji_dairy/widgets/app_card1.dart';
+import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
 class AllUsersCard extends StatelessWidget {
   const AllUsersCard({
@@ -38,9 +38,9 @@ class AllUsersCard extends StatelessWidget {
           ),
         );
       },
-      child: AppCard2(
+      child: AppCard1(
         child: Padding(
-          padding: AppPaddings.p8,
+          padding: AppPaddings.p10,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -50,31 +50,22 @@ class AllUsersCard extends StatelessWidget {
                   Text(
                     '${user.firstName} ${user.lastName}',
                     style: TextStyles.kMediumFredoka(
-                      color: kColorTextPrimary,
+                      color: kColorSecondary,
+                    ).copyWith(
+                      height: 1.25,
                     ),
                   ),
-                  Text(
-                    _controller.getUserDesignation(user.userType),
-                    style: TextStyles.kRegularFredoka(
-                      fontSize: FontSizes.k16FontSize,
-                      color: kColorTextPrimary,
-                    ),
+                  AppTitleValueRow(
+                    title: 'Designation',
+                    value: _controller.getUserDesignation(user.userType),
                   ),
-                  Text(
-                    user.mobileNo,
-                    style: TextStyles.kRegularFredoka(
-                      fontSize: FontSizes.k16FontSize,
-                      color: kColorTextPrimary,
-                    ),
+                  AppTitleValueRow(
+                    title: 'Mobile No.',
+                    value: user.mobileNo,
                   ),
-                  Text(
-                    user.appAccess
-                        ? 'App Access : Enabled'
-                        : 'App Access : Disabled',
-                    style: TextStyles.kRegularFredoka(
-                      fontSize: FontSizes.k16FontSize,
-                      color: kColorTextPrimary,
-                    ),
+                  AppTitleValueRow(
+                    title: 'App Access',
+                    value: user.appAccess ? 'Enabled' : 'Disabled',
                   ),
                 ],
               ),
