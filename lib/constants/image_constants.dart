@@ -34,11 +34,13 @@ const kIconUserManagement = 'assets/icons/user_management.svg';
 const kIconUserRights = 'assets/icons/user_rights.svg';
 const kIconUserAuthorisation = 'assets/icons/user_authorisation.svg';
 const kIconCreditNoteEntry = 'assets/icons/credit_entry.svg';
-const kIconCreditNoteStatus = 'assets/icons/credit_status.svg';
+const kIconCreditStatus = 'assets/icons/credit_status.svg';
 const kIconCreditNoteApproval = 'assets/icons/credit_approval.svg';
 const kIconChangeCustomer = 'assets/icons/change_customer.svg';
 const kIconViewOutstandings = 'assets/icons/view_outstandings.svg';
 const kIconStoreOrder = 'assets/icons/store_order.svg';
+const kIconTestingParameter = 'assets/icons/testing_parameter.svg';
+const kIconQcTest = 'assets/icons/qc_test.svg';
 
 const kLoadingGif = 'assets/images/loading.gif';
 

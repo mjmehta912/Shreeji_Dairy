@@ -124,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       },
       "Credit Note Status": {
-        "icon": kIconCreditNoteStatus,
+        "icon": kIconCreditStatus,
         "action": () {
           Get.to(
             () => CreditNoteStatusScreen(
@@ -185,6 +185,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           }
         },
+      },
+      "Testing Parameter": {
+        "icon": kIconTestingParameter,
+        "action": () {},
+      },
+      "QC Test Para": {
+        "icon": kIconQcTest,
+        "action": () {},
       },
     };
   }
