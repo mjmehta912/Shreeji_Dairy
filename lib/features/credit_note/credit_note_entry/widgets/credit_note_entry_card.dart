@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/controllers/credit_note_entry_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
@@ -55,6 +56,12 @@ class CreditNoteEntryCard extends StatelessWidget {
                   AppTitleValueRow(
                     title: 'Qty',
                     value: item['qty'],
+                  ),
+                  AppTitleValueRow(
+                    title: 'ExpiryDate',
+                    value: DateFormat('dd-MM-yyyy').format(
+                      DateFormat('yyyy-MM-dd').parse(item['expDate']),
+                    ),
                   ),
                   AppTitleValueRow(
                     title: 'Inv No.',

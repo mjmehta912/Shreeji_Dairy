@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
+import 'package:shreeji_dairy/features/qc_test_parameter/add_group_wise_test_para/screens/add_group_wise_test_para_screen.dart';
+import 'package:shreeji_dairy/features/qc_test_parameter/add_item_wise_test_para/screens/add_item_wise_test_para_screen.dart';
 import 'package:shreeji_dairy/features/qc_test_parameter/qc_test_parameters/controllers/qc_test_para_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -145,7 +147,11 @@ class QcTestParaScreen extends StatelessWidget {
                         ),
                         AppButton(
                           title: 'Add Test Para',
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(
+                              () => AddGroupWiseTestParaScreen(),
+                            );
+                          },
                         ),
                         AppSpaces.v10,
                       ],
@@ -224,7 +230,11 @@ class QcTestParaScreen extends StatelessWidget {
                         ),
                         AppButton(
                           title: 'Add Test Para',
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(
+                              () => AddItemWiseTestParaScreen(),
+                            );
+                          },
                         ),
                         AppSpaces.v10,
                       ],

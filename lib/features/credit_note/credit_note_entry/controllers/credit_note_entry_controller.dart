@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/all_item_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/item_party_wise_inv_no_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/repos/credit_note_entry_repo.dart';
@@ -20,6 +21,7 @@ class CreditNoteEntryController extends GetxController {
   var selectedSkuIcode = ''.obs;
   var selectedPack = ''.obs;
   var qtyController = TextEditingController();
+  var expiryDateController = TextEditingController();
   var invNos = <ItemPartyWiseInvNoDm>[].obs;
   var invNoNos = <String>[].obs;
   var selectedInvNo = ''.obs;
@@ -34,6 +36,7 @@ class CreditNoteEntryController extends GetxController {
     required String skuPack,
     required String skuICode,
     required String qty,
+    required String expiryDate,
     required String invNo,
   }) {
     int serialNo = addedItems.length + 1;
@@ -45,6 +48,8 @@ class CreditNoteEntryController extends GetxController {
         'skuPack': skuPack,
         'skuICode': skuICode,
         'qty': qty,
+        'expDate': DateFormat('yyyy-MM-dd')
+            .format(DateFormat('dd-MM-yyyy').parse(expiryDate)),
         'invNo': invNo,
         'image': selectedImage.value,
       },
@@ -66,6 +71,7 @@ class CreditNoteEntryController extends GetxController {
     selectedPack.value = '';
     selectedSkuIcode.value = '';
     qtyController.clear();
+    expiryDateController.clear();
     invNos.clear();
     invNoNos.clear();
     selectedInvNo.value = '';
@@ -86,7 +92,11 @@ class CreditNoteEntryController extends GetxController {
       items.assignAll(fetchedItems);
 
       itemNames.assignAll(
-        fetchedItems.map((item) => item.printName).toList(),
+        fetchedItems
+            .map(
+              (item) => item.printName,
+            )
+            .toList(),
       );
 
       skus.clear();
@@ -174,6 +184,7 @@ class CreditNoteEntryController extends GetxController {
             'SRNO': item['serialNo'].toString(),
             'ICODE': item['skuICode'],
             'QTY': item['qty'],
+            'ExpDate': item['expDate'],
             'INVNO': item['invNo'],
             'Image': item['image'],
           };

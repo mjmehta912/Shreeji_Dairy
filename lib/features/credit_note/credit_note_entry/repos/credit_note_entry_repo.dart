@@ -116,8 +116,11 @@ class CreditNoteEntryRepo {
         fields['Details[$i].SRNO'] = detail['SRNO'];
         fields['Details[$i].ICODE'] = detail['ICODE'];
         fields['Details[$i].QTY'] = detail['QTY'];
+        fields['Details[$i].ExpDate'] = detail['ExpDate'];
         fields['Details[$i].INVNO'] = detail['INVNO'];
       }
+
+      print(fields);
 
       var response = await ApiService.postFormData(
         endpoint: '/CreditNote/entry',

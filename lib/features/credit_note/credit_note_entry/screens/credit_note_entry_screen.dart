@@ -13,6 +13,7 @@ import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
+import 'package:shreeji_dairy/widgets/app_date_picker_field.dart';
 import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
@@ -251,6 +252,17 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
                     },
                   ),
                   AppSpaces.v10,
+                  AppDatePickerTextFormField(
+                    dateController: _controller.expiryDateController,
+                    hintText: 'Expiry Date',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please select an expiry date';
+                      }
+                      return null;
+                    },
+                  ),
+                  AppSpaces.v10,
                   Obx(
                     () => AppDropdown(
                       items: _controller.invNoNos,
@@ -344,6 +356,8 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
                                 skuPack: _controller.selectedPack.value,
                                 skuICode: _controller.selectedSkuIcode.value,
                                 qty: _controller.qtyController.text,
+                                expiryDate:
+                                    _controller.expiryDateController.text,
                                 invNo: _controller.selectedInvNo.value,
                               );
                               Get.back();
