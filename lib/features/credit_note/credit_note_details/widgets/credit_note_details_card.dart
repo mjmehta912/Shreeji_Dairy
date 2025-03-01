@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
+import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_details/models/credit_note_detail_dm.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -33,6 +34,12 @@ class CreditNoteDetailsCard extends StatelessWidget {
                 child: Image.network(
                   imageUrl.startsWith('http') ? imageUrl : 'http://$imageUrl',
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      kImageLogo,
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
               ),
             ),
@@ -76,9 +83,7 @@ class CreditNoteDetailsCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 child: GestureDetector(
                   onTap: () {
-                    _showImagePreview(
-                      detail.imagePath,
-                    );
+                    _showImagePreview(detail.imagePath);
                   },
                   child: Image.network(
                     detail.imagePath.startsWith('http')
@@ -87,6 +92,14 @@ class CreditNoteDetailsCard extends StatelessWidget {
                     width: 80,
                     height: 80,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        kImageLogo,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                      );
+                    },
                   ),
                 ),
               ),

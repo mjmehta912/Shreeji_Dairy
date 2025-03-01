@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
+import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/models/item_for_approval_dm.dart';
+import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
+import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
@@ -12,9 +15,11 @@ class DockApprovalCard extends StatelessWidget {
   const DockApprovalCard({
     super.key,
     required this.item,
+    required this.onApproved,
   });
 
   final ItemForApprovalDm item;
+  final VoidCallback onApproved;
 
   void _showImagePreview(String imageUrl) {
     Get.dialog(
@@ -31,6 +36,12 @@ class DockApprovalCard extends StatelessWidget {
                 child: Image.network(
                   imageUrl.startsWith('http') ? imageUrl : 'http://$imageUrl',
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      kImageLogo,
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
               ),
             ),
@@ -82,6 +93,14 @@ class DockApprovalCard extends StatelessWidget {
                     width: 100,
                     height: 100,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        kImageLogo,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      );
+                    },
                   ),
                 ),
               ),
@@ -127,6 +146,19 @@ class DockApprovalCard extends StatelessWidget {
                             item.status!.toString().isNotEmpty
                         ? item.statusText
                         : '',
+                  ),
+                  AppSpaces.v10,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      AppButton(
+                        buttonHeight: 40,
+                        buttonWidth: 0.25.screenWidth,
+                        title: 'Approve',
+                        titleSize: FontSizes.k16FontSize,
+                        onPressed: onApproved,
+                      ),
+                    ],
                   ),
                 ],
               ),

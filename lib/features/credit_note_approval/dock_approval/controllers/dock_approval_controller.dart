@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/models/item_for_approval_dm.dart';
 import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/repos/dock_approval_repo.dart';
@@ -7,6 +10,11 @@ class DockApprovalController extends GetxController {
   var isLoading = false.obs;
 
   var itemsForApproval = <ItemForApprovalDm>[].obs;
+
+  var qtyController = TextEditingController();
+  var weightController = TextEditingController();
+  var remarkController = TextEditingController();
+  var selectedImage = Rx<File?>(null);
 
   @override
   void onInit() async {
@@ -29,6 +37,46 @@ class DockApprovalController extends GetxController {
         'Error',
         e.toString(),
       );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> approveDock({
+    required String id,
+  }) async {
+    isLoading.value = true;
+
+    try {
+      var response = await DockApprovalRepo.approveDock(
+        id: id,
+        qty: qtyController.text.isNotEmpty ? qtyController.text : '',
+        weight: weightController.text.isNotEmpty ? weightController.text : '',
+        remark: remarkController.text.isNotEmpty ? remarkController.text : '',
+        image: selectedImage.value!,
+      );
+
+      if (response != null && response.containsKey('message')) {
+        String message = response['message'];
+        Get.back();
+        getItemsForApproval();
+        showSuccessSnackbar(
+          'Success',
+          message,
+        );
+      }
+    } catch (e) {
+      if (e is Map<String, dynamic>) {
+        showErrorSnackbar(
+          'Error',
+          e['message'],
+        );
+      } else {
+        showErrorSnackbar(
+          'Error',
+          e.toString(),
+        );
+      }
     } finally {
       isLoading.value = false;
     }

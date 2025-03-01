@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
+import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/models/item_for_approval_dm.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -18,7 +19,6 @@ class QcApprovalCard extends StatelessWidget {
   });
 
   final ItemForApprovalDm item;
-
   void _showImagePreview(String imageUrl) {
     Get.dialog(
       Dialog(
@@ -34,6 +34,12 @@ class QcApprovalCard extends StatelessWidget {
                 child: Image.network(
                   imageUrl.startsWith('http') ? imageUrl : 'http://$imageUrl',
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      kImageLogo,
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
               ),
             ),
@@ -103,6 +109,14 @@ class QcApprovalCard extends StatelessWidget {
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              kImageLogo,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -192,6 +206,14 @@ class QcApprovalCard extends StatelessWidget {
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            kImageLogo,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -272,16 +294,9 @@ class QcApprovalCard extends StatelessWidget {
                 AppButton(
                   buttonWidth: 0.2.screenWidth,
                   buttonHeight: 30,
-                  buttonColor: kColorRed,
-                  title: 'Reject',
-                  titleSize: FontSizes.k16FontSize,
-                  onPressed: () {},
-                ),
-                AppButton(
-                  buttonWidth: 0.2.screenWidth,
-                  buttonHeight: 30,
-                  buttonColor: kColorBlue,
-                  title: 'Accept',
+                  buttonColor: kColorPrimary,
+                  titleColor: kColorTextPrimary,
+                  title: 'Action',
                   titleSize: FontSizes.k16FontSize,
                   onPressed: () {},
                 ),

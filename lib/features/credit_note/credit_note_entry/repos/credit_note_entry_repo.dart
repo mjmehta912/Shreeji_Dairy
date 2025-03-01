@@ -120,8 +120,6 @@ class CreditNoteEntryRepo {
         fields['Details[$i].INVNO'] = detail['INVNO'];
       }
 
-      print(fields);
-
       var response = await ApiService.postFormData(
         endpoint: '/CreditNote/entry',
         fields: fields,
