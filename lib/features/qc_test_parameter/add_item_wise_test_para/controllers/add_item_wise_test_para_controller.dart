@@ -109,8 +109,6 @@ class AddItemWiseTestParaController extends GetxController {
       selectedItemCode.value = '';
       selectedTestingParameter.value = '';
       selectedTestingParameterCode.value = '';
-
-      print(addedData);
     } else {
       showErrorSnackbar(
         'Error',

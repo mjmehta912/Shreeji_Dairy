@@ -110,8 +110,6 @@ class AddGroupWiseTestParaController extends GetxController {
       selectedSubGroupCode.value = '';
       selectedTestingParameter.value = '';
       selectedTestingParameterCode.value = '';
-
-      print(addedData);
     } else {
       showErrorSnackbar(
         'Error',

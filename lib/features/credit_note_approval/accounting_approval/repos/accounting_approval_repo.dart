@@ -1,10 +1,10 @@
-import 'package:shreeji_dairy/features/credit_note_approval/qc_approval/models/qc_para_for_approval_dm.dart';
+import 'package:shreeji_dairy/features/credit_note_approval/accounting_approval/models/qc_detail_dm.dart';
 import 'package:shreeji_dairy/services/api_service.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
-class QcApprovalRepo {
-  static Future<List<QcParaForApprovalDm>> getQcParaForApproval({
-    required String iCode,
+class AccountingApprovalRepo {
+  static Future<List<QcDetailDm>> getQcDetails({
+    required String id,
   }) async {
     String? token = await SecureStorageHelper.read(
       'token',
@@ -12,10 +12,10 @@ class QcApprovalRepo {
 
     try {
       final response = await ApiService.getRequest(
-        endpoint: '/CreditNote/qcPara',
+        endpoint: '/CreditNote/qcTestPara',
         token: token,
         queryParams: {
-          'ICODE': iCode,
+          'ID': id,
         },
       );
 
@@ -25,7 +25,7 @@ class QcApprovalRepo {
 
       return (response['data'] as List<dynamic>)
           .map(
-            (item) => QcParaForApprovalDm.fromJson(item),
+            (item) => QcDetailDm.fromJson(item),
           )
           .toList();
     } catch (e) {
@@ -33,11 +33,10 @@ class QcApprovalRepo {
     }
   }
 
-  static Future<dynamic> approveQc({
+  static Future<dynamic> approveAccounting({
     required int id,
-    required bool qc,
+    required double rate,
     required String remark,
-    required List<Map<String, dynamic>> qcPara,
   }) async {
     String? token = await SecureStorageHelper.read(
       'token',
@@ -45,14 +44,13 @@ class QcApprovalRepo {
 
     final Map<String, dynamic> requestBody = {
       "ID": id,
-      "QC": qc,
+      "Rate": rate,
       "Remark": remark,
-      "QCPara": qcPara,
     };
 
     try {
       var response = await ApiService.postRequest(
-        endpoint: '/CreditNote/qcApprove',
+        endpoint: '/CreditNote/accApprove',
         requestBody: requestBody,
         token: token,
       );

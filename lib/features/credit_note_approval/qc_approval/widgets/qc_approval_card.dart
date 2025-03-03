@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/models/item_for_approval_dm.dart';
+import 'package:shreeji_dairy/features/credit_note_approval/qc_approval/screens/qc_approval_action_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
@@ -79,101 +80,111 @@ class QcApprovalCard extends StatelessWidget {
           ),
           child: Padding(
             padding: AppPaddings.p10,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: 0.75 * Get.height, // Maximum height constraint
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize
+                      .min, // Allows dialog to shrink if content is small
                   children: [
-                    Text(
-                      'Dock Details',
-                      style: TextStyles.kMediumFredoka(
-                        fontSize: FontSizes.k20FontSize,
-                        color: kColorSecondary,
-                      ),
+                    /// 🔹 Title: Dock Details
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Dock Details',
+                          style: TextStyles.kMediumFredoka(
+                            fontSize: FontSizes.k20FontSize,
+                            color: kColorSecondary,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                AppSpaces.v10,
-                Row(
-                  children: [
-                    Material(
-                      elevation: 5,
-                      borderRadius: BorderRadius.circular(10),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          item.docImagePath!.startsWith('http')
-                              ? item.docImagePath!
-                              : 'http://${item.docImagePath!}',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              kImageLogo,
+                    AppSpaces.v10,
+
+                    /// 🔹 Dock Image & Info
+                    Row(
+                      children: [
+                        Material(
+                          elevation: 5,
+                          borderRadius: BorderRadius.circular(10),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              item.docImagePath!.startsWith('http')
+                                  ? item.docImagePath!
+                                  : 'http://${item.docImagePath!}',
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,
-                            );
-                          },
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  kImageLogo,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    AppSpaces.h10,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AppTitleValueRow(
-                            title: 'Dock Date',
-                            value:
-                                item.docDate != null && item.docDate!.isNotEmpty
+                        AppSpaces.h10,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AppTitleValueRow(
+                                title: 'Dock Date',
+                                value: item.docDate?.isNotEmpty == true
                                     ? item.docDate!
-                                    : '',
+                                    : 'N/A',
+                              ),
+                              AppTitleValueRow(
+                                title: 'Dock Remark',
+                                value: item.docRemark?.isNotEmpty == true
+                                    ? item.docRemark!
+                                    : 'N/A',
+                              ),
+                              AppTitleValueRow(
+                                title: 'Dock Qty',
+                                value:
+                                    item.docQty?.toString().isNotEmpty == true
+                                        ? item.docQty!.toString()
+                                        : '0',
+                              ),
+                              AppTitleValueRow(
+                                title: 'Dock Weight',
+                                value: item.docWeight?.toString().isNotEmpty ==
+                                        true
+                                    ? item.docWeight!.toString()
+                                    : '0',
+                              ),
+                            ],
                           ),
-                          AppTitleValueRow(
-                            title: 'Dock Remark',
-                            value: item.docRemark != null &&
-                                    item.docRemark!.isNotEmpty
-                                ? item.docRemark!
-                                : '',
-                          ),
-                          AppTitleValueRow(
-                            title: 'Dock Qty',
-                            value: item.docQty != null &&
-                                    item.docQty!.toString().isNotEmpty
-                                ? item.docQty!.toString()
-                                : '0',
-                          ),
-                          AppTitleValueRow(
-                            title: 'Dock Weight',
-                            value: item.docWeight != null &&
-                                    item.docWeight!.toString().isNotEmpty
-                                ? item.docWeight!.toString()
-                                : '0',
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
+
+                    AppSpaces.v10,
+
+                    /// 🔹 OK Button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        AppButton(
+                          title: 'OK',
+                          titleSize: FontSizes.k16FontSize,
+                          buttonWidth: 0.15 * Get.width,
+                          buttonHeight: 30,
+                          onPressed: () => Get.back(),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                AppSpaces.v10,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    AppButton(
-                      title: 'OK',
-                      titleSize: FontSizes.k16FontSize,
-                      buttonWidth: 0.15.screenWidth,
-                      buttonHeight: 30,
-                      onPressed: () {
-                        Get.back();
-                      },
-                    ),
-                  ],
-                )
-              ],
+              ),
             ),
           ),
         );
@@ -298,7 +309,14 @@ class QcApprovalCard extends StatelessWidget {
                   titleColor: kColorTextPrimary,
                   title: 'Action',
                   titleSize: FontSizes.k16FontSize,
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(
+                      () => QcApprovalActionScreen(
+                        id: item.id!,
+                        iCode: item.iCode!,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
