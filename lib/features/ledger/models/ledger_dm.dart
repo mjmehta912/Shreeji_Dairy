@@ -2,6 +2,7 @@ class LedgerDm {
   final int? id;
   final String? date;
   final String? invNo;
+  final String? finYear;
   final String? dbc;
   final String? remarks;
   final String? pname;
@@ -19,6 +20,7 @@ class LedgerDm {
     this.id,
     this.date,
     this.invNo,
+    this.finYear,
     this.dbc,
     this.remarks,
     this.pname,
@@ -38,6 +40,7 @@ class LedgerDm {
       id: _toInt(json['ID']),
       date: json['DATE'] as String?,
       invNo: json['INVNO'] as String?,
+      finYear: json['FINYEAR'] as String?,
       dbc: json['DBC'] as String?,
       remarks: json['REMARKS'] as String?,
       pname: json['pname'] as String?,

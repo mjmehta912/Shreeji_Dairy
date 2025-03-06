@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shreeji_dairy/features/invoice/invoices/repositories/invoices_repo.dart';
+import 'package:shreeji_dairy/features/invoice/invoices/screens/invoice_pdf_screen.dart';
 import 'package:shreeji_dairy/features/ledger/models/ledger_dm.dart';
 import 'package:shreeji_dairy/features/ledger/repositories/ledger_repo.dart';
 import 'package:shreeji_dairy/features/ledger/screens/ledger_pdf_screen.dart';
@@ -130,6 +132,35 @@ class LedgerController extends GetxController {
           e.toString(),
         );
       }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> downloadInvoice({
+    required String invNo,
+    required String financialYear,
+  }) async {
+    try {
+      isLoading.value = true;
+      final pdfBytes = await InvoicesRepo.downloadInvoice(
+        invNo: invNo,
+        financialYear: financialYear,
+      );
+
+      if (pdfBytes != null && pdfBytes.isNotEmpty) {
+        Get.to(
+          () => InvoicePdfScreen(
+            pdfBytes: pdfBytes,
+            title: selectedCustomerCode.value,
+          ),
+        );
+      }
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
     } finally {
       isLoading.value = false;
     }

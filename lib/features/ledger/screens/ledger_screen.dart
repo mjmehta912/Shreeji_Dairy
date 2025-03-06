@@ -266,14 +266,30 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  parent.invNo!,
-                                                  style: TextStyles
-                                                      .kRegularFredoka(
-                                                    color: kColorTextPrimary,
-                                                    fontSize:
-                                                        FontSizes.k14FontSize,
-                                                  ).copyWith(height: 1),
+                                                InkWell(
+                                                  onTap: parent.dbc != null &&
+                                                          parent.dbc!
+                                                              .isNotEmpty &&
+                                                          parent.dbc! == 'SALE'
+                                                      ? () {
+                                                          _controller
+                                                              .downloadInvoice(
+                                                            invNo:
+                                                                parent.invNo!,
+                                                            financialYear:
+                                                                parent.finYear!,
+                                                          );
+                                                        }
+                                                      : () {},
+                                                  child: Text(
+                                                    parent.invNo!,
+                                                    style: TextStyles
+                                                        .kRegularFredoka(
+                                                      color: kColorTextPrimary,
+                                                      fontSize:
+                                                          FontSizes.k14FontSize,
+                                                    ).copyWith(height: 1),
+                                                  ),
                                                 ),
                                                 Text(
                                                   parent.date!,

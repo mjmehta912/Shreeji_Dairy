@@ -401,7 +401,6 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
                       ],
                     ),
 
-                    /// 🔹 QC Details (Only if status is 2, 3, or 4)
                     if (item.status != null && [2, 3, 4].contains(item.status))
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -542,7 +541,6 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
                         ],
                       ),
 
-                    /// 🔹 OK Button
                     AppSpaces.v10,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
