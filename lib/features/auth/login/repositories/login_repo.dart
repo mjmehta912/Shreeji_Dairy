@@ -19,6 +19,9 @@ class LoginRepo {
         endpoint: '/Auth/login',
         requestBody: requestBody,
       );
+
+      print(requestBody);
+      print(response);
       return response;
     } catch (e) {
       rethrow;
