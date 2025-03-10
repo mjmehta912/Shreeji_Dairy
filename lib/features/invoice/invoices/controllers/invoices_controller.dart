@@ -19,6 +19,7 @@ class InvoicesController extends GetxController {
   var toDateController = TextEditingController();
   var searchController = TextEditingController();
   var selectedStatus = 'ALL'.obs;
+  var selectedOrderBy = 'Date Desc'.obs;
 
   var invoices = <InvoiceDm>[].obs;
 
@@ -71,6 +72,7 @@ class InvoicesController extends GetxController {
         status: selectedStatus.value,
         invNo: searchController.text,
         pCode: selectedCustomerCode.value,
+        orderBy: selectedOrderBy.value == 'Date Desc' ? 'DESC' : 'ASC',
       );
 
       invoices.assignAll(fetchedInvoices);

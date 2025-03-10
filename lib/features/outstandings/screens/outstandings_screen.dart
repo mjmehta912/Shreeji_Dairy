@@ -182,7 +182,7 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                               color: _controller.outstandingAmount.value
                                       .contains('-')
                                   ? kColorRed
-                                  : kColorBlue,
+                                  : kColorGreen,
                             ),
                           ),
                         ],

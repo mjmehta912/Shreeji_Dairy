@@ -219,34 +219,92 @@ class _UserAccessScreenState extends State<UserAccessScreen> {
                         itemCount: _controller.menuAccess.length,
                         itemBuilder: (context, index) {
                           final menuAccess = _controller.menuAccess[index];
-                          return ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            leading: Text(
-                              menuAccess.menuName,
-                              style: TextStyles.kMediumFredoka(
-                                fontSize: FontSizes.k18FontSize,
-                                color: kColorTextPrimary,
-                              ),
-                            ),
-                            trailing: Switch(
-                              value: menuAccess.access,
-                              activeColor: kColorWhite,
-                              inactiveThumbColor: kColorWhite,
-                              inactiveTrackColor: kColorGrey,
-                              activeTrackColor: kColorSecondary,
-                              onChanged: (value) async {
-                                await _controller.setMenuAccess(
-                                  userId: widget.userId,
-                                  menuId: menuAccess.menuId,
-                                  menuAccess: value,
-                                );
-                                setState(
-                                  () {
-                                    menuAccess.access = value;
+
+                          return Column(
+                            children: [
+                              ListTile(
+                                contentPadding: EdgeInsets.all(0),
+                                leading: Text(
+                                  menuAccess.menuName,
+                                  style: TextStyles.kMediumFredoka(
+                                    fontSize: FontSizes.k18FontSize,
+                                    color: kColorTextPrimary,
+                                  ),
+                                ),
+                                trailing: Switch(
+                                  value: menuAccess.access,
+                                  activeColor: kColorWhite,
+                                  inactiveThumbColor: kColorWhite,
+                                  inactiveTrackColor: kColorGrey,
+                                  activeTrackColor: kColorSecondary,
+                                  onChanged: (value) async {
+                                    await _controller.setMenuAccess(
+                                      userId: widget.userId,
+                                      menuId: menuAccess.menuId,
+                                      menuAccess: value,
+                                    );
+                                    setState(
+                                      () {
+                                        menuAccess.access = value;
+
+                                        if (!value) {
+                                          for (var subMenu
+                                              in menuAccess.subMenu) {
+                                            subMenu.subMenuAccess = false;
+                                          }
+                                        }
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                            ),
+                                ),
+                              ),
+                              if (menuAccess.access &&
+                                  menuAccess.subMenu.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 30),
+                                  child: Column(
+                                    children: menuAccess.subMenu.map(
+                                      (subMenu) {
+                                        return ListTile(
+                                          contentPadding: EdgeInsets.all(0),
+                                          leading: Text(
+                                            subMenu.subMenuName,
+                                            style: TextStyles.kRegularFredoka(
+                                              fontSize: FontSizes.k18FontSize,
+                                              color: kColorTextPrimary,
+                                            ),
+                                          ),
+                                          trailing: Switch(
+                                            value: subMenu.subMenuAccess,
+                                            activeColor: kColorWhite,
+                                            inactiveThumbColor: kColorWhite,
+                                            inactiveTrackColor: kColorGrey,
+                                            activeTrackColor: kColorSecondary,
+                                            onChanged: menuAccess.access
+                                                ? (value) async {
+                                                    await _controller
+                                                        .setMenuAccess(
+                                                      userId: widget.userId,
+                                                      menuId: menuAccess.menuId,
+                                                      subMenuId:
+                                                          subMenu.subMenuId,
+                                                      menuAccess: value,
+                                                    );
+                                                    setState(
+                                                      () {
+                                                        subMenu.subMenuAccess =
+                                                            value;
+                                                      },
+                                                    );
+                                                  }
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                    ).toList(),
+                                  ),
+                                ),
+                            ],
                           );
                         },
                       ),

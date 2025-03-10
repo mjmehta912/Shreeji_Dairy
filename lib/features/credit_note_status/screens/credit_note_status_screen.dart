@@ -13,6 +13,7 @@ import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
+import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
 class CreditNoteStatusScreen extends StatefulWidget {
@@ -51,6 +52,9 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
     return Stack(
       children: [
         GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             backgroundColor: kColorWhite,
             appBar: AppAppbar(
@@ -69,6 +73,50 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
               padding: AppPaddings.p12,
               child: Column(
                 children: [
+                  AppTextFormField(
+                    controller: _controller.searchController,
+                    hintText: 'Search Credit Note',
+                    onChanged: (value) {
+                      _controller.getItemsForApproval(
+                        pCode: widget.pCode,
+                      );
+                    },
+                  ),
+                  AppSpaces.v10,
+                  Obx(
+                    () => SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: _controller.statusOptions.map(
+                          (status) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: ChoiceChip(
+                                showCheckmark: false,
+                                label: Text(
+                                  status["label"],
+                                  style: TextStyles.kRegularFredoka(
+                                    fontSize: FontSizes.k14FontSize,
+                                  ),
+                                ),
+                                selected: _controller.selectedStatus.value ==
+                                    status["value"],
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    _controller.setStatus(status["value"]);
+                                  }
+                                },
+                                selectedColor: kColorPrimary,
+                                backgroundColor: kColorWhite,
+                              ),
+                            );
+                          },
+                        ).toList(),
+                      ),
+                    ),
+                  ),
+                  AppSpaces.v10,
                   Obx(
                     () {
                       if (_controller.itemsForApproval.isEmpty &&
@@ -425,7 +473,7 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
                             value:
                                 item.qcStatus == true ? 'Approved' : 'Rejected',
                             color:
-                                item.qcStatus == true ? kColorBlue : kColorRed,
+                                item.qcStatus == true ? kColorGreen : kColorRed,
                           ),
                           AppTitleValueRow(
                             title: 'QC Remark',
@@ -530,7 +578,7 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
                             value:
                                 item.approve == true ? 'Approved' : 'Rejected',
                             color:
-                                item.approve == true ? kColorBlue : kColorRed,
+                                item.approve == true ? kColorGreen : kColorRed,
                           ),
                           AppTitleValueRow(
                             title: 'Approval Remark',

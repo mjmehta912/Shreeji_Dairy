@@ -11,32 +11,28 @@ class UserAccessController extends GetxController {
   var isLoading = false.obs;
 
   var menuAccess = <MenuAccessDm>[].obs;
-  var ledgerDate = <LedgerDateDm>[].obs;
+  var ledgerDate = LedgerDateDm(
+    ledgerStart: '',
+    ledgerEnd: '',
+  ).obs;
+
   var ledgerStartDateController = TextEditingController();
   var ledgerEndDateController = TextEditingController();
 
-  Future<void> getUserAccess({
-    required int userId,
-  }) async {
+  Future<void> getUserAccess({required int userId}) async {
     try {
       isLoading.value = true;
 
-      final fetchedUserAccess = await UserAccessRepo.getUserAccess(
-        userId: userId,
-      );
+      final fetchedUserAccess =
+          await UserAccessRepo.getUserAccess(userId: userId);
 
       menuAccess.assignAll(fetchedUserAccess.menuAccess);
-      ledgerDate.assignAll(fetchedUserAccess.ledgerDate);
+      ledgerDate.value = fetchedUserAccess.ledgerDate;
 
-      ledgerStartDateController.text =
-          fetchedUserAccess.ledgerDate.first.ledgerStart ?? '';
-      ledgerEndDateController.text =
-          fetchedUserAccess.ledgerDate.first.ledgerEnd ?? '';
+      ledgerStartDateController.text = fetchedUserAccess.ledgerDate.ledgerStart;
+      ledgerEndDateController.text = fetchedUserAccess.ledgerDate.ledgerEnd;
     } catch (e) {
-      showErrorSnackbar(
-        'Error',
-        e.toString(),
-      );
+      showErrorSnackbar('Error', e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -53,25 +49,17 @@ class UserAccessController extends GetxController {
 
     try {
       var response = await UserAccessRepo.setAppAccess(
-        userId: userId,
-        appAccess: appAccess,
-      );
+          userId: userId, appAccess: appAccess);
 
       if (response != null && response.containsKey('message')) {
         String message = response['message'];
 
         usersController.getUsers();
 
-        showSuccessSnackbar(
-          'Success',
-          message,
-        );
+        showSuccessSnackbar('Success', message);
       }
     } catch (e) {
-      showErrorSnackbar(
-        'Error',
-        e.toString(),
-      );
+      showErrorSnackbar('Error', e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -80,6 +68,7 @@ class UserAccessController extends GetxController {
   Future<void> setMenuAccess({
     required int userId,
     required int menuId,
+    int? subMenuId,
     required bool menuAccess,
   }) async {
     isLoading.value = true;
@@ -88,22 +77,17 @@ class UserAccessController extends GetxController {
       var response = await UserAccessRepo.setMenuAccess(
         userId: userId,
         menuId: menuId,
+        subMenuId: subMenuId,
         menuAccess: menuAccess,
       );
 
       if (response != null && response.containsKey('message')) {
         String message = response['message'];
 
-        getUserAccess(
-          userId: userId,
-        );
-
+        getUserAccess(userId: userId);
         profileController.getUserAccess();
 
-        showSuccessSnackbar(
-          'Success',
-          message,
-        );
+        showSuccessSnackbar('Success', message);
       }
     } catch (e) {
       showErrorSnackbar(
@@ -115,9 +99,39 @@ class UserAccessController extends GetxController {
     }
   }
 
-  Future<void> setLedger({
-    required int userId,
-  }) async {
+  // /// **NEW METHOD: Set SubMenu Access**
+  // Future<void> setSubMenuAccess({
+  //   required int userId,
+  //   required int menuId,
+  //   required int subMenuId,
+  //   required bool subMenuAccess,
+  // }) async {
+  //   isLoading.value = true;
+
+  //   try {
+  //     var response = await UserAccessRepo.setSubMenuAccess(
+  //       userId: userId,
+  //       menuId: menuId,
+  //       subMenuId: subMenuId,
+  //       subMenuAccess: subMenuAccess,
+  //     );
+
+  //     if (response != null && response.containsKey('message')) {
+  //       String message = response['message'];
+
+  //       getUserAccess(userId: userId);
+  //       profileController.getUserAccess();
+
+  //       showSuccessSnackbar('Success', message);
+  //     }
+  //   } catch (e) {
+  //     showErrorSnackbar('Error', e.toString());
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+  Future<void> setLedger({required int userId}) async {
     isLoading.value = true;
 
     try {
@@ -125,16 +139,12 @@ class UserAccessController extends GetxController {
         userId: userId,
         ledgerStart: ledgerStartDateController.text.isNotEmpty
             ? DateFormat('yyyy-MM-dd').format(
-                DateFormat('dd-MM-yyyy').parse(
-                  ledgerStartDateController.text,
-                ),
+                DateFormat('dd-MM-yyyy').parse(ledgerStartDateController.text),
               )
             : null,
         ledgerEnd: ledgerEndDateController.text.isNotEmpty
             ? DateFormat('yyyy-MM-dd').format(
-                DateFormat('dd-MM-yyyy').parse(
-                  ledgerEndDateController.text,
-                ),
+                DateFormat('dd-MM-yyyy').parse(ledgerEndDateController.text),
               )
             : null,
       );
@@ -142,22 +152,13 @@ class UserAccessController extends GetxController {
       if (response != null && response.containsKey('message')) {
         String message = response['message'];
 
-        getUserAccess(
-          userId: userId,
-        );
-
+        getUserAccess(userId: userId);
         profileController.getUserAccess();
 
-        showSuccessSnackbar(
-          'Success',
-          message,
-        );
+        showSuccessSnackbar('Success', message);
       }
     } catch (e) {
-      showErrorSnackbar(
-        'Error',
-        e.toString(),
-      );
+      showErrorSnackbar('Error', e.toString());
     } finally {
       isLoading.value = false;
     }

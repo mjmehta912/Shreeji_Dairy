@@ -6,9 +6,7 @@ class ProfileRepo {
   static Future<UserAccessDm> getUserAccess({
     required int userId,
   }) async {
-    String? token = await SecureStorageHelper.read(
-      'token',
-    );
+    String? token = await SecureStorageHelper.read('token');
 
     try {
       final response = await ApiService.getRequest(
@@ -21,8 +19,11 @@ class ProfileRepo {
 
       if (response == null) {
         return UserAccessDm(
-          ledgerDate: [],
           menuAccess: [],
+          ledgerDate: LedgerDateDm(
+            ledgerStart: '',
+            ledgerEnd: '',
+          ),
         );
       }
 

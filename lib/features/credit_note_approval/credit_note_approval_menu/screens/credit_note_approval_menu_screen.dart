@@ -12,144 +12,96 @@ import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 
 class CreditNoteApprovalMenuScreen extends StatelessWidget {
-  const CreditNoteApprovalMenuScreen({
+  final List<dynamic> subMenus;
+
+  CreditNoteApprovalMenuScreen({
     super.key,
+    required this.subMenus,
   });
+
+  final List<Map<String, dynamic>> creditNoteMenus = [
+    {
+      'subMenuId': 1,
+      'subMenuName': 'Dock Approval',
+      'icon': kIconDockApproval,
+      'screen': DockApprovalScreen(),
+    },
+    {
+      'subMenuId': 2,
+      'subMenuName': 'QC Approval',
+      'icon': kIconQcApproval,
+      'screen': QcApprovalScreen(),
+    },
+    {
+      'subMenuId': 3,
+      'subMenuName': 'Accounting Approval',
+      'icon': kIconAccountingApproval,
+      'screen': AccountingApprovalScreen(),
+    },
+    {
+      'subMenuId': 4,
+      'subMenuName': 'Management Approval',
+      'icon': kIconManagementApproval,
+      'screen': ManagementApprovalScreen(),
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
+    // Filter accessible submenus
+    List<Map<String, dynamic>> accessibleMenus = creditNoteMenus.where(
+      (menu) {
+        return subMenus.any((subMenu) =>
+            subMenu.subMenuId == menu['subMenuId'] && subMenu.subMenuAccess);
+      },
+    ).toList();
+
     return Scaffold(
       backgroundColor: kColorWhite,
       appBar: AppAppbar(
         title: 'Credit Note Approval',
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: Icon(
-            Icons.arrow_back_ios,
-            size: 25,
-            color: kColorTextPrimary,
-          ),
+          icon: Icon(Icons.arrow_back_ios, size: 25, color: kColorTextPrimary),
         ),
       ),
       body: Padding(
         padding: AppPaddings.p10,
-        child: ListView(
-          children: [
-            ListTile(
-              leading: SvgPicture.asset(
-                kIconDockApproval,
-                height: 25,
-                colorFilter: ColorFilter.mode(
-                  kColorSecondary,
-                  BlendMode.srcIn,
+        child: accessibleMenus.isNotEmpty
+            ? ListView.separated(
+                itemCount: accessibleMenus.length,
+                separatorBuilder: (context, index) =>
+                    Divider(color: kColorTextPrimary),
+                itemBuilder: (context, index) {
+                  final menu = accessibleMenus[index];
+
+                  return ListTile(
+                    leading: SvgPicture.asset(
+                      menu['icon'],
+                      height: 25,
+                      colorFilter:
+                          ColorFilter.mode(kColorSecondary, BlendMode.srcIn),
+                    ),
+                    title: Text(
+                      menu['subMenuName'],
+                      style:
+                          TextStyles.kRegularFredoka(color: kColorTextPrimary),
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios,
+                        size: 20, color: kColorTextPrimary),
+                    onTap: () {
+                      Widget screen = menu['screen']; // Cast as Widget
+                      Get.to(() => screen);
+                    },
+                  );
+                },
+              )
+            : Center(
+                child: Text(
+                  'No access to Credit Note Approval menus',
+                  style: TextStyles.kRegularFredoka(color: kColorTextPrimary),
                 ),
               ),
-              title: Text(
-                'Dock Approval',
-                style: TextStyles.kRegularFredoka(
-                  color: kColorTextPrimary,
-                ),
-              ),
-              trailing: Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
-                color: kColorTextPrimary,
-              ),
-              onTap: () {
-                Get.to(
-                  () => DockApprovalScreen(),
-                );
-              },
-            ),
-            Divider(
-              color: kColorTextPrimary,
-            ),
-            ListTile(
-              leading: SvgPicture.asset(
-                kIconQcApproval,
-                height: 25,
-                colorFilter: ColorFilter.mode(
-                  kColorSecondary,
-                  BlendMode.srcIn,
-                ),
-              ),
-              title: Text(
-                'QC Approval',
-                style: TextStyles.kRegularFredoka(
-                  color: kColorTextPrimary,
-                ),
-              ),
-              trailing: Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
-                color: kColorTextPrimary,
-              ),
-              onTap: () {
-                Get.to(
-                  () => QcApprovalScreen(),
-                );
-              },
-            ),
-            Divider(
-              color: kColorTextPrimary,
-            ),
-            ListTile(
-              leading: SvgPicture.asset(
-                kIconAccountingApproval,
-                height: 25,
-                colorFilter: ColorFilter.mode(
-                  kColorSecondary,
-                  BlendMode.srcIn,
-                ),
-              ),
-              title: Text(
-                'Accounting Approval',
-                style: TextStyles.kRegularFredoka(
-                  color: kColorTextPrimary,
-                ),
-              ),
-              trailing: Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
-                color: kColorTextPrimary,
-              ),
-              onTap: () {
-                Get.to(
-                  () => AccountingApprovalScreen(),
-                );
-              },
-            ),
-            Divider(
-              color: kColorTextPrimary,
-            ),
-            ListTile(
-              leading: SvgPicture.asset(
-                kIconManagementApproval,
-                height: 25,
-                colorFilter: ColorFilter.mode(
-                  kColorSecondary,
-                  BlendMode.srcIn,
-                ),
-              ),
-              title: Text(
-                'Management Approval',
-                style: TextStyles.kRegularFredoka(
-                  color: kColorTextPrimary,
-                ),
-              ),
-              trailing: Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
-                color: kColorTextPrimary,
-              ),
-              onTap: () {
-                Get.to(
-                  () => ManagementApprovalScreen(),
-                );
-              },
-            ),
-          ],
-        ),
       ),
     );
   }

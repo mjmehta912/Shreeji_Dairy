@@ -139,9 +139,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       "Credit Note Approval": {
         "icon": kIconCreditNoteApproval,
         "action": () {
-          Get.to(
-            () => CreditNoteApprovalMenuScreen(),
+          // Find the "Credit Note Approval" menu and pass its submenus
+          final creditNoteMenu = _controller.menuAccess.firstWhereOrNull(
+            (menu) => menu.menuName == "Credit Note Approval",
           );
+
+          if (creditNoteMenu != null) {
+            Get.to(() => CreditNoteApprovalMenuScreen(
+                  subMenus: creditNoteMenu.subMenu, // Pass submenus
+                ));
+          } else {
+            Get.snackbar("Access Denied",
+                "You don't have access to Credit Note Approval");
+          }
         },
       },
       "Store Order": {

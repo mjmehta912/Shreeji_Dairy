@@ -48,10 +48,11 @@ class _AppDatePickerTextFormFieldState
         DateTime selectedDate = currentDate;
 
         return SizedBox(
-          height: 300,
+          height: 0.33.screenHeight,
           child: Column(
             children: [
               Container(
+                color: kColorWhite,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 10,
@@ -90,6 +91,7 @@ class _AppDatePickerTextFormFieldState
                   onDateTimeChanged: (DateTime newDate) {
                     selectedDate = newDate;
                   },
+                  backgroundColor: kColorWhite,
                 ),
               ),
             ],

@@ -9,6 +9,7 @@ class InvoicesRepo {
     required String fromDate,
     required String toDate,
     required String status,
+    required String orderBy,
     String invNo = '',
     required String pCode,
   }) async {
@@ -22,6 +23,7 @@ class InvoicesRepo {
         "ToDate": toDate,
         "Status": status,
         "INVNo": invNo,
+        "ORDERBY": orderBy,
         "PCODE": pCode,
       };
 

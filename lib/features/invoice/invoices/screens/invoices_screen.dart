@@ -203,6 +203,20 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
               ),
             ),
             AppSpaces.v10,
+
+            // Order By Dropdown
+            Obx(
+              () => AppDropdown(
+                items: ['Date Asc', 'Date Desc'],
+                selectedItem: _controller.selectedOrderBy.value,
+                hintText: 'Order By',
+                showSearchBox: false,
+                onChanged: (value) {
+                  _controller.selectedOrderBy.value = value!;
+                },
+              ),
+            ),
+            AppSpaces.v10,
             Obx(
               () => AppDropdown(
                 items: [

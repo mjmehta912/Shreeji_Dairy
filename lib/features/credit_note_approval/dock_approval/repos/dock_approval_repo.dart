@@ -9,6 +9,7 @@ class DockApprovalRepo {
   static Future<List<ItemForApprovalDm>> getItemsForApproval({
     String pCode = '',
     String status = '',
+    String searchText = '',
   }) async {
     String? token = await SecureStorageHelper.read(
       'token',
@@ -20,6 +21,7 @@ class DockApprovalRepo {
         queryParams: {
           'Status': status,
           'PCODE': pCode,
+          'Searchtext': searchText,
         },
         token: token,
       );

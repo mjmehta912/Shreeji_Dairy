@@ -6,9 +6,7 @@ class UserAccessRepo {
   static Future<UserAccessDm> getUserAccess({
     required int userId,
   }) async {
-    String? token = await SecureStorageHelper.read(
-      'token',
-    );
+    String? token = await SecureStorageHelper.read('token');
 
     try {
       final response = await ApiService.getRequest(
@@ -21,8 +19,11 @@ class UserAccessRepo {
 
       if (response == null) {
         return UserAccessDm(
-          ledgerDate: [],
           menuAccess: [],
+          ledgerDate: LedgerDateDm(
+            ledgerStart: '',
+            ledgerEnd: '',
+          ),
         );
       }
 
@@ -61,6 +62,7 @@ class UserAccessRepo {
   static Future<dynamic> setMenuAccess({
     required int userId,
     required int menuId,
+    int? subMenuId,
     required bool menuAccess,
   }) async {
     String? token = await SecureStorageHelper.read(
@@ -70,6 +72,7 @@ class UserAccessRepo {
     final Map<String, dynamic> requestBody = {
       'UserId': userId,
       'MENUID': menuId,
+      'SUBMENUID': subMenuId,
       'Access': menuAccess,
     };
 

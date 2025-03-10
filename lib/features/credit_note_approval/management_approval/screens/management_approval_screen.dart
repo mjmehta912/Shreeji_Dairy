@@ -257,7 +257,7 @@ class ManagementApprovalScreen extends StatelessWidget {
                                         AppButton(
                                           buttonWidth: 0.2.screenWidth,
                                           buttonHeight: 30,
-                                          buttonColor: kColorBlue,
+                                          buttonColor: kColorGreen,
                                           title: 'Accept',
                                           titleSize: FontSizes.k16FontSize,
                                           onPressed: () {
@@ -291,7 +291,7 @@ class ManagementApprovalScreen extends StatelessWidget {
                                                         AppButton(
                                                           title: 'Save',
                                                           buttonColor:
-                                                              kColorBlue,
+                                                              kColorGreen,
                                                           onPressed: () async {
                                                             await _controller
                                                                 .approveManagement(
@@ -497,7 +497,7 @@ class ManagementApprovalScreen extends StatelessWidget {
                           ? (item.qcStatus! ? 'Approved' : 'Rejected')
                           : 'N/A',
                       color: item.qcStatus != null
-                          ? (item.qcStatus! ? kColorBlue : kColorRed)
+                          ? (item.qcStatus! ? kColorGreen : kColorRed)
                           : kColorTextPrimary,
                     ),
                     AppTitleValueRow(

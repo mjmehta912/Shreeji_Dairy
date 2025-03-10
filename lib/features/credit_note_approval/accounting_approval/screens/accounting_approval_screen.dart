@@ -203,7 +203,7 @@ class AccountingApprovalScreen extends StatelessWidget {
                                         AppButton(
                                           buttonWidth: 0.2.screenWidth,
                                           buttonHeight: 30,
-                                          buttonColor: kColorBlue,
+                                          buttonColor: kColorGreen,
                                           title: 'Accept',
                                           titleSize: FontSizes.k16FontSize,
                                           onPressed: () {
@@ -473,7 +473,7 @@ class AccountingApprovalScreen extends StatelessWidget {
                           ? (item.qcStatus! ? 'Approved' : 'Rejected')
                           : 'N/A',
                       color: item.qcStatus != null
-                          ? (item.qcStatus! ? kColorBlue : kColorRed)
+                          ? (item.qcStatus! ? kColorGreen : kColorRed)
                           : kColorTextPrimary,
                     ),
                     AppTitleValueRow(

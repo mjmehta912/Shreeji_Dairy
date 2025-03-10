@@ -71,7 +71,7 @@ class OutstandingCard extends StatelessWidget {
                       value: outstanding.paidAmount,
                       color: outstanding.runningTotal.contains('-')
                           ? kColorRed
-                          : kColorBlue,
+                          : kColorGreen,
                     ),
                     Text(
                       outstanding.runningTotal,
