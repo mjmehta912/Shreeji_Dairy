@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
@@ -33,65 +34,69 @@ class _AppDatePickerTextFormFieldState
     extends State<AppDatePickerTextFormField> {
   static const String dateFormat = 'dd-MM-yyyy';
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime currentDate =
+  void _showCupertinoDatePicker() {
+    DateTime currentDate =
         _parseDate(widget.dateController.text) ?? DateTime.now();
 
-    final DateTime? pickedDate = await showDatePicker(
+    showModalBottomSheet(
       context: context,
-      initialDate: currentDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            primaryColor: kColorSecondary,
-            colorScheme: const ColorScheme.light(
-              primary: kColorSecondary,
-              onPrimary: kColorWhite,
-              surface: kColorWhite,
-            ),
-            textTheme: TextTheme(
-              headlineLarge: TextStyles.kRegularFredoka(
-                fontSize: FontSizes.k24FontSize,
-                color: kColorBlack,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (BuildContext context) {
+        DateTime selectedDate = currentDate;
+
+        return SizedBox(
+          height: 300,
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    setState(
+                      () {
+                        widget.dateController.text =
+                            DateFormat(dateFormat).format(selectedDate);
+                      },
+                    );
+
+                    if (widget.onChanged != null) {
+                      widget.onChanged!(widget.dateController.text);
+                    }
+
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Done",
+                    style: TextStyles.kRegularFredoka(
+                      fontSize: FontSizes.k16FontSize,
+                      color: kColorSecondary,
+                    ),
+                  ),
+                ),
               ),
-              bodyLarge: TextStyles.kRegularFredoka(
-                fontSize: FontSizes.k16FontSize,
-                color: kColorBlack,
+              Expanded(
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.date,
+                  initialDateTime: currentDate,
+                  minimumDate: DateTime(2000),
+                  maximumDate: DateTime(2100),
+                  onDateTimeChanged: (DateTime newDate) {
+                    selectedDate = newDate;
+                  },
+                ),
               ),
-              titleLarge: TextStyles.kRegularFredoka(
-                fontSize: FontSizes.k18FontSize,
-                color: kColorBlack,
-              ),
-              displayLarge: TextStyles.kRegularFredoka(
-                fontSize: FontSizes.k18FontSize,
-                color: kColorBlack,
-              ),
-              labelLarge: TextStyles.kRegularFredoka(
-                fontSize: FontSizes.k18FontSize,
-                color: kColorBlack,
-              ),
-            ),
-            dialogBackgroundColor: kColorWhite,
+            ],
           ),
-          child: child!,
         );
       },
     );
-
-    if (pickedDate != null) {
-      setState(
-        () {
-          widget.dateController.text =
-              DateFormat(dateFormat).format(pickedDate);
-        },
-      );
-
-      if (widget.onChanged != null) {
-        widget.onChanged!(widget.dateController.text);
-      }
-    }
   }
 
   DateTime? _parseDate(String dateString) {
@@ -153,7 +158,7 @@ class _AppDatePickerTextFormFieldState
             size: 20,
             color: kColorTextPrimary,
           ),
-          onPressed: widget.enabled ? () => _selectDate(context) : null,
+          onPressed: widget.enabled ? _showCupertinoDatePicker : null,
         ),
         suffixIconColor: kColorTextPrimary,
       ),

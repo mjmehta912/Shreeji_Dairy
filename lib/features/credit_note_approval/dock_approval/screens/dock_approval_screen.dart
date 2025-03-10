@@ -28,10 +28,49 @@ class DockApprovalScreen extends StatelessWidget {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> pickImage() async {
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      _controller.selectedImage.value = File(pickedFile.path);
+    final ImageSource? source = await Get.defaultDialog<ImageSource>(
+      title: "Select Image Source",
+      titleStyle: TextStyles.kRegularFredoka(),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: Icon(
+              Icons.camera_alt,
+              color: kColorSecondary,
+            ),
+            title: Text(
+              "Camera",
+              style: TextStyles.kRegularFredoka(
+                fontSize: FontSizes.k16FontSize,
+              ),
+            ),
+            onTap: () => Get.back(
+              result: ImageSource.camera,
+            ),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.photo_library,
+              color: kColorSecondary,
+            ),
+            title: Text(
+              "Gallery",
+              style: TextStyles.kRegularFredoka(
+                fontSize: FontSizes.k16FontSize,
+              ),
+            ),
+            onTap: () => Get.back(result: ImageSource.gallery),
+          ),
+        ],
+      ),
+    );
+
+    if (source != null) {
+      final XFile? pickedFile = await _picker.pickImage(source: source);
+      if (pickedFile != null) {
+        _controller.selectedImage.value = File(pickedFile.path);
+      }
     }
   }
 

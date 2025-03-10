@@ -47,13 +47,13 @@ class CreditNoteApprovalMenuScreen extends StatelessWidget {
               title: Text(
                 'Dock Approval',
                 style: TextStyles.kRegularFredoka(
-                  color: kColorSecondary,
+                  color: kColorTextPrimary,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios,
                 size: 20,
-                color: kColorSecondary,
+                color: kColorTextPrimary,
               ),
               onTap: () {
                 Get.to(
@@ -62,7 +62,7 @@ class CreditNoteApprovalMenuScreen extends StatelessWidget {
               },
             ),
             Divider(
-              color: kColorSecondary,
+              color: kColorTextPrimary,
             ),
             ListTile(
               leading: SvgPicture.asset(
@@ -76,13 +76,13 @@ class CreditNoteApprovalMenuScreen extends StatelessWidget {
               title: Text(
                 'QC Approval',
                 style: TextStyles.kRegularFredoka(
-                  color: kColorSecondary,
+                  color: kColorTextPrimary,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios,
                 size: 20,
-                color: kColorSecondary,
+                color: kColorTextPrimary,
               ),
               onTap: () {
                 Get.to(
@@ -91,7 +91,7 @@ class CreditNoteApprovalMenuScreen extends StatelessWidget {
               },
             ),
             Divider(
-              color: kColorSecondary,
+              color: kColorTextPrimary,
             ),
             ListTile(
               leading: SvgPicture.asset(
@@ -105,13 +105,13 @@ class CreditNoteApprovalMenuScreen extends StatelessWidget {
               title: Text(
                 'Accounting Approval',
                 style: TextStyles.kRegularFredoka(
-                  color: kColorSecondary,
+                  color: kColorTextPrimary,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios,
                 size: 20,
-                color: kColorSecondary,
+                color: kColorTextPrimary,
               ),
               onTap: () {
                 Get.to(
@@ -120,7 +120,7 @@ class CreditNoteApprovalMenuScreen extends StatelessWidget {
               },
             ),
             Divider(
-              color: kColorSecondary,
+              color: kColorTextPrimary,
             ),
             ListTile(
               leading: SvgPicture.asset(
@@ -134,13 +134,13 @@ class CreditNoteApprovalMenuScreen extends StatelessWidget {
               title: Text(
                 'Management Approval',
                 style: TextStyles.kRegularFredoka(
-                  color: kColorSecondary,
+                  color: kColorTextPrimary,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios,
                 size: 20,
-                color: kColorSecondary,
+                color: kColorTextPrimary,
               ),
               onTap: () {
                 Get.to(

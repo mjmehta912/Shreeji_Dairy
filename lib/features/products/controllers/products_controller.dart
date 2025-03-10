@@ -105,11 +105,6 @@ class ProductsController extends GetxController {
               ),
             ),
           );
-        } else {
-          showErrorSnackbar(
-            'Error',
-            e['message'] ?? 'An unknown error occurred.',
-          );
         }
       } else {
         showErrorSnackbar(

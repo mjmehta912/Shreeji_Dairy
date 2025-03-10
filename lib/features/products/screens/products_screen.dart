@@ -44,13 +44,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void _initialize() async {
+    await _controller.getGroups();
+    await _controller.getSubGroups();
+    await _controller.getSubGroups2();
     await _controller.searchProduct(
       pCode: widget.pCode,
       searchText: _controller.searchController.text,
     );
-    await _controller.getGroups();
-    await _controller.getSubGroups();
-    await _controller.getSubGroups2();
   }
 
   void showGroupFilter() {

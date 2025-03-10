@@ -67,8 +67,6 @@ class InvoicesRepo {
         token: token,
       );
 
-      print(queryParams);
-
       if (response is Uint8List) {
         return response;
       } else {
