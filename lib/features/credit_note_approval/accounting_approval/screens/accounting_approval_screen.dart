@@ -235,7 +235,8 @@ class AccountingApprovalScreen extends StatelessWidget {
                                                           AppTextFormField(
                                                             controller: _controller
                                                                 .rateController,
-                                                            hintText: 'Rate',
+                                                            hintText:
+                                                                'Percentage',
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,

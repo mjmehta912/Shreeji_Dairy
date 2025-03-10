@@ -67,6 +67,10 @@ class CreditNoteEntryCard extends StatelessWidget {
                     title: 'Inv No.',
                     value: item['invNo'],
                   ),
+                  AppTitleValueRow(
+                    title: 'Reason',
+                    value: item['reason'],
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

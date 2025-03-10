@@ -91,6 +91,7 @@ class _AppDatePickerTextFormFieldState
                   onDateTimeChanged: (DateTime newDate) {
                     selectedDate = newDate;
                   },
+                  showDayOfWeek: true,
                   backgroundColor: kColorWhite,
                 ),
               ),

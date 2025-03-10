@@ -41,13 +41,18 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
   @override
   void initState() {
     super.initState();
-    _controller.getAllItems();
+    _initialize();
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         _showCreditNoteEntryBottomSheet();
       },
     );
+  }
+
+  void _initialize() async {
+    await _controller.getAllItems();
+    await _controller.getReasons();
   }
 
   Future<void> pickImage() async {
@@ -224,7 +229,7 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
         ),
         padding: AppPaddings.p16,
         constraints: BoxConstraints(
-          maxHeight: 0.6.screenHeight,
+          maxHeight: 0.75.screenHeight,
         ),
         child: GestureDetector(
           onTap: () {
@@ -313,6 +318,33 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
                           ? _controller.selectedInvNo.value
                           : null,
                     ),
+                  ),
+                  AppSpaces.v10,
+                  Obx(
+                    () => AppDropdown(
+                      items: _controller.reasonNames,
+                      hintText: 'Reason',
+                      onChanged: _controller.onReasonSelected,
+                      selectedItem: _controller.selectedReason.value.isNotEmpty
+                          ? _controller.selectedReason.value
+                          : null,
+                      validatorText: 'Please select a reason',
+                    ),
+                  ),
+                  AppSpaces.v10,
+                  Obx(
+                    () => _controller.selectedReason.value == 'OTHER'
+                        ? AppTextFormField(
+                            controller: _controller.reasonController,
+                            hintText: 'Reason',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please select a reason';
+                              }
+                              return null;
+                            },
+                          )
+                        : const SizedBox.shrink(),
                   ),
                   AppSpaces.v10,
                   Row(

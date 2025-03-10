@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/all_item_dm.dart';
+import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/credit_note_reason_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/item_party_wise_inv_no_dm.dart';
 import 'package:shreeji_dairy/services/api_service.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
@@ -85,6 +86,34 @@ class CreditNoteEntryRepo {
     }
   }
 
+  static Future<List<CreditNoteReasonDm>> getReasons() async {
+    String? token = await SecureStorageHelper.read(
+      'token',
+    );
+
+    try {
+      final response = await ApiService.getRequest(
+        endpoint: '/CreditNote/reason',
+        token: token,
+      );
+      if (response == null) {
+        return [];
+      }
+
+      if (response['data'] != null) {
+        return (response['data'] as List<dynamic>)
+            .map(
+              (item) => CreditNoteReasonDm.fromJson(item),
+            )
+            .toList();
+      }
+
+      return [];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   static Future<dynamic> saveCreditNote({
     required String pcode,
     required String remark,
@@ -118,6 +147,7 @@ class CreditNoteEntryRepo {
         fields['Details[$i].QTY'] = detail['QTY'];
         fields['Details[$i].ExpDate'] = detail['ExpDate'];
         fields['Details[$i].INVNO'] = detail['INVNO'];
+        fields['Details[$i].Reason'] = detail['Reason'];
       }
 
       var response = await ApiService.postFormData(

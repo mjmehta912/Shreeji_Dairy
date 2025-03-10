@@ -97,7 +97,7 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
                                 label: Text(
                                   status["label"],
                                   style: TextStyles.kRegularFredoka(
-                                    fontSize: FontSizes.k14FontSize,
+                                    fontSize: FontSizes.k12FontSize,
                                   ),
                                 ),
                                 selected: _controller.selectedStatus.value ==
@@ -386,7 +386,6 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
                     ),
                     AppSpaces.v10,
 
-                    /// 🔹 Dock Image & Info
                     Row(
                       children: [
                         Material(

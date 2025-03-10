@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/all_item_dm.dart';
+import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/credit_note_reason_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/item_party_wise_inv_no_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/repos/credit_note_entry_repo.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_notes/controllers/credit_notes_controller.dart';
@@ -25,6 +26,11 @@ class CreditNoteEntryController extends GetxController {
   var invNos = <ItemPartyWiseInvNoDm>[].obs;
   var invNoNos = <String>[].obs;
   var selectedInvNo = ''.obs;
+  var reasons = <CreditNoteReasonDm>[].obs;
+  var reasonNames = <String>[].obs;
+  var selectedReason = ''.obs;
+  var selectedReasonCode = ''.obs;
+  var reasonController = TextEditingController();
 
   var selectedImage = Rx<File?>(null);
 
@@ -51,6 +57,9 @@ class CreditNoteEntryController extends GetxController {
         'expDate': DateFormat('yyyy-MM-dd')
             .format(DateFormat('dd-MM-yyyy').parse(expiryDate)),
         'invNo': invNo,
+        'reason': selectedReason.value == 'OTHER'
+            ? reasonController.text
+            : selectedReason.value,
         'image': selectedImage.value,
       },
     );
@@ -75,6 +84,9 @@ class CreditNoteEntryController extends GetxController {
     invNos.clear();
     invNoNos.clear();
     selectedInvNo.value = '';
+    selectedReason.value = '';
+    selectedReasonCode.value = '';
+    reasonController.clear();
     selectedImage.value = null;
   }
 
@@ -169,6 +181,39 @@ class CreditNoteEntryController extends GetxController {
     selectedInvNo.value = invNo;
   }
 
+  Future<void> getReasons() async {
+    try {
+      isLoading.value = true;
+
+      final fetchedReasons = await CreditNoteEntryRepo.getReasons();
+
+      reasons.assignAll(fetchedReasons);
+      reasonNames.assignAll(
+        fetchedReasons
+            .map(
+              (reason) => reason.rName,
+            )
+            .toList(),
+      );
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void onReasonSelected(String? reasonName) {
+    selectedReason.value = reasonName!;
+    final selectedReasonObj = reasons.firstWhere(
+      (reason) => reason.rName == reasonName,
+    );
+
+    selectedReasonCode.value = selectedReasonObj.rCode;
+  }
+
   final CreditNotesController creditNotesController =
       Get.find<CreditNotesController>();
 
@@ -186,6 +231,7 @@ class CreditNoteEntryController extends GetxController {
             'QTY': item['qty'],
             'ExpDate': item['expDate'],
             'INVNO': item['invNo'],
+            'Reason': item['reason'],
             'Image': item['image'],
           };
         },
