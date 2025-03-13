@@ -27,6 +27,7 @@ const kIconViewOutstandings = 'assets/icons/view_outstandings.svg';
 const kIconStoreOrder = 'assets/icons/store_order.svg';
 const kIconTestingParameter = 'assets/icons/testing_parameter.svg';
 const kIconQcTest = 'assets/icons/qc_test.svg';
+const kIconReason = 'assets/icons/reason.svg';
 
 const kLoadingGif = 'assets/images/loading.gif';
 

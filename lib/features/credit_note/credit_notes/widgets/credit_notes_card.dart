@@ -31,7 +31,7 @@ class CreditNotesCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppTitleValueRow(
-                title: 'Inv No.',
+                title: 'Credit Note No.',
                 value: creditNote.invNo,
               ),
               AppTitleValueRow(

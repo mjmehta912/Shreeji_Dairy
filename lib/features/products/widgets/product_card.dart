@@ -10,6 +10,7 @@ import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_card1.dart';
+import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -79,6 +80,87 @@ class ProductCard extends StatelessWidget {
                                 ]
                               : product.skus.map(
                                   (sku) {
+                                    // If SKU pack is empty, show TextFields instead
+                                    if (sku.pack.isEmpty) {
+                                      TextEditingController qtyController =
+                                          TextEditingController(
+                                              text: sku.cartQty.toString());
+
+                                      return AppCard1(
+                                        child: Padding(
+                                          padding: AppPaddings.combined(
+                                            horizontal: 10.appWidth,
+                                            vertical: 5.appHeight,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                '₹ ${sku.rate}',
+                                                style:
+                                                    TextStyles.kRegularFredoka(
+                                                  fontSize:
+                                                      FontSizes.k14FontSize,
+                                                ).copyWith(
+                                                  height: 1,
+                                                ),
+                                              ),
+                                              AppSpaces.v8,
+                                              SizedBox(
+                                                width: 0.2.screenWidth,
+                                                child: AppTextFormField(
+                                                  controller: qtyController,
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  onChanged: (value) async {
+                                                    int qty =
+                                                        int.tryParse(value) ??
+                                                            0;
+                                                    double offset =
+                                                        _scrollController
+                                                                .hasClients
+                                                            ? _scrollController
+                                                                .offset
+                                                            : 0.0;
+
+                                                    await _controller
+                                                        .addOrUpdateCart(
+                                                      pCode: widget.pCode,
+                                                      iCode: sku.skuIcode,
+                                                      qty: qty,
+                                                      rate: sku.rate,
+                                                    );
+
+                                                    await _controller
+                                                        .searchProduct(
+                                                      pCode: widget.pCode,
+                                                      searchText: _controller
+                                                          .searchController
+                                                          .text,
+                                                    );
+
+                                                    // Restore scroll position
+                                                    WidgetsBinding.instance
+                                                        .addPostFrameCallback(
+                                                            (_) {
+                                                      if (_scrollController
+                                                          .hasClients) {
+                                                        _scrollController
+                                                            .jumpTo(offset);
+                                                      }
+                                                    });
+                                                  },
+                                                  hintText: 'Qty',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }
+
+                                    // Regular SKU Cards
                                     return AppCard1(
                                       child: Padding(
                                         padding: AppPaddings.combined(
@@ -93,18 +175,14 @@ class ProductCard extends StatelessWidget {
                                               sku.pack,
                                               style: TextStyles.kMediumFredoka(
                                                 fontSize: FontSizes.k14FontSize,
-                                              ).copyWith(
-                                                height: 1,
-                                              ),
+                                              ).copyWith(height: 1),
                                             ),
                                             AppSpaces.v4,
                                             Text(
                                               '₹ ${sku.rate}',
                                               style: TextStyles.kRegularFredoka(
                                                 fontSize: FontSizes.k14FontSize,
-                                              ).copyWith(
-                                                height: 1,
-                                              ),
+                                              ).copyWith(height: 1),
                                             ),
                                             AppSpaces.v4,
                                             sku.cartQty == 0
@@ -124,8 +202,7 @@ class ProductCard extends StatelessWidget {
                                                             .addOrUpdateCart(
                                                           pCode: widget.pCode,
                                                           iCode: sku.skuIcode,
-                                                          qty: sku.cartQty +
-                                                              1, // or -1 for remove
+                                                          qty: 1,
                                                           rate: sku.rate,
                                                         );
 
@@ -137,7 +214,6 @@ class ProductCard extends StatelessWidget {
                                                               .text,
                                                         );
 
-                                                        // ✅ Restore scroll position after UI updates
                                                         WidgetsBinding.instance
                                                             .addPostFrameCallback(
                                                                 (_) {
@@ -189,7 +265,6 @@ class ProductCard extends StatelessWidget {
                                                                 .text,
                                                           );
 
-                                                          // ✅ Restore scroll position after UI updates
                                                           WidgetsBinding
                                                               .instance
                                                               .addPostFrameCallback(
@@ -234,8 +309,8 @@ class ProductCard extends StatelessWidget {
                                                               .addOrUpdateCart(
                                                             pCode: widget.pCode,
                                                             iCode: sku.skuIcode,
-                                                            qty: sku.cartQty +
-                                                                1, // or -1 for remove
+                                                            qty:
+                                                                sku.cartQty + 1,
                                                             rate: sku.rate,
                                                           );
 
@@ -247,7 +322,6 @@ class ProductCard extends StatelessWidget {
                                                                 .text,
                                                           );
 
-                                                          // ✅ Restore scroll position after UI updates
                                                           WidgetsBinding
                                                               .instance
                                                               .addPostFrameCallback(

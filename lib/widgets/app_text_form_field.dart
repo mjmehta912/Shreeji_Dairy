@@ -69,6 +69,16 @@ class AppTextFormField extends StatelessWidget {
           fontSize: FontSizes.k16FontSize,
           color: kColorGrey,
         ),
+        labelText: hintText,
+        labelStyle: TextStyles.kLightFredoka(
+          fontSize: FontSizes.k16FontSize,
+          color: kColorGrey,
+        ),
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        floatingLabelStyle: TextStyles.kMediumFredoka(
+          fontSize: FontSizes.k18FontSize,
+          color: kColorSecondary,
+        ),
         errorStyle: TextStyles.kRegularFredoka(
           fontSize: FontSizes.k16FontSize,
           color: kColorRed,
