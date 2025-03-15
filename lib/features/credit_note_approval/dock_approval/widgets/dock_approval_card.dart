@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/models/item_for_approval_dm.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
-import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
+import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
@@ -21,100 +20,71 @@ class DockApprovalCard extends StatelessWidget {
   final ItemForApprovalDm item;
   final VoidCallback onApproved;
 
-  void _showImagePreview(String imageUrl) {
-    Get.dialog(
-      Dialog(
-        backgroundColor: Colors.transparent,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: SizedBox(
-                width: 0.75.screenWidth,
-                height: 0.75.screenWidth,
-                child: Image.network(
-                  imageUrl.startsWith('http') ? imageUrl : 'http://$imageUrl',
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      kImageLogo,
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
-            ),
-            Positioned(
-              top: -12.5,
-              right: -12.5,
-              child: GestureDetector(
-                onTap: () => Get.back(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: kColorBlackWithOpacity,
-                  ),
-                  padding: AppPaddings.p6,
-                  child: Icon(
-                    Icons.close,
-                    color: kColorWhite,
-                    size: 25,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return AppCard1(
       child: Padding(
         padding: AppPaddings.p10,
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: () {
-                _showImagePreview(item.imagePath!);
-              },
-              child: Material(
-                elevation: 5,
-                borderRadius: BorderRadius.circular(10),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    item.imagePath!.startsWith('http')
-                        ? item.imagePath!
-                        : 'http://${item.imagePath!}',
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        kImageLogo,
+            Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showImagePreview(item.imagePath!);
+                  },
+                  child: Material(
+                    elevation: 5,
+                    borderRadius: BorderRadius.circular(10),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        item.imagePath!.startsWith('http')
+                            ? item.imagePath!
+                            : 'http://${item.imagePath!}',
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
-                      );
-                    },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            kImageLogo,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                AppSpaces.v10,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    AppButton(
+                      buttonHeight: 35,
+                      buttonWidth: 100,
+                      title: 'Approve',
+                      titleSize: FontSizes.k16FontSize,
+                      onPressed: onApproved,
+                    ),
+                  ],
+                ),
+              ],
             ),
             AppSpaces.h10,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppTitleValueRow(
-                    title: 'Item',
-                    value: item.iName != null && item.iName!.isNotEmpty
+                  Text(
+                    item.iName != null && item.iName!.isNotEmpty
                         ? item.iName!
                         : '',
+                    style: TextStyles.kMediumFredoka(
+                      fontSize: FontSizes.k16FontSize,
+                    ),
                   ),
                   AppTitleValueRow(
                     title: 'Party',
@@ -140,25 +110,17 @@ class DockApprovalCard extends StatelessWidget {
                         ? item.qty!.toString()
                         : '0',
                   ),
+                  if (item.reason != null && item.reason!.isNotEmpty)
+                    AppTitleValueRow(
+                      title: 'Reason',
+                      value: item.reason!,
+                    ),
                   AppTitleValueRow(
                     title: 'Status',
                     value: item.status != null &&
                             item.status!.toString().isNotEmpty
                         ? item.statusText
                         : '',
-                  ),
-                  AppSpaces.v10,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      AppButton(
-                        buttonHeight: 40,
-                        buttonWidth: 0.25.screenWidth,
-                        title: 'Approve',
-                        titleSize: FontSizes.k16FontSize,
-                        onPressed: onApproved,
-                      ),
-                    ],
                   ),
                 ],
               ),

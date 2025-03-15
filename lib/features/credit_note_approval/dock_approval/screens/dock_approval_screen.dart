@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/controllers/dock_approval_controller.dart';
+import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/models/item_for_approval_dm.dart';
 import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/widgets/dock_approval_card.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
@@ -16,14 +18,25 @@ import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 
-class DockApprovalScreen extends StatelessWidget {
-  DockApprovalScreen({
+class DockApprovalScreen extends StatefulWidget {
+  const DockApprovalScreen({
     super.key,
   });
 
+  @override
+  State<DockApprovalScreen> createState() => _DockApprovalScreenState();
+}
+
+class _DockApprovalScreenState extends State<DockApprovalScreen> {
   final DockApprovalController _controller = Get.put(
     DockApprovalController(),
   );
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.getItemsForApproval();
+  }
 
   final ImagePicker _picker = ImagePicker();
 
@@ -60,7 +73,9 @@ class DockApprovalScreen extends StatelessWidget {
                 fontSize: FontSizes.k16FontSize,
               ),
             ),
-            onTap: () => Get.back(result: ImageSource.gallery),
+            onTap: () => Get.back(
+              result: ImageSource.gallery,
+            ),
           ),
         ],
       ),
@@ -74,11 +89,89 @@ class DockApprovalScreen extends StatelessWidget {
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GestureDetector(
+          child: Scaffold(
+            backgroundColor: kColorWhite,
+            appBar: AppAppbar(
+              title: 'Dock Approval',
+              leading: IconButton(
+                onPressed: () => Get.back(),
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  size: 25,
+                  color: kColorTextPrimary,
+                ),
+              ),
+            ),
+            body: Padding(
+              padding: AppPaddings.p10,
+              child: Column(
+                children: [
+                  Obx(
+                    () {
+                      if (_controller.itemsForApproval.isEmpty &&
+                          !_controller.isLoading.value) {
+                        return Expanded(
+                          child: Center(
+                            child: Text(
+                              'No credit notes found.',
+                              style: TextStyles.kRegularFredoka(),
+                            ),
+                          ),
+                        );
+                      }
+                      return Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _controller.itemsForApproval.length,
+                          itemBuilder: (context, index) {
+                            final item = _controller.itemsForApproval[index];
+
+                            return DockApprovalCard(
+                              item: item,
+                              onApproved: () {
+                                _showDockApprovalBottomSheet(
+                                  id: item.id.toString(),
+                                  item: item,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Obx(
+          () => AppLoadingOverlay(
+            isLoading: _controller.isLoading.value,
+          ),
+        ),
+      ],
+    );
+  }
+
   void _showDockApprovalBottomSheet({
     required String id,
+    required ItemForApprovalDm item,
   }) {
-    _controller.qtyController.clear();
-    _controller.weightController.clear();
+    _controller.qtyController.text = item.qty.toString();
+    if (item.itemPack != null && item.itemPack!.toString().isNotEmpty) {
+      _controller.weightController.text =
+          (int.parse(_controller.qtyController.text) * item.itemPack!)
+              .toString();
+    } else {
+      _controller.weightController.clear();
+    }
+
     _controller.remarkController.clear();
     _controller.selectedImage.value = null;
     Get.bottomSheet(
@@ -100,6 +193,7 @@ class DockApprovalScreen extends StatelessWidget {
           },
           child: SingleChildScrollView(
             child: Form(
+              key: _controller.dockApprovalFormKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -107,11 +201,23 @@ class DockApprovalScreen extends StatelessWidget {
                   AppTextFormField(
                     controller: _controller.qtyController,
                     hintText: 'Qty',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a qty';
+                      }
+                      return null;
+                    },
                   ),
                   AppSpaces.v10,
                   AppTextFormField(
                     controller: _controller.weightController,
                     hintText: 'Weight',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a weight';
+                      }
+                      return null;
+                    },
                   ),
                   AppSpaces.v10,
                   AppTextFormField(
@@ -144,8 +250,8 @@ class DockApprovalScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.file(
                                       _controller.selectedImage.value!,
-                                      width: 50,
-                                      height: 50,
+                                      width: 60,
+                                      height: 60,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -162,7 +268,9 @@ class DockApprovalScreen extends StatelessWidget {
                                           shape: BoxShape.circle,
                                           color: Colors.white,
                                           border: Border.all(
-                                              color: Colors.grey, width: 1),
+                                            color: Colors.grey,
+                                            width: 1,
+                                          ),
                                         ),
                                         child: Icon(
                                           Icons.close,
@@ -185,9 +293,19 @@ class DockApprovalScreen extends StatelessWidget {
                     buttonHeight: 40,
                     titleSize: FontSizes.k16FontSize,
                     onPressed: () {
-                      _controller.approveDock(
-                        id: id,
-                      );
+                      if (_controller.dockApprovalFormKey.currentState!
+                          .validate()) {
+                        if (_controller.selectedImage.value != null) {
+                          _controller.approveDock(
+                            id: id,
+                          );
+                        } else {
+                          showErrorSnackbar(
+                            'Oops!',
+                            'Please upload an image to continue',
+                          );
+                        }
+                      }
                     },
                   ),
                   AppSpaces.v10,
@@ -198,75 +316,6 @@ class DockApprovalScreen extends StatelessWidget {
         ),
       ),
       isScrollControlled: true,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GestureDetector(
-          child: Scaffold(
-            backgroundColor: kColorWhite,
-            appBar: AppAppbar(
-              title: 'Dock Approval',
-              leading: IconButton(
-                onPressed: () => Get.back(),
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  size: 25,
-                  color: kColorTextPrimary,
-                ),
-              ),
-            ),
-            body: Padding(
-              padding: AppPaddings.p12,
-              child: Column(
-                children: [
-                  Obx(
-                    () {
-                      if (_controller.itemsForApproval.isEmpty &&
-                          !_controller.isLoading.value) {
-                        return Expanded(
-                          child: Center(
-                            child: Text(
-                              'No credit notes found.',
-                              style: TextStyles.kRegularFredoka(),
-                            ),
-                          ),
-                        );
-                      }
-                      return Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _controller.itemsForApproval.length,
-                          itemBuilder: (context, index) {
-                            final item = _controller.itemsForApproval[index];
-
-                            return DockApprovalCard(
-                              item: item,
-                              onApproved: () {
-                                _showDockApprovalBottomSheet(
-                                  id: item.id.toString(),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Obx(
-          () => AppLoadingOverlay(
-            isLoading: _controller.isLoading.value,
-          ),
-        ),
-      ],
     );
   }
 }

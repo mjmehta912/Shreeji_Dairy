@@ -130,6 +130,11 @@ class CreditNoteStatusCard extends StatelessWidget {
                         ? item.billNo!
                         : '',
                   ),
+                  if (item.reason != null && item.reason!.isNotEmpty)
+                    AppTitleValueRow(
+                      title: 'Reason',
+                      value: item.reason!,
+                    ),
                   AppTitleValueRow(
                     title: 'Status',
                     value: item.status != null &&

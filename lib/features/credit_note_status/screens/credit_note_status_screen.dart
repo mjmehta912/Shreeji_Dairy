@@ -179,9 +179,12 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
           backgroundColor: kColorWhite,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
+            side: BorderSide(
+              color: kColorTextPrimary,
+            ),
           ),
           child: Padding(
-            padding: AppPaddings.p10,
+            padding: AppPaddings.p14,
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxHeight: 0.75 * Get.height,
@@ -194,8 +197,11 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
                     Text(
                       'Dock Details',
                       style: TextStyles.kMediumFredoka(
-                        fontSize: FontSizes.k20FontSize,
+                        fontSize: FontSizes.k18FontSize,
                         color: kColorSecondary,
+                      ).copyWith(
+                        decoration: TextDecoration.underline,
+                        decorationColor: kColorSecondary,
                       ),
                     ),
                     AppSpaces.v10,
@@ -275,8 +281,11 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
                           Text(
                             'QC Details',
                             style: TextStyles.kMediumFredoka(
-                              fontSize: FontSizes.k20FontSize,
+                              fontSize: FontSizes.k18FontSize,
                               color: kColorSecondary,
+                            ).copyWith(
+                              decoration: TextDecoration.underline,
+                              decorationColor: kColorSecondary,
                             ),
                           ),
                           AppSpaces.v10,
@@ -345,8 +354,11 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
                           Text(
                             'Accounting Details',
                             style: TextStyles.kMediumFredoka(
-                              fontSize: FontSizes.k20FontSize,
+                              fontSize: FontSizes.k18FontSize,
                               color: kColorSecondary,
+                            ).copyWith(
+                              decoration: TextDecoration.underline,
+                              decorationColor: kColorSecondary,
                             ),
                           ),
                           AppSpaces.v10,
@@ -380,8 +392,11 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
                           Text(
                             'Management Details',
                             style: TextStyles.kMediumFredoka(
-                              fontSize: FontSizes.k20FontSize,
+                              fontSize: FontSizes.k18FontSize,
                               color: kColorSecondary,
+                            ).copyWith(
+                              decoration: TextDecoration.underline,
+                              decorationColor: kColorSecondary,
                             ),
                           ),
                           AppSpaces.v10,

@@ -9,6 +9,8 @@ class ItemForApprovalDm {
   final String? billNo;
   final double? weight;
   final int? qty;
+  final String? reason;
+  final double? itemPack;
   final int? docQty;
   final double? docWeight;
   final String? docRemark;
@@ -36,6 +38,8 @@ class ItemForApprovalDm {
     this.billNo,
     this.weight,
     this.qty,
+    this.reason,
+    this.itemPack,
     this.docQty,
     this.docWeight,
     this.docRemark,
@@ -66,6 +70,10 @@ class ItemForApprovalDm {
       weight:
           (json['Weight'] != null) ? (json['Weight'] as num).toDouble() : null,
       qty: json['QTY'] as int?,
+      reason: json['Reason'] as String?,
+      itemPack: (json['ItemPack'] != null)
+          ? (json['ItemPack'] as num).toDouble()
+          : null,
       docQty: json['DocQty'] as int?,
       docWeight: (json['DocWeight'] != null)
           ? (json['DocWeight'] as num).toDouble()

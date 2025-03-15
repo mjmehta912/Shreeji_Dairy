@@ -8,6 +8,7 @@ import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class DockApprovalController extends GetxController {
   var isLoading = false.obs;
+  final dockApprovalFormKey = GlobalKey<FormState>();
 
   var itemsForApproval = <ItemForApprovalDm>[].obs;
 
@@ -15,12 +16,6 @@ class DockApprovalController extends GetxController {
   var weightController = TextEditingController();
   var remarkController = TextEditingController();
   var selectedImage = Rx<File?>(null);
-
-  @override
-  void onInit() async {
-    super.onInit();
-    await getItemsForApproval();
-  }
 
   Future<void> getItemsForApproval() async {
     try {

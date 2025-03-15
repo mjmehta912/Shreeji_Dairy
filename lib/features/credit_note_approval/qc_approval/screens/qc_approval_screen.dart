@@ -8,14 +8,25 @@ import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 
-class QcApprovalScreen extends StatelessWidget {
-  QcApprovalScreen({
+class QcApprovalScreen extends StatefulWidget {
+  const QcApprovalScreen({
     super.key,
   });
 
+  @override
+  State<QcApprovalScreen> createState() => _QcApprovalScreenState();
+}
+
+class _QcApprovalScreenState extends State<QcApprovalScreen> {
   final QcApprovalController _controller = Get.put(
     QcApprovalController(),
   );
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.getItemsForApproval();
+  }
 
   @override
   Widget build(BuildContext context) {

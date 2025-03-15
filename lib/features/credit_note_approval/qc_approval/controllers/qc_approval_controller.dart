@@ -10,12 +10,6 @@ class QcApprovalController extends GetxController {
   var itemsForApproval = <ItemForApprovalDm>[].obs;
   var remarkController = TextEditingController();
 
-  @override
-  void onInit() async {
-    super.onInit();
-    await getItemsForApproval();
-  }
-
   Future<void> getItemsForApproval() async {
     try {
       isLoading.value = true;
