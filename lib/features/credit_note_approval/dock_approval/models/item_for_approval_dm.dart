@@ -1,6 +1,7 @@
 class ItemForApprovalDm {
   final int? id;
   final String? iCode;
+  final String? invNo;
   final String? iName;
   final String? pCode;
   final String? pName;
@@ -30,6 +31,7 @@ class ItemForApprovalDm {
   ItemForApprovalDm({
     this.id,
     this.iCode,
+    this.invNo,
     this.iName,
     this.pCode,
     this.pName,
@@ -61,6 +63,7 @@ class ItemForApprovalDm {
     return ItemForApprovalDm(
       id: json['ID'] as int?,
       iCode: json['ICODE'] as String?,
+      invNo: json['INVNO'] as String?,
       iName: json['INAME'] as String?,
       pCode: json['PCODE'] as String?,
       pName: json['PNAME'] as String?,

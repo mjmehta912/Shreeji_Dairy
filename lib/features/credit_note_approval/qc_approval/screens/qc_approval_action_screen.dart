@@ -102,10 +102,8 @@ class _QcApprovalActionScreenState extends State<QcApprovalActionScreen> {
                                         return Obx(
                                           () {
                                             return RadioListTile<String>(
-                                              contentPadding: EdgeInsets
-                                                  .zero, // Remove extra padding
-                                              dense:
-                                                  true, // Make the tile more compact
+                                              contentPadding: EdgeInsets.zero,
+                                              dense: true,
                                               title: Text(
                                                 testResult.testResult,
                                                 style:
@@ -153,8 +151,10 @@ class _QcApprovalActionScreenState extends State<QcApprovalActionScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       AppButton(
-                        buttonWidth: 0.4.screenWidth,
+                        buttonWidth: 0.35.screenWidth,
+                        buttonHeight: 35,
                         buttonColor: kColorRed,
+                        titleSize: FontSizes.k16FontSize,
                         title: 'Reject',
                         onPressed: () async {
                           if (_controller.qcParaForApproval.length !=
@@ -172,9 +172,10 @@ class _QcApprovalActionScreenState extends State<QcApprovalActionScreen> {
                         },
                       ),
                       AppButton(
-                        buttonWidth: 0.4.screenWidth,
-                        buttonColor: kColorPrimary,
-                        titleColor: kColorTextPrimary,
+                        buttonWidth: 0.35.screenWidth,
+                        buttonHeight: 35,
+                        buttonColor: kColorSecondary,
+                        titleSize: FontSizes.k16FontSize,
                         title: 'Approve',
                         onPressed: () async {
                           if (_controller.qcParaForApproval.length !=
@@ -193,7 +194,7 @@ class _QcApprovalActionScreenState extends State<QcApprovalActionScreen> {
                       ),
                     ],
                   ),
-                  AppSpaces.v10,
+                  AppSpaces.v20,
                 ],
               ),
             ),

@@ -152,18 +152,27 @@ class _ManagementApprovalScreenState extends State<ManagementApprovalScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          AppTitleValueRow(
-                                            title: 'Item',
-                                            value: item.iName != null &&
+                                          Text(
+                                            item.iName != null &&
                                                     item.iName!.isNotEmpty
                                                 ? item.iName!
                                                 : '',
+                                            style: TextStyles.kMediumFredoka(
+                                              fontSize: FontSizes.k16FontSize,
+                                            ),
                                           ),
                                           AppTitleValueRow(
                                             title: 'Party',
                                             value: item.pName != null &&
                                                     item.pName!.isNotEmpty
                                                 ? item.pName!
+                                                : '',
+                                          ),
+                                          AppTitleValueRow(
+                                            title: 'CRNT No',
+                                            value: item.invNo != null &&
+                                                    item.invNo!.isNotEmpty
+                                                ? item.invNo!
                                                 : '',
                                           ),
                                           AppTitleValueRow(
@@ -249,7 +258,7 @@ class _ManagementApprovalScreenState extends State<ManagementApprovalScreen> {
                                                         ),
                                                         child: Padding(
                                                           padding:
-                                                              AppPaddings.p10,
+                                                              AppPaddings.p20,
                                                           child: Column(
                                                             mainAxisSize:
                                                                 MainAxisSize
@@ -266,20 +275,32 @@ class _ManagementApprovalScreenState extends State<ManagementApprovalScreen> {
                                                                     'Remark',
                                                               ),
                                                               AppSpaces.v10,
-                                                              AppButton(
-                                                                title: 'Save',
-                                                                buttonColor:
-                                                                    kColorRed,
-                                                                onPressed:
-                                                                    () async {
-                                                                  await _controller
-                                                                      .approveManagement(
-                                                                    id: item
-                                                                        .id!,
-                                                                    approve:
-                                                                        false,
-                                                                  );
-                                                                },
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  AppButton(
+                                                                    buttonWidth:
+                                                                        0.25.screenWidth,
+                                                                    buttonHeight:
+                                                                        35,
+                                                                    buttonColor:
+                                                                        kColorRed,
+                                                                    title:
+                                                                        'Save',
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await _controller
+                                                                          .approveManagement(
+                                                                        id: item
+                                                                            .id!,
+                                                                        approve:
+                                                                            false,
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ],
                                                               ),
                                                             ],
                                                           ),
@@ -314,7 +335,7 @@ class _ManagementApprovalScreenState extends State<ManagementApprovalScreen> {
                                                         ),
                                                         child: Padding(
                                                           padding:
-                                                              AppPaddings.p10,
+                                                              AppPaddings.p20,
                                                           child: Column(
                                                             mainAxisSize:
                                                                 MainAxisSize
@@ -331,20 +352,32 @@ class _ManagementApprovalScreenState extends State<ManagementApprovalScreen> {
                                                                     'Remark',
                                                               ),
                                                               AppSpaces.v10,
-                                                              AppButton(
-                                                                title: 'Save',
-                                                                buttonColor:
-                                                                    kColorGreen,
-                                                                onPressed:
-                                                                    () async {
-                                                                  await _controller
-                                                                      .approveManagement(
-                                                                    id: item
-                                                                        .id!,
-                                                                    approve:
-                                                                        true,
-                                                                  );
-                                                                },
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  AppButton(
+                                                                    buttonWidth:
+                                                                        0.25.screenWidth,
+                                                                    buttonHeight:
+                                                                        35,
+                                                                    buttonColor:
+                                                                        kColorSecondary,
+                                                                    title:
+                                                                        'Save',
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await _controller
+                                                                          .approveManagement(
+                                                                        id: item
+                                                                            .id!,
+                                                                        approve:
+                                                                            true,
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ],
                                                               ),
                                                             ],
                                                           ),

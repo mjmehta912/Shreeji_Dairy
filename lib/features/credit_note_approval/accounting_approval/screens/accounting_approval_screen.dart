@@ -178,6 +178,13 @@ class _AccountingApprovalScreenState extends State<AccountingApprovalScreen> {
                                                     : '',
                                               ),
                                               AppTitleValueRow(
+                                                title: 'CRNT No',
+                                                value: item.invNo != null &&
+                                                        item.invNo!.isNotEmpty
+                                                    ? item.invNo!
+                                                    : '',
+                                              ),
+                                              AppTitleValueRow(
                                                 title: 'Entry Date',
                                                 value: item.date != null &&
                                                         item.date!.isNotEmpty
@@ -270,7 +277,7 @@ class _AccountingApprovalScreenState extends State<AccountingApprovalScreen> {
                                                             child: Padding(
                                                               padding:
                                                                   AppPaddings
-                                                                      .p10,
+                                                                      .p20,
                                                               child: Form(
                                                                 key: _controller
                                                                     .approveAccountingFormKey,
@@ -312,21 +319,32 @@ class _AccountingApprovalScreenState extends State<AccountingApprovalScreen> {
                                                                     ),
                                                                     AppSpaces
                                                                         .v10,
-                                                                    AppButton(
-                                                                      title:
-                                                                          'Save',
-                                                                      onPressed:
-                                                                          () async {
-                                                                        if (_controller
-                                                                            .approveAccountingFormKey
-                                                                            .currentState!
-                                                                            .validate()) {
-                                                                          await _controller
-                                                                              .approveAccounting(
-                                                                            id: item.id!,
-                                                                          );
-                                                                        }
-                                                                      },
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        AppButton(
+                                                                          buttonWidth:
+                                                                              0.25.screenWidth,
+                                                                          buttonHeight:
+                                                                              35,
+                                                                          buttonColor:
+                                                                              kColorSecondary,
+                                                                          title:
+                                                                              'Save',
+                                                                          titleSize:
+                                                                              FontSizes.k16FontSize,
+                                                                          onPressed:
+                                                                              () async {
+                                                                            if (_controller.approveAccountingFormKey.currentState!.validate()) {
+                                                                              await _controller.approveAccounting(
+                                                                                id: item.id!,
+                                                                              );
+                                                                            }
+                                                                          },
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   ],
                                                                 ),
@@ -404,26 +422,31 @@ class _AccountingApprovalScreenState extends State<AccountingApprovalScreen> {
 
                     Row(
                       children: [
-                        Material(
-                          elevation: 5,
-                          borderRadius: BorderRadius.circular(10),
-                          child: ClipRRect(
+                        GestureDetector(
+                          onTap: () {
+                            showImagePreview(item.docImagePath!);
+                          },
+                          child: Material(
+                            elevation: 5,
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              item.docImagePath!.startsWith('http')
-                                  ? item.docImagePath!
-                                  : 'http://${item.docImagePath!}',
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  kImageLogo,
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                );
-                              },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                item.docImagePath!.startsWith('http')
+                                    ? item.docImagePath!
+                                    : 'http://${item.docImagePath!}',
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    kImageLogo,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),

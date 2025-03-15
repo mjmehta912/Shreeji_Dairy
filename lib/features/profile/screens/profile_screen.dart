@@ -429,7 +429,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Text(
                 title,
                 style: TextStyles.kRegularFredoka(
-                  fontSize: FontSizes.k15FontSize,
+                  fontSize: FontSizes.k14FontSize,
                   color: kColorTextPrimary,
                 ).copyWith(
                   height: 1.25,

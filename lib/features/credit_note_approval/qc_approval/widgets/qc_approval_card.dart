@@ -78,6 +78,12 @@ class QcApprovalCard extends StatelessWidget {
                         : '',
                   ),
                   AppTitleValueRow(
+                    title: 'CRNT No',
+                    value: item.invNo != null && item.invNo!.isNotEmpty
+                        ? item.invNo!
+                        : '',
+                  ),
+                  AppTitleValueRow(
                     title: 'Entry Date',
                     value: item.date != null && item.date!.isNotEmpty
                         ? item.date!
