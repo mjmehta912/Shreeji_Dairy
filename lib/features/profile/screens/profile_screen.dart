@@ -7,6 +7,7 @@ import 'package:shreeji_dairy/features/auth/reset_password/screens/reset_passwor
 import 'package:shreeji_dairy/features/credit_note/credit_notes/screens/credit_notes_screen.dart';
 import 'package:shreeji_dairy/features/credit_note_approval/credit_note_approval_menu/screens/credit_note_approval_menu_screen.dart';
 import 'package:shreeji_dairy/features/credit_note_status/screens/credit_note_status_screen.dart';
+import 'package:shreeji_dairy/features/notification_master/noifications/screens/notifications_screen.dart';
 import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/features/auth/select_customer/screens/select_customer_branch_screen.dart';
@@ -149,8 +150,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   subMenus: creditNoteMenu.subMenu,
                 ));
           } else {
-            Get.snackbar("Access Denied",
-                "You don't have access to Credit Note Approval");
+            Get.snackbar(
+              "Access Denied",
+              "You don't have access to Credit Note Approval",
+            );
           }
         },
       },
@@ -214,11 +217,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
         },
       },
-      "Reason": {
+      "Reason Master": {
         "icon": kIconReason,
         "action": () {
           Get.to(
             () => ReasonsScreen(),
+          );
+        },
+      },
+      "Notification Master": {
+        "icon": kIconNotification,
+        "action": () {
+          Get.to(
+            () => NotificationsScreen(),
           );
         },
       },
@@ -283,7 +294,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildWelcomeText(),
-                AppSpaces.v16,
+                AppSpaces.v10,
                 Obx(
                   () {
                     if (_controller.isLoading.value) {
@@ -378,6 +389,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               textAlign: TextAlign.left,
             );
           },
+        ),
+        AppSpaces.v10,
+        Divider(
+          color: kColorLightGrey,
+          indent: 20,
+          endIndent: 20,
         ),
       ],
     );

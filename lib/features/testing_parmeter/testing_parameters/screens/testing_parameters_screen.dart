@@ -25,9 +25,7 @@ class TestingParametersScreen extends StatelessWidget {
     return Stack(
       children: [
         GestureDetector(
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: Scaffold(
             backgroundColor: kColorWhite,
             appBar: AppAppbar(
@@ -35,112 +33,107 @@ class TestingParametersScreen extends StatelessWidget {
               leading: IconButton(
                 onPressed: () => Get.back(),
                 icon: Icon(
-                  Icons.arrow_back_ios,
-                  size: 25,
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 22,
                   color: kColorTextPrimary,
                 ),
               ),
             ),
             body: Padding(
               padding: AppPaddings.p10,
-              child: Column(
-                children: [
-                  Obx(
-                    () {
-                      if (_controller.testingParameters.isEmpty &&
-                          !_controller.isLoading.value) {
-                        return Expanded(
-                          child: Center(
-                            child: Text(
-                              'No testing parameters found.',
-                              style: TextStyles.kRegularFredoka(),
-                            ),
-                          ),
-                        );
-                      }
-                      return Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _controller.testingParameters.length,
-                          itemBuilder: (context, index) {
-                            final testPara =
-                                _controller.testingParameters[index];
-
-                            return AppCard1(
-                              child: Padding(
-                                padding: AppPaddings.p10,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      testPara.testPara,
-                                      style: TextStyles.kRegularFredoka(
-                                        color: kColorTextPrimary,
-                                      ),
-                                    ),
-                                    AppSpaces.v10,
-                                    Wrap(
-                                      spacing: 10,
-                                      runSpacing: 10,
-                                      children: testPara.testResult
-                                          .map(
-                                            (result) => Chip(
-                                              label: Text(
-                                                result.testResult,
-                                                style:
-                                                    TextStyles.kRegularFredoka(
-                                                  fontSize:
-                                                      FontSizes.k16FontSize,
-                                                  color: kColorTextPrimary,
-                                                ),
-                                              ),
-                                              backgroundColor: kColorWhite,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                side: BorderSide(
-                                                  color: kColorSecondary,
-                                                  width: 1,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+              child: Obx(
+                () {
+                  if (_controller.testingParameters.isEmpty &&
+                      !_controller.isLoading.value) {
+                    return Center(
+                      child: Text(
+                        'No testing parameters found.',
+                        style: TextStyles.kRegularFredoka(
+                          fontSize: FontSizes.k18FontSize,
+                          color: kColorSecondary,
                         ),
-                      );
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: _controller.testingParameters.length,
+                    itemBuilder: (context, index) {
+                      final testPara = _controller.testingParameters[index];
+
+                      return _buildStandardCard(
+                          testPara.testPara, testPara.testResult);
                     },
-                  ),
-                ],
+                  );
+                },
               ),
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Get.to(
-                  () => TestingParameterEntryScreen(),
-                );
-              },
-              shape: const CircleBorder(),
+              onPressed: () => Get.to(
+                () => TestingParameterEntryScreen(),
+              ),
               backgroundColor: kColorPrimary,
+              elevation: 3,
+              shape: const CircleBorder(),
               child: Icon(
-                Icons.add,
+                Icons.add_rounded,
                 color: kColorTextPrimary,
-                size: 25,
+                size: 28,
               ),
             ),
           ),
         ),
         Obx(
-          () => AppLoadingOverlay(
-            isLoading: _controller.isLoading.value,
-          ),
+          () => AppLoadingOverlay(isLoading: _controller.isLoading.value),
         ),
       ],
+    );
+  }
+
+  Widget _buildStandardCard(
+    String title,
+    List<dynamic> results,
+  ) {
+    return AppCard1(
+      child: Padding(
+        padding: AppPaddings.p10,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyles.kMediumFredoka(
+                fontSize: FontSizes.k18FontSize,
+                color: kColorTextPrimary,
+              ),
+            ),
+            AppSpaces.v10,
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: results
+                  .map(
+                    (result) => Chip(
+                      label: Text(
+                        result.testResult,
+                        style: TextStyles.kRegularFredoka(
+                          fontSize: FontSizes.k16FontSize,
+                          color: kColorTextPrimary,
+                        ),
+                      ),
+                      backgroundColor: kColorLightGrey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(
+                          color: kColorSecondary,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

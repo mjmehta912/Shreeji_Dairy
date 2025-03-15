@@ -142,7 +142,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                       ),
                     ],
                   ),
-                  AppSpaces.v6,
+                  AppSpaces.v10,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

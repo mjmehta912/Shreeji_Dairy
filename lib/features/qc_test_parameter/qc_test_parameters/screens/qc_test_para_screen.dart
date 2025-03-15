@@ -99,14 +99,14 @@ class QcTestParaScreen extends StatelessWidget {
                                           Text(
                                             testPara.icname,
                                             style: TextStyles.kMediumFredoka(
-                                              color: kColorSecondary,
                                               fontSize: FontSizes.k18FontSize,
+                                              color: kColorTextPrimary,
                                             ),
                                           ),
                                           AppSpaces.v10,
                                           Wrap(
-                                            spacing: 10,
-                                            runSpacing: 10,
+                                            spacing: 8,
+                                            runSpacing: 8,
                                             children: testPara.testResult
                                                 .map(
                                                   (result) => Chip(
@@ -121,7 +121,7 @@ class QcTestParaScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                     backgroundColor:
-                                                        kColorWhite,
+                                                        kColorLightGrey,
                                                     shape:
                                                         RoundedRectangleBorder(
                                                       borderRadius:
@@ -129,7 +129,6 @@ class QcTestParaScreen extends StatelessWidget {
                                                               10),
                                                       side: BorderSide(
                                                         color: kColorSecondary,
-                                                        width: 1,
                                                       ),
                                                     ),
                                                   ),
@@ -182,14 +181,14 @@ class QcTestParaScreen extends StatelessWidget {
                                           Text(
                                             testPara.iname,
                                             style: TextStyles.kMediumFredoka(
-                                              color: kColorSecondary,
+                                              color: kColorTextPrimary,
                                               fontSize: FontSizes.k18FontSize,
                                             ),
                                           ),
                                           AppSpaces.v10,
                                           Wrap(
-                                            spacing: 10,
-                                            runSpacing: 10,
+                                            spacing: 8,
+                                            runSpacing: 8,
                                             children: testPara.testResult
                                                 .map(
                                                   (result) => Chip(
@@ -204,17 +203,14 @@ class QcTestParaScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                     backgroundColor:
-                                                        kColorWhite,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      side: BorderSide(
-                                                        color: kColorSecondary,
-                                                        width: 1,
-                                                      ),
-                                                    ),
+                                                        kColorLightGrey,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        side: BorderSide(
+                                                            color:
+                                                                kColorSecondary)),
                                                   ),
                                                 )
                                                 .toList(),
