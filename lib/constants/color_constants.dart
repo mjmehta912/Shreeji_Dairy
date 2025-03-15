@@ -9,4 +9,4 @@ const Color kColorBlackWithOpacity = Color(0x80000000);
 const Color kColorGrey = Color(0xFF878787);
 const Color kColorLightGrey = Color(0xFFE5E5E5);
 const Color kColorRed = Color.fromARGB(239, 193, 20, 20);
-const Color kColorGreen = Color(0xFf4CAF50);
+const Color kColorGreen = Color(0xFF2E7D32);

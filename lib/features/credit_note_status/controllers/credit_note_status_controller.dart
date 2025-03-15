@@ -16,12 +16,30 @@ class CreditNoteStatusController extends GetxController {
   var selectedStatus = ''.obs;
 
   List<Map<String, dynamic>> statusOptions = [
-    {"label": "All", "value": ""},
-    {"label": "DOCK Pending", "value": "0"},
-    {"label": "DOCK Checked", "value": "1"},
-    {"label": "QC Done", "value": "2"},
-    {"label": "Passed by Accounting", "value": "3"},
-    {"label": "Approved", "value": "4"},
+    {
+      "label": "All",
+      "value": "",
+    },
+    {
+      "label": "DOCK Pending",
+      "value": "0",
+    },
+    {
+      "label": "DOCK Checked",
+      "value": "1",
+    },
+    {
+      "label": "QC Done",
+      "value": "2",
+    },
+    {
+      "label": "Passed by Accounting",
+      "value": "3",
+    },
+    {
+      "label": "Approved",
+      "value": "4",
+    },
   ];
 
   void setStatus(String value) {
