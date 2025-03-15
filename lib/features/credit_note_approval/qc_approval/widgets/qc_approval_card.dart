@@ -6,6 +6,7 @@ import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/models
 import 'package:shreeji_dairy/features/credit_note_approval/qc_approval/screens/qc_approval_action_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
@@ -20,47 +21,135 @@ class QcApprovalCard extends StatelessWidget {
   });
 
   final ItemForApprovalDm item;
-  void _showImagePreview(String imageUrl) {
-    Get.dialog(
-      Dialog(
-        backgroundColor: Colors.transparent,
-        child: Stack(
-          clipBehavior: Clip.none,
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard1(
+      child: Padding(
+        padding: AppPaddings.p10,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: SizedBox(
-                width: 0.75.screenWidth,
-                height: 0.75.screenWidth,
-                child: Image.network(
-                  imageUrl.startsWith('http') ? imageUrl : 'http://$imageUrl',
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      kImageLogo,
-                      fit: BoxFit.cover,
-                    );
-                  },
+            GestureDetector(
+              onTap: () {
+                showImagePreview(item.imagePath!);
+              },
+              child: Material(
+                elevation: 5,
+                borderRadius: BorderRadius.circular(10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    item.imagePath!.startsWith('http')
+                        ? item.imagePath!
+                        : 'http://${item.imagePath!}',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        kImageLogo,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-            Positioned(
-              top: -12.5,
-              right: -12.5,
-              child: GestureDetector(
-                onTap: () => Get.back(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: kColorBlackWithOpacity,
+            AppSpaces.h10,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.iName != null && item.iName!.isNotEmpty
+                        ? item.iName!
+                        : '',
+                    style: TextStyles.kMediumFredoka(
+                      fontSize: FontSizes.k16FontSize,
+                    ),
                   ),
-                  padding: AppPaddings.p6,
-                  child: Icon(
-                    Icons.close,
-                    color: kColorWhite,
-                    size: 25,
+                  AppTitleValueRow(
+                    title: 'Party',
+                    value: item.pName != null && item.pName!.isNotEmpty
+                        ? item.pName!
+                        : '',
                   ),
-                ),
+                  AppTitleValueRow(
+                    title: 'Entry Date',
+                    value: item.date != null && item.date!.isNotEmpty
+                        ? item.date!
+                        : '',
+                  ),
+                  Row(
+                    children: [
+                      AppTitleValueRow(
+                        title: 'Qty',
+                        value:
+                            item.qty != null && item.qty!.toString().isNotEmpty
+                                ? item.qty!.toString()
+                                : '0',
+                      ),
+                      AppSpaces.h10,
+                      AppTitleValueRow(
+                        title: 'Weight',
+                        value: item.weight != null &&
+                                item.weight!.toString().isNotEmpty
+                            ? item.weight!.toString()
+                            : '0.0',
+                      ),
+                    ],
+                  ),
+                  AppTitleValueRow(
+                    title: 'Bill No.',
+                    value: item.billNo != null && item.billNo!.isNotEmpty
+                        ? item.billNo!
+                        : '',
+                  ),
+                  if (item.reason != null && item.reason!.isNotEmpty)
+                    AppTitleValueRow(
+                      title: 'Reason',
+                      value: item.reason!,
+                    ),
+                  AppTitleValueRow(
+                    title: 'Status',
+                    value: item.status != null &&
+                            item.status!.toString().isNotEmpty
+                        ? item.statusText
+                        : '',
+                  ),
+                  AppSpaces.v10,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppButton(
+                        title: 'Dock Details',
+                        titleSize: FontSizes.k16FontSize,
+                        buttonHeight: 35,
+                        buttonWidth: 0.3.screenWidth,
+                        onPressed: () {
+                          _showDockDetails(item);
+                        },
+                      ),
+                      AppButton(
+                        title: 'Action',
+                        titleSize: FontSizes.k16FontSize,
+                        buttonHeight: 35,
+                        buttonWidth: 0.25.screenWidth,
+                        onPressed: () {
+                          Get.to(
+                            () => QcApprovalActionScreen(
+                              id: item.id!,
+                              iCode: item.iCode!,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
@@ -77,56 +166,63 @@ class QcApprovalCard extends StatelessWidget {
           backgroundColor: kColorWhite,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
+            side: BorderSide(
+              color: kColorTextPrimary,
+            ),
           ),
           child: Padding(
             padding: AppPaddings.p10,
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                maxHeight: 0.75 * Get.height, // Maximum height constraint
+                maxHeight: 0.75 * Get.height,
               ),
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisSize: MainAxisSize
-                      .min, // Allows dialog to shrink if content is small
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    /// 🔹 Title: Dock Details
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           'Dock Details',
                           style: TextStyles.kMediumFredoka(
-                            fontSize: FontSizes.k20FontSize,
+                            fontSize: FontSizes.k18FontSize,
                             color: kColorSecondary,
+                          ).copyWith(
+                            decoration: TextDecoration.underline,
+                            decorationColor: kColorSecondary,
                           ),
                         ),
                       ],
                     ),
                     AppSpaces.v10,
-
-                    /// 🔹 Dock Image & Info
                     Row(
                       children: [
-                        Material(
-                          elevation: 5,
-                          borderRadius: BorderRadius.circular(10),
-                          child: ClipRRect(
+                        GestureDetector(
+                          onTap: () {
+                            showImagePreview(item.docImagePath!);
+                          },
+                          child: Material(
+                            elevation: 5,
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              item.docImagePath!.startsWith('http')
-                                  ? item.docImagePath!
-                                  : 'http://${item.docImagePath!}',
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  kImageLogo,
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                );
-                              },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                item.docImagePath!.startsWith('http')
+                                    ? item.docImagePath!
+                                    : 'http://${item.docImagePath!}',
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    kImageLogo,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -166,10 +262,7 @@ class QcApprovalCard extends StatelessWidget {
                         ),
                       ],
                     ),
-
                     AppSpaces.v10,
-
-                    /// 🔹 OK Button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -189,140 +282,6 @@ class QcApprovalCard extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard1(
-      child: Padding(
-        padding: AppPaddings.p10,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _showImagePreview(item.imagePath!);
-                  },
-                  child: Material(
-                    elevation: 5,
-                    borderRadius: BorderRadius.circular(10),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        item.imagePath!.startsWith('http')
-                            ? item.imagePath!
-                            : 'http://${item.imagePath!}',
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.asset(
-                            kImageLogo,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                AppSpaces.h10,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AppTitleValueRow(
-                        title: 'Item',
-                        value: item.iName != null && item.iName!.isNotEmpty
-                            ? item.iName!
-                            : '',
-                      ),
-                      AppTitleValueRow(
-                        title: 'Party',
-                        value: item.pName != null && item.pName!.isNotEmpty
-                            ? item.pName!
-                            : '',
-                      ),
-                      AppTitleValueRow(
-                        title: 'Entry Date',
-                        value: item.date != null && item.date!.isNotEmpty
-                            ? item.date!
-                            : '',
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          AppTitleValueRow(
-                            title: 'Qty',
-                            value: item.qty != null &&
-                                    item.qty!.toString().isNotEmpty
-                                ? item.qty!.toString()
-                                : '0',
-                          ),
-                          AppTitleValueRow(
-                            title: 'Weight',
-                            value: item.weight != null &&
-                                    item.weight!.toString().isNotEmpty
-                                ? item.weight!.toString()
-                                : '0.0',
-                          ),
-                        ],
-                      ),
-                      AppTitleValueRow(
-                        title: 'Bill No.',
-                        value: item.billNo != null && item.billNo!.isNotEmpty
-                            ? item.billNo!
-                            : '',
-                      ),
-                      AppTitleValueRow(
-                        title: 'Status',
-                        value: item.status != null &&
-                                item.status!.toString().isNotEmpty
-                            ? item.statusText
-                            : '',
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            AppSpaces.v10,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppButton(
-                  buttonWidth: 0.4.screenWidth,
-                  buttonHeight: 30,
-                  title: 'Dock Details',
-                  titleSize: FontSizes.k16FontSize,
-                  onPressed: () {
-                    _showDockDetails(item);
-                  },
-                ),
-                AppButton(
-                  buttonWidth: 0.2.screenWidth,
-                  buttonHeight: 30,
-                  buttonColor: kColorPrimary,
-                  titleColor: kColorTextPrimary,
-                  title: 'Action',
-                  titleSize: FontSizes.k16FontSize,
-                  onPressed: () {
-                    Get.to(
-                      () => QcApprovalActionScreen(
-                        id: item.id!,
-                        iCode: item.iCode!,
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

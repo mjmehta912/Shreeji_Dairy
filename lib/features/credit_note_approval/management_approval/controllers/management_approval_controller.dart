@@ -18,12 +18,6 @@ class ManagementApprovalController extends GetxController {
     showQcDetails.value = !showQcDetails.value;
   }
 
-  @override
-  void onInit() async {
-    super.onInit();
-    await getItemsForApproval();
-  }
-
   Future<void> getItemsForApproval() async {
     try {
       isLoading.value = true;

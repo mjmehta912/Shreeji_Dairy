@@ -6,6 +6,7 @@ import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/models
 import 'package:shreeji_dairy/features/credit_note_approval/management_approval/controllers/management_approval_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
@@ -16,14 +17,26 @@ import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
-class ManagementApprovalScreen extends StatelessWidget {
-  ManagementApprovalScreen({
+class ManagementApprovalScreen extends StatefulWidget {
+  const ManagementApprovalScreen({
     super.key,
   });
 
+  @override
+  State<ManagementApprovalScreen> createState() =>
+      _ManagementApprovalScreenState();
+}
+
+class _ManagementApprovalScreenState extends State<ManagementApprovalScreen> {
   final ManagementApprovalController _controller = Get.put(
     ManagementApprovalController(),
   );
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.getItemsForApproval();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +83,14 @@ class ManagementApprovalScreen extends StatelessWidget {
                             return AppCard1(
                               child: Padding(
                                 padding: AppPaddings.p10,
-                                child: Column(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
+                                    Column(
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            _showImagePreview(item.imagePath!);
+                                            showImagePreview(item.imagePath!);
                                           },
                                           child: Material(
                                             elevation: 5,
@@ -106,209 +120,244 @@ class ManagementApprovalScreen extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        AppSpaces.h10,
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              AppTitleValueRow(
-                                                title: 'Item',
-                                                value: item.iName != null &&
-                                                        item.iName!.isNotEmpty
-                                                    ? item.iName!
-                                                    : '',
-                                              ),
-                                              AppTitleValueRow(
-                                                title: 'Party',
-                                                value: item.pName != null &&
-                                                        item.pName!.isNotEmpty
-                                                    ? item.pName!
-                                                    : '',
-                                              ),
-                                              AppTitleValueRow(
-                                                title: 'Entry Date',
-                                                value: item.date != null &&
-                                                        item.date!.isNotEmpty
-                                                    ? item.date!
-                                                    : '',
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  AppTitleValueRow(
-                                                    title: 'Qty',
-                                                    value: item.qty != null &&
-                                                            item.qty!
-                                                                .toString()
-                                                                .isNotEmpty
-                                                        ? item.qty!.toString()
-                                                        : '0',
-                                                  ),
-                                                  AppTitleValueRow(
-                                                    title: 'Weight',
-                                                    value:
-                                                        item.weight != null &&
-                                                                item.weight!
-                                                                    .toString()
-                                                                    .isNotEmpty
-                                                            ? item.weight!
-                                                                .toString()
-                                                            : '0.0',
-                                                  ),
-                                                ],
-                                              ),
-                                              AppTitleValueRow(
-                                                title: 'Bill No.',
-                                                value: item.billNo != null &&
-                                                        item.billNo!.isNotEmpty
-                                                    ? item.billNo!
-                                                    : '',
-                                              ),
-                                              AppTitleValueRow(
-                                                title: 'Status',
-                                                value: item.status != null &&
-                                                        item.status!
-                                                            .toString()
-                                                            .isNotEmpty
-                                                    ? item.statusText
-                                                    : '',
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    AppSpaces.v10,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppButton(
-                                          buttonWidth: 0.4.screenWidth,
-                                          buttonHeight: 30,
-                                          title: 'Approval History',
-                                          titleSize: FontSizes.k16FontSize,
-                                          onPressed: () async {
+                                        AppSpaces.v10,
+                                        InkWell(
+                                          onTap: () async {
                                             _controller.showQcDetails.value =
                                                 false;
                                             await _controller.getQcDetails(
                                               id: item.id.toString(),
                                             );
-                                            _showDockDetails(item);
+                                            _showApprovalHistory(item);
                                           },
-                                        ),
-                                        AppButton(
-                                          buttonWidth: 0.2.screenWidth,
-                                          buttonHeight: 30,
-                                          buttonColor: kColorRed,
-                                          title: 'Reject',
-                                          titleSize: FontSizes.k16FontSize,
-                                          onPressed: () {
-                                            _controller.remarkController
-                                                .clear();
-                                            showDialog(
-                                              context: Get.context!,
-                                              builder: (BuildContext context) {
-                                                return Dialog(
-                                                  backgroundColor: kColorWhite,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: Padding(
-                                                    padding: AppPaddings.p10,
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        AppTextFormField(
-                                                          controller: _controller
-                                                              .remarkController,
-                                                          hintText: 'Remark',
-                                                        ),
-                                                        AppSpaces.v10,
-                                                        AppButton(
-                                                          title: 'Save',
-                                                          buttonColor:
-                                                              kColorRed,
-                                                          onPressed: () async {
-                                                            await _controller
-                                                                .approveManagement(
-                                                              id: item.id!,
-                                                              approve: false,
-                                                            );
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ),
-                                        AppButton(
-                                          buttonWidth: 0.2.screenWidth,
-                                          buttonHeight: 30,
-                                          buttonColor: kColorGreen,
-                                          title: 'Accept',
-                                          titleSize: FontSizes.k16FontSize,
-                                          onPressed: () {
-                                            _controller.remarkController
-                                                .clear();
-                                            showDialog(
-                                              context: Get.context!,
-                                              builder: (BuildContext context) {
-                                                return Dialog(
-                                                  backgroundColor: kColorWhite,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: Padding(
-                                                    padding: AppPaddings.p10,
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        AppTextFormField(
-                                                          controller: _controller
-                                                              .remarkController,
-                                                          hintText: 'Remark',
-                                                        ),
-                                                        AppSpaces.v10,
-                                                        AppButton(
-                                                          title: 'Save',
-                                                          buttonColor:
-                                                              kColorGreen,
-                                                          onPressed: () async {
-                                                            await _controller
-                                                                .approveManagement(
-                                                              id: item.id!,
-                                                              approve: true,
-                                                            );
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
+                                          child: Text(
+                                            'Approval\nHistory',
+                                            style: TextStyles.kRegularFredoka(
+                                              fontSize: FontSizes.k16FontSize,
+                                              color: kColorSecondary,
+                                            ).copyWith(
+                                              height: 1,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationColor: kColorSecondary,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
                                         ),
                                       ],
+                                    ),
+                                    AppSpaces.h10,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          AppTitleValueRow(
+                                            title: 'Item',
+                                            value: item.iName != null &&
+                                                    item.iName!.isNotEmpty
+                                                ? item.iName!
+                                                : '',
+                                          ),
+                                          AppTitleValueRow(
+                                            title: 'Party',
+                                            value: item.pName != null &&
+                                                    item.pName!.isNotEmpty
+                                                ? item.pName!
+                                                : '',
+                                          ),
+                                          AppTitleValueRow(
+                                            title: 'Entry Date',
+                                            value: item.date != null &&
+                                                    item.date!.isNotEmpty
+                                                ? item.date!
+                                                : '',
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              AppTitleValueRow(
+                                                title: 'Qty',
+                                                value: item.qty != null &&
+                                                        item.qty!
+                                                            .toString()
+                                                            .isNotEmpty
+                                                    ? item.qty!.toString()
+                                                    : '0',
+                                              ),
+                                              AppTitleValueRow(
+                                                title: 'Weight',
+                                                value: item.weight != null &&
+                                                        item.weight!
+                                                            .toString()
+                                                            .isNotEmpty
+                                                    ? item.weight!.toString()
+                                                    : '0.0',
+                                              ),
+                                            ],
+                                          ),
+                                          AppTitleValueRow(
+                                            title: 'Bill No.',
+                                            value: item.billNo != null &&
+                                                    item.billNo!.isNotEmpty
+                                                ? item.billNo!
+                                                : '',
+                                          ),
+                                          if (item.reason != null &&
+                                              item.reason!.isNotEmpty)
+                                            AppTitleValueRow(
+                                              title: 'Reason',
+                                              value: item.reason!,
+                                            ),
+                                          AppTitleValueRow(
+                                            title: 'Status',
+                                            value: item.status != null &&
+                                                    item.status!
+                                                        .toString()
+                                                        .isNotEmpty
+                                                ? item.statusText
+                                                : '',
+                                          ),
+                                          AppSpaces.v10,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              AppButton(
+                                                buttonWidth: 0.25.screenWidth,
+                                                buttonHeight: 35,
+                                                buttonColor: kColorRed,
+                                                title: 'Reject',
+                                                titleSize:
+                                                    FontSizes.k16FontSize,
+                                                onPressed: () {
+                                                  _controller.remarkController
+                                                      .clear();
+                                                  showDialog(
+                                                    context: Get.context!,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Dialog(
+                                                        backgroundColor:
+                                                            kColorWhite,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              AppPaddings.p10,
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              AppTextFormField(
+                                                                controller:
+                                                                    _controller
+                                                                        .remarkController,
+                                                                hintText:
+                                                                    'Remark',
+                                                              ),
+                                                              AppSpaces.v10,
+                                                              AppButton(
+                                                                title: 'Save',
+                                                                buttonColor:
+                                                                    kColorRed,
+                                                                onPressed:
+                                                                    () async {
+                                                                  await _controller
+                                                                      .approveManagement(
+                                                                    id: item
+                                                                        .id!,
+                                                                    approve:
+                                                                        false,
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                              AppButton(
+                                                buttonWidth: 0.25.screenWidth,
+                                                buttonHeight: 35,
+                                                buttonColor: kColorSecondary,
+                                                title: 'Accept',
+                                                titleSize:
+                                                    FontSizes.k16FontSize,
+                                                onPressed: () {
+                                                  _controller.remarkController
+                                                      .clear();
+                                                  showDialog(
+                                                    context: Get.context!,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Dialog(
+                                                        backgroundColor:
+                                                            kColorWhite,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              AppPaddings.p10,
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              AppTextFormField(
+                                                                controller:
+                                                                    _controller
+                                                                        .remarkController,
+                                                                hintText:
+                                                                    'Remark',
+                                                              ),
+                                                              AppSpaces.v10,
+                                                              AppButton(
+                                                                title: 'Save',
+                                                                buttonColor:
+                                                                    kColorGreen,
+                                                                onPressed:
+                                                                    () async {
+                                                                  await _controller
+                                                                      .approveManagement(
+                                                                    id: item
+                                                                        .id!,
+                                                                    approve:
+                                                                        true,
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -333,56 +382,7 @@ class ManagementApprovalScreen extends StatelessWidget {
     );
   }
 
-  void _showImagePreview(String imageUrl) {
-    Get.dialog(
-      Dialog(
-        backgroundColor: Colors.transparent,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: SizedBox(
-                width: 0.75.screenWidth,
-                height: 0.75.screenWidth,
-                child: Image.network(
-                  imageUrl.startsWith('http') ? imageUrl : 'http://$imageUrl',
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      kImageLogo,
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
-            ),
-            Positioned(
-              top: -12.5,
-              right: -12.5,
-              child: GestureDetector(
-                onTap: () => Get.back(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: kColorBlackWithOpacity,
-                  ),
-                  padding: AppPaddings.p6,
-                  child: Icon(
-                    Icons.close,
-                    color: kColorWhite,
-                    size: 25,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showDockDetails(ItemForApprovalDm item) {
+  void _showApprovalHistory(ItemForApprovalDm item) {
     showDialog(
       context: Get.context!,
       builder: (BuildContext context) {
@@ -390,6 +390,9 @@ class ManagementApprovalScreen extends StatelessWidget {
           backgroundColor: kColorWhite,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
+            side: BorderSide(
+              color: kColorTextPrimary,
+            ),
           ),
           child: Padding(
             padding: AppPaddings.p10,
@@ -405,34 +408,42 @@ class ManagementApprovalScreen extends StatelessWidget {
                     Text(
                       'Dock Details',
                       style: TextStyles.kMediumFredoka(
-                        fontSize: FontSizes.k20FontSize,
+                        fontSize: FontSizes.k18FontSize,
                         color: kColorSecondary,
+                      ).copyWith(
+                        decoration: TextDecoration.underline,
+                        decorationColor: kColorSecondary,
                       ),
                     ),
                     AppSpaces.v10,
 
                     Row(
                       children: [
-                        Material(
-                          elevation: 5,
-                          borderRadius: BorderRadius.circular(10),
-                          child: ClipRRect(
+                        GestureDetector(
+                          onTap: () {
+                            showImagePreview(item.docImagePath!);
+                          },
+                          child: Material(
+                            elevation: 5,
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              item.docImagePath!.startsWith('http')
-                                  ? item.docImagePath!
-                                  : 'http://${item.docImagePath!}',
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  kImageLogo,
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                );
-                              },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                item.docImagePath!.startsWith('http')
+                                    ? item.docImagePath!
+                                    : 'http://${item.docImagePath!}',
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    kImageLogo,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -479,8 +490,11 @@ class ManagementApprovalScreen extends StatelessWidget {
                     Text(
                       'QC Details',
                       style: TextStyles.kMediumFredoka(
-                        fontSize: FontSizes.k20FontSize,
+                        fontSize: FontSizes.k18FontSize,
                         color: kColorSecondary,
+                      ).copyWith(
+                        decoration: TextDecoration.underline,
+                        decorationColor: kColorSecondary,
                       ),
                     ),
                     AppSpaces.v10,
@@ -554,8 +568,11 @@ class ManagementApprovalScreen extends StatelessWidget {
                     Text(
                       'Accounting Details',
                       style: TextStyles.kMediumFredoka(
-                        fontSize: FontSizes.k20FontSize,
+                        fontSize: FontSizes.k18FontSize,
                         color: kColorSecondary,
+                      ).copyWith(
+                        decoration: TextDecoration.underline,
+                        decorationColor: kColorSecondary,
                       ),
                     ),
                     AppSpaces.v10,

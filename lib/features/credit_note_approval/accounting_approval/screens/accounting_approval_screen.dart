@@ -6,6 +6,7 @@ import 'package:shreeji_dairy/features/credit_note_approval/accounting_approval/
 import 'package:shreeji_dairy/features/credit_note_approval/dock_approval/models/item_for_approval_dm.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
@@ -16,14 +17,26 @@ import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
-class AccountingApprovalScreen extends StatelessWidget {
-  AccountingApprovalScreen({
+class AccountingApprovalScreen extends StatefulWidget {
+  const AccountingApprovalScreen({
     super.key,
   });
 
+  @override
+  State<AccountingApprovalScreen> createState() =>
+      _AccountingApprovalScreenState();
+}
+
+class _AccountingApprovalScreenState extends State<AccountingApprovalScreen> {
   final AccountingApprovalController _controller = Get.put(
     AccountingApprovalController(),
   );
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.getItemsForApproval();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,38 +86,72 @@ class AccountingApprovalScreen extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            _showImagePreview(item.imagePath!);
-                                          },
-                                          child: Material(
-                                            elevation: 5,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: Image.network(
-                                                item.imagePath!
-                                                        .startsWith('http')
-                                                    ? item.imagePath!
-                                                    : 'http://${item.imagePath!}',
-                                                width: 100,
-                                                height: 100,
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error,
-                                                    stackTrace) {
-                                                  return Image.asset(
-                                                    kImageLogo,
+                                        Column(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                showImagePreview(
+                                                    item.imagePath!);
+                                              },
+                                              child: Material(
+                                                elevation: 5,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: Image.network(
+                                                    item.imagePath!
+                                                            .startsWith('http')
+                                                        ? item.imagePath!
+                                                        : 'http://${item.imagePath!}',
                                                     width: 100,
                                                     height: 100,
                                                     fit: BoxFit.cover,
-                                                  );
-                                                },
+                                                    errorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      return Image.asset(
+                                                        kImageLogo,
+                                                        width: 100,
+                                                        height: 100,
+                                                        fit: BoxFit.cover,
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                            AppSpaces.v10,
+                                            InkWell(
+                                              onTap: () async {
+                                                _controller.showQcDetails
+                                                    .value = false;
+                                                await _controller.getQcDetails(
+                                                  id: item.id.toString(),
+                                                );
+                                                _showDockDetails(item);
+                                              },
+                                              child: Text(
+                                                'Approval\nHistory',
+                                                style:
+                                                    TextStyles.kRegularFredoka(
+                                                  fontSize:
+                                                      FontSizes.k16FontSize,
+                                                  color: kColorSecondary,
+                                                ).copyWith(
+                                                  height: 1,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  decorationColor:
+                                                      kColorSecondary,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         AppSpaces.h10,
                                         Expanded(
@@ -112,12 +159,16 @@ class AccountingApprovalScreen extends StatelessWidget {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              AppTitleValueRow(
-                                                title: 'Item',
-                                                value: item.iName != null &&
+                                              Text(
+                                                item.iName != null &&
                                                         item.iName!.isNotEmpty
                                                     ? item.iName!
                                                     : '',
+                                                style:
+                                                    TextStyles.kMediumFredoka(
+                                                  fontSize:
+                                                      FontSizes.k16FontSize,
+                                                ),
                                               ),
                                               AppTitleValueRow(
                                                 title: 'Party',
@@ -167,6 +218,12 @@ class AccountingApprovalScreen extends StatelessWidget {
                                                     ? item.billNo!
                                                     : '',
                                               ),
+                                              if (item.reason != null &&
+                                                  item.reason!.isNotEmpty)
+                                                AppTitleValueRow(
+                                                  title: 'Reason',
+                                                  value: item.reason!,
+                                                ),
                                               AppTitleValueRow(
                                                 title: 'Status',
                                                 value: item.status != null &&
@@ -176,110 +233,114 @@ class AccountingApprovalScreen extends StatelessWidget {
                                                     ? item.statusText
                                                     : '',
                                               ),
+                                              AppSpaces.v10,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  AppButton(
+                                                    buttonWidth:
+                                                        0.25.screenWidth,
+                                                    buttonHeight: 35,
+                                                    buttonColor:
+                                                        kColorSecondary,
+                                                    title: 'Accept',
+                                                    titleSize:
+                                                        FontSizes.k16FontSize,
+                                                    onPressed: () {
+                                                      _controller.rateController
+                                                          .clear();
+                                                      _controller
+                                                          .remarkController
+                                                          .clear();
+                                                      showDialog(
+                                                        context: Get.context!,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return Dialog(
+                                                            backgroundColor:
+                                                                kColorWhite,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                            ),
+                                                            child: Padding(
+                                                              padding:
+                                                                  AppPaddings
+                                                                      .p10,
+                                                              child: Form(
+                                                                key: _controller
+                                                                    .approveAccountingFormKey,
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    AppTextFormField(
+                                                                      controller:
+                                                                          _controller
+                                                                              .rateController,
+                                                                      hintText:
+                                                                          'Percentage',
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      validator:
+                                                                          (value) {
+                                                                        if (value ==
+                                                                                null ||
+                                                                            value.isEmpty) {
+                                                                          return 'Please enter a rate';
+                                                                        }
+                                                                        return null;
+                                                                      },
+                                                                    ),
+                                                                    AppSpaces
+                                                                        .v10,
+                                                                    AppTextFormField(
+                                                                      controller:
+                                                                          _controller
+                                                                              .remarkController,
+                                                                      hintText:
+                                                                          'Remark',
+                                                                    ),
+                                                                    AppSpaces
+                                                                        .v10,
+                                                                    AppButton(
+                                                                      title:
+                                                                          'Save',
+                                                                      onPressed:
+                                                                          () async {
+                                                                        if (_controller
+                                                                            .approveAccountingFormKey
+                                                                            .currentState!
+                                                                            .validate()) {
+                                                                          await _controller
+                                                                              .approveAccounting(
+                                                                            id: item.id!,
+                                                                          );
+                                                                        }
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
                                             ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    AppSpaces.v10,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppButton(
-                                          buttonWidth: 0.4.screenWidth,
-                                          buttonHeight: 30,
-                                          title: 'Approval History',
-                                          titleSize: FontSizes.k16FontSize,
-                                          onPressed: () async {
-                                            _controller.showQcDetails.value =
-                                                false;
-                                            await _controller.getQcDetails(
-                                              id: item.id.toString(),
-                                            );
-                                            _showDockDetails(item);
-                                          },
-                                        ),
-                                        AppButton(
-                                          buttonWidth: 0.2.screenWidth,
-                                          buttonHeight: 30,
-                                          buttonColor: kColorGreen,
-                                          title: 'Accept',
-                                          titleSize: FontSizes.k16FontSize,
-                                          onPressed: () {
-                                            _controller.rateController.clear();
-                                            _controller.remarkController
-                                                .clear();
-                                            showDialog(
-                                              context: Get.context!,
-                                              builder: (BuildContext context) {
-                                                return Dialog(
-                                                  backgroundColor: kColorWhite,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: Padding(
-                                                    padding: AppPaddings.p10,
-                                                    child: Form(
-                                                      key: _controller
-                                                          .approveAccountingFormKey,
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          AppTextFormField(
-                                                            controller: _controller
-                                                                .rateController,
-                                                            hintText:
-                                                                'Percentage',
-                                                            keyboardType:
-                                                                TextInputType
-                                                                    .number,
-                                                            validator: (value) {
-                                                              if (value ==
-                                                                      null ||
-                                                                  value
-                                                                      .isEmpty) {
-                                                                return 'Please enter a rate';
-                                                              }
-                                                              return null;
-                                                            },
-                                                          ),
-                                                          AppSpaces.v10,
-                                                          AppTextFormField(
-                                                            controller: _controller
-                                                                .remarkController,
-                                                            hintText: 'Remark',
-                                                          ),
-                                                          AppSpaces.v10,
-                                                          AppButton(
-                                                            title: 'Save',
-                                                            onPressed:
-                                                                () async {
-                                                              if (_controller
-                                                                  .approveAccountingFormKey
-                                                                  .currentState!
-                                                                  .validate()) {
-                                                                await _controller
-                                                                    .approveAccounting(
-                                                                  id: item.id!,
-                                                                );
-                                                              }
-                                                            },
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
                                         ),
                                       ],
                                     ),
@@ -306,55 +367,6 @@ class AccountingApprovalScreen extends StatelessWidget {
     );
   }
 
-  void _showImagePreview(String imageUrl) {
-    Get.dialog(
-      Dialog(
-        backgroundColor: Colors.transparent,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: SizedBox(
-                width: 0.75.screenWidth,
-                height: 0.75.screenWidth,
-                child: Image.network(
-                  imageUrl.startsWith('http') ? imageUrl : 'http://$imageUrl',
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      kImageLogo,
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
-            ),
-            Positioned(
-              top: -12.5,
-              right: -12.5,
-              child: GestureDetector(
-                onTap: () => Get.back(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: kColorBlackWithOpacity,
-                  ),
-                  padding: AppPaddings.p6,
-                  child: Icon(
-                    Icons.close,
-                    color: kColorWhite,
-                    size: 25,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   void _showDockDetails(ItemForApprovalDm item) {
     showDialog(
       context: Get.context!,
@@ -363,30 +375,33 @@ class AccountingApprovalScreen extends StatelessWidget {
           backgroundColor: kColorWhite,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
+            side: BorderSide(
+              color: kColorTextPrimary,
+            ),
           ),
           child: Padding(
             padding: AppPaddings.p10,
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                maxHeight:
-                    0.75 * Get.height, // Set max height to 75% of screen height
+                maxHeight: 0.75 * Get.height,
               ),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// 🔹 Dock Details Title
                     Text(
                       'Dock Details',
                       style: TextStyles.kMediumFredoka(
-                        fontSize: FontSizes.k20FontSize,
+                        fontSize: FontSizes.k18FontSize,
                         color: kColorSecondary,
+                      ).copyWith(
+                        decoration: TextDecoration.underline,
+                        decorationColor: kColorSecondary,
                       ),
                     ),
                     AppSpaces.v10,
 
-                    /// 🔹 Dock Image & Info
                     Row(
                       children: [
                         Material(
@@ -451,17 +466,18 @@ class AccountingApprovalScreen extends StatelessWidget {
 
                     AppSpaces.v10,
 
-                    /// 🔹 QC Details Title
                     Text(
                       'QC Details',
                       style: TextStyles.kMediumFredoka(
-                        fontSize: FontSizes.k20FontSize,
+                        fontSize: FontSizes.k18FontSize,
                         color: kColorSecondary,
+                      ).copyWith(
+                        decoration: TextDecoration.underline,
+                        decorationColor: kColorSecondary,
                       ),
                     ),
                     AppSpaces.v10,
 
-                    /// 🔹 QC Details
                     AppTitleValueRow(
                       title: 'QC Date',
                       value: item.qcDate?.isNotEmpty == true
