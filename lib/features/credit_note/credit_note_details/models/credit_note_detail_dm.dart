@@ -6,6 +6,7 @@ class CreditNoteDetailDm {
   final int qty;
   final int status;
   final String imagePath;
+  final String reason;
 
   CreditNoteDetailDm({
     required this.invNo,
@@ -15,6 +16,7 @@ class CreditNoteDetailDm {
     required this.qty,
     required this.status,
     required this.imagePath,
+    required this.reason,
   });
 
   factory CreditNoteDetailDm.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class CreditNoteDetailDm {
       qty: json['QTY'],
       status: json['Status'],
       imagePath: json['ImagePath'],
+      reason: json['Reason'] ?? '',
     );
   }
 

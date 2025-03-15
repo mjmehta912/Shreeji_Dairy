@@ -39,6 +39,10 @@ class CreditNotesCard extends StatelessWidget {
                 value: creditNote.pName,
               ),
               AppTitleValueRow(
+                title: 'Date',
+                value: creditNote.date,
+              ),
+              AppTitleValueRow(
                 title: 'Remark',
                 value:
                     creditNote.remark != null && creditNote.remark!.isNotEmpty

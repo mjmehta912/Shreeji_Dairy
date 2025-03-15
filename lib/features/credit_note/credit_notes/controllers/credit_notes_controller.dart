@@ -10,15 +10,16 @@ class CreditNotesController extends GetxController {
   var hasMoreData = true.obs;
   var isFetchingData = false;
 
-  var creditNotes = <CreditNoteDm>[].obs;
-
   var searchController = TextEditingController();
   var searchQuery = ''.obs;
+  var creditNotes = <CreditNoteDm>[].obs;
 
   var currentPage = 1;
   var pageSize = 10;
 
-  void debounceSearchQuery(String pCode) {
+  void debounceSearchQuery(
+    String pCode,
+  ) {
     debounce(
       searchQuery,
       (_) => getAllCreditNotes(

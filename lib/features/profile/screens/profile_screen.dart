@@ -11,7 +11,7 @@ import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/features/auth/select_customer/screens/select_customer_branch_screen.dart';
 import 'package:shreeji_dairy/features/qc_test_parameter/qc_test_parameters/screens/qc_test_para_screen.dart';
-import 'package:shreeji_dairy/features/reason/reasons/screens/reasons_screen.dart';
+import 'package:shreeji_dairy/features/reasons/screens/reasons_screen.dart';
 import 'package:shreeji_dairy/features/store_order/screens/store_order_screen.dart';
 import 'package:shreeji_dairy/features/testing_parmeter/testing_parameters/screens/testing_parameters_screen.dart';
 import 'package:shreeji_dairy/features/upload_product_image/screens/upload_product_image_screen.dart';

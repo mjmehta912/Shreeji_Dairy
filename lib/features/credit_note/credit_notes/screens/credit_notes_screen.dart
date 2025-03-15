@@ -100,7 +100,9 @@ class _CreditNotesScreenState extends State<CreditNotesScreen> {
                               if (scrollNotification is ScrollEndNotification &&
                                   scrollNotification.metrics.extentAfter == 0) {
                                 _controller.getAllCreditNotes(
-                                    pCode: widget.pCode, loadMore: true);
+                                  pCode: widget.pCode,
+                                  loadMore: true,
+                                );
                               }
                               return false;
                             },

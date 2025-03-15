@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_details/models/credit_note_detail_dm.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
-import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_card1.dart';
@@ -18,55 +16,6 @@ class CreditNoteDetailsCard extends StatelessWidget {
   });
 
   final CreditNoteDetailDm detail;
-
-  void _showImagePreview(String imageUrl) {
-    Get.dialog(
-      Dialog(
-        backgroundColor: Colors.transparent,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: SizedBox(
-                width: 0.75.screenWidth,
-                height: 0.75.screenWidth,
-                child: Image.network(
-                  imageUrl.startsWith('http') ? imageUrl : 'http://$imageUrl',
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      kImageLogo,
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
-            ),
-            Positioned(
-              top: -12.5,
-              right: -12.5,
-              child: GestureDetector(
-                onTap: () => Get.back(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: kColorBlackWithOpacity,
-                  ),
-                  padding: AppPaddings.p6,
-                  child: Icon(
-                    Icons.close,
-                    color: kColorWhite,
-                    size: 25,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,20 +32,20 @@ class CreditNoteDetailsCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 child: GestureDetector(
                   onTap: () {
-                    _showImagePreview(detail.imagePath);
+                    showImagePreview(detail.imagePath);
                   },
                   child: Image.network(
                     detail.imagePath.startsWith('http')
                         ? detail.imagePath
                         : 'http://${detail.imagePath}',
-                    width: 80,
-                    height: 80,
+                    width: 100,
+                    height: 100,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Image.asset(
                         kImageLogo,
-                        width: 80,
-                        height: 80,
+                        width: 100,
+                        height: 100,
                         fit: BoxFit.cover,
                       );
                     },
@@ -112,7 +61,7 @@ class CreditNoteDetailsCard extends StatelessWidget {
                   Text(
                     detail.iName,
                     style: TextStyles.kMediumFredoka(
-                      fontSize: FontSizes.k18FontSize,
+                      fontSize: FontSizes.k16FontSize,
                     ).copyWith(
                       height: 1.25,
                     ),
@@ -129,6 +78,11 @@ class CreditNoteDetailsCard extends StatelessWidget {
                     title: 'Status',
                     value: detail.statusText,
                   ),
+                  if (detail.reason.isNotEmpty)
+                    AppTitleValueRow(
+                      title: 'Reason',
+                      value: detail.reason,
+                    ),
                 ],
               ),
             ),

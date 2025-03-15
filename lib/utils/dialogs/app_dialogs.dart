@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
+import 'package:shreeji_dairy/constants/image_constants.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
+import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 
 void showErrorSnackbar(
   String title,
@@ -97,6 +100,57 @@ void showSuccessSnackbar(
           color: kColorWhite,
           fontSize: FontSizes.k20FontSize,
         ),
+      ),
+    ),
+  );
+}
+
+void showImagePreview(
+  String imageUrl,
+) {
+  Get.dialog(
+    Dialog(
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: SizedBox(
+              width: 0.75.screenWidth,
+              height: 0.75.screenWidth,
+              child: Image.network(
+                imageUrl.startsWith('http') ? imageUrl : 'http://$imageUrl',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    kImageLogo,
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
+            ),
+          ),
+          Positioned(
+            top: -12.5,
+            right: -12.5,
+            child: GestureDetector(
+              onTap: () => Get.back(),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: kColorBlackWithOpacity,
+                ),
+                padding: AppPaddings.p6,
+                child: Icon(
+                  Icons.close,
+                  color: kColorWhite,
+                  size: 25,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     ),
   );

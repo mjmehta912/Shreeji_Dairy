@@ -88,14 +88,18 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
                 fontSize: FontSizes.k16FontSize,
               ),
             ),
-            onTap: () => Get.back(result: ImageSource.gallery),
+            onTap: () => Get.back(
+              result: ImageSource.gallery,
+            ),
           ),
         ],
       ),
     );
 
     if (source != null) {
-      final XFile? pickedFile = await _picker.pickImage(source: source);
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+      );
       if (pickedFile != null) {
         _controller.selectedImage.value = File(pickedFile.path);
       }
@@ -184,16 +188,9 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
                           AppButton(
                             title: 'Save',
                             onPressed: () {
-                              if (_controller.addedItems.isEmpty) {
-                                showErrorSnackbar(
-                                  'Oops!',
-                                  'Please add an item to continue',
-                                );
-                              } else {
-                                _controller.saveCreditNote(
-                                  pCode: widget.pCode,
-                                );
-                              }
+                              _controller.saveCreditNote(
+                                pCode: widget.pCode,
+                              );
                             },
                           ),
                         ],
@@ -229,7 +226,7 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
         ),
         padding: AppPaddings.p16,
         constraints: BoxConstraints(
-          maxHeight: 0.75.screenHeight,
+          maxHeight: 0.8.screenHeight,
         ),
         child: GestureDetector(
           onTap: () {
@@ -372,8 +369,8 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.file(
                                       _controller.selectedImage.value!,
-                                      width: 50,
-                                      height: 50,
+                                      width: 60,
+                                      height: 60,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -418,7 +415,9 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
                               .validate()) {
                             if (_controller.selectedImage.value == null) {
                               showErrorSnackbar(
-                                  'Oops', 'Please upload an image');
+                                'Oops',
+                                'Please upload an image',
+                              );
                             } else {
                               _controller.addItemToList(
                                 itemName:

@@ -31,7 +31,6 @@ class CreditNoteEntryController extends GetxController {
   var selectedReason = ''.obs;
   var selectedReasonCode = ''.obs;
   var reasonController = TextEditingController();
-
   var selectedImage = Rx<File?>(null);
 
   var addedItems = <Map<String, dynamic>>[].obs;
