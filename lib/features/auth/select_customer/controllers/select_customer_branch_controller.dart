@@ -15,6 +15,7 @@ class SelectCustomerBranchController extends GetxController {
   var customerNames = <String>[].obs;
   var selectedCustomer = ''.obs;
   var selectedCustomerCode = ''.obs;
+  var selectedDeliDateOption = ''.obs;
 
   var branches = <BranchDm>[].obs;
   var branchNames = <String>[].obs;
@@ -79,6 +80,7 @@ class SelectCustomerBranchController extends GetxController {
             () => BottomNavScreen(
               pCode: selectedCustomerCode.value,
               pName: selectedCustomer.value,
+              deliDateOption: selectedDeliDateOption.value,
               branchCode: selectedBranchCode.value.isNotEmpty
                   ? selectedBranchCode.value
                   : 'HO',
@@ -106,6 +108,8 @@ class SelectCustomerBranchController extends GetxController {
     );
 
     selectedCustomerCode.value = customerObj.pCode;
+    selectedDeliDateOption.value =
+        customerObj.deliDateOption != null ? customerObj.deliDateOption! : '';
   }
 
   Future<void> getBranches() async {

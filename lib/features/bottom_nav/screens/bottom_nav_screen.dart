@@ -18,12 +18,14 @@ class BottomNavScreen extends StatelessWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.deliDateOption,
     this.branchCode,
     this.branchName,
   });
 
   final String pCode;
   final String pName;
+  final String deliDateOption;
   final String? branchCode;
   final String? branchName;
   final BottomNavController _controller = Get.put(
@@ -41,6 +43,7 @@ class BottomNavScreen extends StatelessWidget {
         ProductsScreen(
           pCode: pCode,
           pName: pName,
+          deliDateOption: deliDateOption,
         ),
         InvoicesScreen(
           pCode: pCode,

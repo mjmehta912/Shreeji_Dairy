@@ -21,10 +21,12 @@ class ProductsScreen extends StatefulWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.deliDateOption,
   });
 
   final String pCode;
   final String pName;
+  final String deliDateOption;
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
@@ -158,6 +160,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                             () => CartScreen(
                               pCode: widget.pCode,
                               pName: widget.pName,
+                              deliDateOption: widget.deliDateOption,
                             ),
                           );
                         },
@@ -168,6 +171,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                     () => CartScreen(
                                       pCode: widget.pCode,
                                       pName: widget.pName,
+                                      deliDateOption: widget.deliDateOption,
                                     ),
                                   );
                                 },
@@ -203,6 +207,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                       () => CartScreen(
                                         pCode: widget.pCode,
                                         pName: widget.pName,
+                                        deliDateOption: widget.deliDateOption,
                                       ),
                                     );
                                   },
@@ -230,6 +235,20 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   AppTextFormField(
                     controller: _controller.searchController,
                     hintText: 'Search Product',
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        _controller.searchController.clear();
+                        _controller.searchProduct(
+                          pCode: widget.pCode,
+                          searchText: _controller.searchController.text,
+                        );
+                      },
+                      icon: Icon(
+                        Icons.clear,
+                        size: 20,
+                        color: kColorGrey,
+                      ),
+                    ),
                     onChanged: (value) {
                       _controller.searchProduct(
                         searchText: value,

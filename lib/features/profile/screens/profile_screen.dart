@@ -233,6 +233,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
         },
       },
+      "Order Authorization": {
+        "icon": kIconOrderAuthorization,
+        "action": () {},
+      },
     };
   }
 

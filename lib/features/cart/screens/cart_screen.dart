@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/cart/controllers/cart_controller.dart';
 import 'package:shreeji_dairy/features/cart/widgets/cart_card.dart';
+import 'package:shreeji_dairy/features/place_order/screens/place_order_screen.dart';
 import 'package:shreeji_dairy/features/products/controllers/products_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -18,10 +19,12 @@ class CartScreen extends StatefulWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.deliDateOption,
   });
 
   final String pCode;
   final String pName;
+  final String deliDateOption;
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -134,12 +137,17 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                             AppButton(
                               buttonWidth: 0.5.screenWidth,
-                              title: 'Place Order',
+                              title: 'Proceed',
                               titleColor: kColorTextPrimary,
                               buttonColor: kColorPrimary,
                               onPressed: () {
-                                _controller.placeOrder(
-                                  pCode: widget.pCode,
+                                Get.to(
+                                  () => PlaceOrderScreen(
+                                    pCode: widget.pCode,
+                                    pName: widget.pName,
+                                    deliDateOption: widget.deliDateOption,
+                                    totalAmount: _controller.totalAmount,
+                                  ),
                                 );
                               },
                             ),

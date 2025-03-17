@@ -94,6 +94,8 @@ class SelectCustomerBranchScreen extends StatelessWidget {
                               () => BottomNavScreen(
                                 pCode: _controller.selectedCustomerCode.value,
                                 pName: _controller.selectedCustomer.value,
+                                deliDateOption:
+                                    _controller.selectedDeliDateOption.value,
                                 branchCode: _controller
                                         .selectedBranchCode.value.isNotEmpty
                                     ? _controller.selectedBranchCode.value
