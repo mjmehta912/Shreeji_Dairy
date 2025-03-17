@@ -33,8 +33,10 @@ class AppTimePickerTextFormField extends StatefulWidget {
 class _AppTimePickerTextFormFieldState
     extends State<AppTimePickerTextFormField> {
   void _showCupertinoTimePicker() {
-    TimeOfDay currentTime =
-        _parseTime(widget.timeController.text) ?? TimeOfDay.now();
+    // Sanitize the time string before parsing
+    String sanitizedTimeString =
+        widget.timeController.text.replaceAll(' ', ' ');
+    TimeOfDay currentTime = _parseTime(sanitizedTimeString) ?? TimeOfDay.now();
 
     showModalBottomSheet(
       context: context,
@@ -66,8 +68,10 @@ class _AppTimePickerTextFormFieldState
                 child: TextButton(
                   onPressed: () {
                     setState(() {
-                      widget.timeController.text =
-                          DateFormat.jm().format(selectedTime);
+                      // Sanitize the selected time before setting it
+                      widget.timeController.text = DateFormat.jm()
+                          .format(selectedTime)
+                          .replaceAll(' ', ' ');
                     });
 
                     if (widget.onChanged != null) {
@@ -107,8 +111,10 @@ class _AppTimePickerTextFormFieldState
 
   TimeOfDay? _parseTime(String timeString) {
     try {
+      String sanitizedTimeString = timeString.replaceAll(' ', ' ');
+
       final format = DateFormat.jm();
-      final DateTime dateTime = format.parse(timeString);
+      final DateTime dateTime = format.parse(sanitizedTimeString);
       return TimeOfDay.fromDateTime(dateTime);
     } catch (e) {
       return null;

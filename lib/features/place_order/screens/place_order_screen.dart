@@ -5,6 +5,7 @@ import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/place_order/controllers/place_order_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
@@ -151,23 +152,76 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                           if (_controller.placeOrderFormKey.currentState!
                               .validate()) {
                             if (widget.deliDateOption == 'Slot Time') {
+                              DateTime selectedDate = DateFormat('dd-MM-yyyy')
+                                  .parse(
+                                      _controller.deliveryDateController.text);
+
+                              DateTime now = DateTime.now();
+
+                              if (selectedDate.year == now.year &&
+                                  selectedDate.month == now.month &&
+                                  selectedDate.day == now.day) {
+                                DateTime selectedTime = DateFormat('hh:mm a')
+                                    .parse(_controller.selectedDTime.value);
+
+                                DateTime selectedDateTime = DateTime(
+                                  now.year,
+                                  now.month,
+                                  now.day,
+                                  selectedTime.hour,
+                                  selectedTime.minute,
+                                );
+
+                                if (selectedDateTime.isBefore(now)) {
+                                  showErrorSnackbar(
+                                    'Oops!',
+                                    'Delivery time must be greater than the current time',
+                                  );
+                                  return;
+                                }
+                              }
+
                               _controller.placeOrder(
                                 pCode: widget.pCode,
-                                dDate: DateFormat('yyyy-MM-dd').format(
-                                  DateFormat('dd-MM-yyyy').parse(
-                                    _controller.deliveryDateController.text,
-                                  ),
-                                ),
+                                dDate: DateFormat('yyyy-MM-dd')
+                                    .format(selectedDate),
                                 dTime: _controller.selectedDTime.value,
                               );
                             } else {
+                              DateTime selectedDate = DateFormat('dd-MM-yyyy')
+                                  .parse(
+                                      _controller.deliveryDateController.text);
+
+                              DateTime now = DateTime.now();
+
+                              if (selectedDate.year == now.year &&
+                                  selectedDate.month == now.month &&
+                                  selectedDate.day == now.day) {
+                                DateTime pickedTime = DateFormat('h:mm a')
+                                    .parse(_controller
+                                        .deliveryTimeController.text);
+
+                                DateTime pickedDateTime = DateTime(
+                                  now.year,
+                                  now.month,
+                                  now.day,
+                                  pickedTime.hour,
+                                  pickedTime.minute,
+                                );
+
+                                if (pickedDateTime.isBefore(now)) {
+                                  showErrorSnackbar(
+                                    'Oops!',
+                                    'Delivery time must be greater than the current time',
+                                  );
+                                  return;
+                                }
+                              }
+
                               _controller.placeOrder(
                                 pCode: widget.pCode,
-                                dDate: DateFormat('yyyy-MM-dd').format(
-                                  DateFormat('dd-MM-yyyy').parse(
-                                    _controller.deliveryDateController.text,
-                                  ),
-                                ),
+                                dDate: DateFormat('yyyy-MM-dd')
+                                    .format(selectedDate),
                                 dTime: _controller.deliveryTimeController.text,
                               );
                             }

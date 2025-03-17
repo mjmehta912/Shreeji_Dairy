@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shreeji_dairy/features/cart/controllers/cart_controller.dart';
 import 'package:shreeji_dairy/features/place_order/models/slot_dm.dart';
 import 'package:shreeji_dairy/features/place_order/repos/place_order_repo.dart';
+import 'package:shreeji_dairy/features/products/controllers/products_controller.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class PlaceOrderController extends GetxController {
@@ -47,7 +49,11 @@ class PlaceOrderController extends GetxController {
     );
 
     selectedDTime.value = selectedSlotObj.dTime;
+    print(selectedDTime.value);
   }
+
+  final CartController cartController = Get.find<CartController>();
+  final ProductsController productsController = Get.find<ProductsController>();
 
   Future<void> placeOrder({
     required String pCode,
@@ -65,6 +71,16 @@ class PlaceOrderController extends GetxController {
 
       if (response != null && response.containsKey('message')) {
         String message = response['message'];
+
+        Get.back();
+
+        cartController.getCartProducts(
+          pCode: pCode,
+        );
+
+        productsController.searchProduct(
+          pCode: pCode,
+        );
 
         showSuccessSnackbar(
           'Order Placed!',
