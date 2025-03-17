@@ -93,7 +93,7 @@ class _CartScreenState extends State<CartScreen> {
                         itemBuilder: (context, index) {
                           final product = _controller.cartProducts[index];
 
-                          return CardCard(
+                          return CartCard(
                             product: product,
                             controller: _controller,
                             widget: widget,

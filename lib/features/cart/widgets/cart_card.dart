@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/cart/controllers/cart_controller.dart';
@@ -12,22 +13,28 @@ import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 
-class CardCard extends StatelessWidget {
-  const CardCard({
+class CartCard extends StatefulWidget {
+  final CartProductDm product;
+  final CartController controller;
+  final CartScreen widget;
+  final ScrollController scrollController;
+  final ProductsController productsController;
+
+  const CartCard({
     super.key,
     required this.product,
-    required CartController controller,
+    required this.controller,
     required this.widget,
-    required ScrollController scrollController,
+    required this.scrollController,
     required this.productsController,
-  })  : _controller = controller,
-        _scrollController = scrollController;
+  });
 
-  final CartProductDm product;
-  final CartController _controller;
-  final CartScreen widget;
-  final ScrollController _scrollController;
-  final ProductsController productsController;
+  @override
+  State<CartCard> createState() => _CartCardState();
+}
+
+class _CartCardState extends State<CartCard> {
+  Timer? _debounce;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +46,7 @@ class CardCard extends StatelessWidget {
           children: [
             Row(
               children: [
+                // Product Image
                 Card(
                   elevation: 5,
                   color: kColorWhite,
@@ -47,7 +55,7 @@ class CardCard extends StatelessWidget {
                     width: 100,
                     height: 100,
                     child: Image.network(
-                      'http://43.250.164.139:8080/api/Product/Image?ICODE=${product.icode}',
+                      'http://43.250.164.139:8080/api/Product/Image?ICODE=${widget.product.icode}',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -58,7 +66,7 @@ class CardCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.printName,
+                        widget.product.printName,
                         style: TextStyles.kMediumFredoka(
                           color: kColorTextPrimary,
                           fontSize: FontSizes.k18FontSize,
@@ -67,10 +75,12 @@ class CardCard extends StatelessWidget {
                         ),
                       ),
                       AppSpaces.v10,
+
+                      // SKU List
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          children: product.skus.isEmpty
+                          children: widget.product.skus.isEmpty
                               ? [
                                   Text(
                                     'No packaging available',
@@ -80,105 +90,7 @@ class CardCard extends StatelessWidget {
                                     ),
                                   )
                                 ]
-                              : product.skus.map((sku) {
-                                  if (sku.pack.isEmpty) {
-                                    TextEditingController qtyController =
-                                        TextEditingController(
-                                            text: sku.cartQty.toString());
-
-                                    return AppCard1(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: AppPaddings.p2,
-                                            child: InkWell(
-                                              onTap: () {
-                                                _controller.removeProduct(
-                                                  pCode: widget.pCode,
-                                                  iCode: sku.skuIcode,
-                                                );
-                                              },
-                                              child: Icon(
-                                                Icons.cancel_outlined,
-                                                color: kColorTextPrimary,
-                                                size: 20,
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: AppPaddings.ph10,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  '₹ ${sku.rate}',
-                                                  style: TextStyles
-                                                      .kRegularFredoka(
-                                                    fontSize:
-                                                        FontSizes.k14FontSize,
-                                                  ).copyWith(height: 1),
-                                                ),
-                                                AppSpaces.v8,
-                                                SizedBox(
-                                                  width: 0.2.screenWidth,
-                                                  child: AppTextFormField(
-                                                    controller: qtyController,
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    hintText: 'Qty',
-                                                    onChanged: (value) async {
-                                                      int qty =
-                                                          int.tryParse(value) ??
-                                                              0;
-                                                      double offset =
-                                                          _scrollController
-                                                                  .hasClients
-                                                              ? _scrollController
-                                                                  .offset
-                                                              : 0.0;
-
-                                                      await _controller
-                                                          .addOrUpdateCart(
-                                                        pCode: widget.pCode,
-                                                        iCode: sku.skuIcode,
-                                                        qty: qty,
-                                                        rate: sku.rate,
-                                                      );
-
-                                                      await _controller
-                                                          .getCartProducts(
-                                                        pCode: widget.pCode,
-                                                      );
-
-                                                      await productsController
-                                                          .searchProduct(
-                                                        pCode: widget.pCode,
-                                                      );
-
-                                                      WidgetsBinding.instance
-                                                          .addPostFrameCallback(
-                                                              (_) {
-                                                        if (_scrollController
-                                                            .hasClients) {
-                                                          _scrollController
-                                                              .jumpTo(offset);
-                                                        }
-                                                      });
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          AppSpaces.v6,
-                                        ],
-                                      ),
-                                    );
-                                  }
-
+                              : widget.product.skus.map((sku) {
                                   return AppCard1(
                                     child: Column(
                                       crossAxisAlignment:
@@ -188,12 +100,12 @@ class CardCard extends StatelessWidget {
                                           padding: AppPaddings.p2,
                                           child: InkWell(
                                             onTap: () {
-                                              _controller.removeProduct(
-                                                pCode: widget.pCode,
+                                              widget.controller.removeProduct(
+                                                pCode: widget.widget.pCode,
                                                 iCode: sku.skuIcode,
                                               );
                                             },
-                                            child: Icon(
+                                            child: const Icon(
                                               Icons.cancel_outlined,
                                               color: kColorTextPrimary,
                                               size: 20,
@@ -206,16 +118,19 @@ class CardCard extends StatelessWidget {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
-                                              AppSpaces.v4,
-                                              Text(
-                                                sku.pack,
-                                                style:
-                                                    TextStyles.kMediumFredoka(
-                                                  fontSize:
-                                                      FontSizes.k14FontSize,
-                                                ).copyWith(height: 1),
-                                              ),
-                                              AppSpaces.v4,
+                                              // Display SKU Pack Name if Available
+                                              if (sku.pack.isNotEmpty) ...[
+                                                Text(
+                                                  sku.pack,
+                                                  style:
+                                                      TextStyles.kMediumFredoka(
+                                                    fontSize:
+                                                        FontSizes.k14FontSize,
+                                                  ).copyWith(height: 1),
+                                                ),
+                                                AppSpaces.v4,
+                                              ],
+                                              // Display Price
                                               Text(
                                                 '₹ ${sku.rate}',
                                                 style:
@@ -224,110 +139,14 @@ class CardCard extends StatelessWidget {
                                                       FontSizes.k14FontSize,
                                                 ).copyWith(height: 1),
                                               ),
-                                              AppSpaces.v4,
-                                              Row(
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      double offset =
-                                                          _scrollController
-                                                                  .hasClients
-                                                              ? _scrollController
-                                                                  .offset
-                                                              : 0.0;
+                                              AppSpaces.v8,
 
-                                                      await _controller
-                                                          .addOrUpdateCart(
-                                                        pCode: widget.pCode,
-                                                        iCode: sku.skuIcode,
-                                                        qty: sku.cartQty == 1
-                                                            ? 0
-                                                            : sku.cartQty - 1,
-                                                        rate: sku.rate,
-                                                      );
-
-                                                      await _controller
-                                                          .getCartProducts(
-                                                        pCode: widget.pCode,
-                                                      );
-
-                                                      await productsController
-                                                          .searchProduct(
-                                                        pCode: widget.pCode,
-                                                      );
-
-                                                      WidgetsBinding.instance
-                                                          .addPostFrameCallback(
-                                                              (_) {
-                                                        if (_scrollController
-                                                            .hasClients) {
-                                                          _scrollController
-                                                              .jumpTo(offset);
-                                                        }
-                                                      });
-                                                    },
-                                                    child: const Icon(
-                                                      Icons.remove,
-                                                      color: kColorSecondary,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                                  AppSpaces.h10,
-                                                  Text(
-                                                    '${sku.cartQty}',
-                                                    style: TextStyles
-                                                        .kMediumFredoka(
-                                                      fontSize:
-                                                          FontSizes.k16FontSize,
-                                                      color: kColorTextPrimary,
-                                                    ),
-                                                  ),
-                                                  AppSpaces.h10,
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      double offset =
-                                                          _scrollController
-                                                                  .hasClients
-                                                              ? _scrollController
-                                                                  .offset
-                                                              : 0.0;
-
-                                                      await _controller
-                                                          .addOrUpdateCart(
-                                                        pCode: widget.pCode,
-                                                        iCode: sku.skuIcode,
-                                                        qty: sku.cartQty + 1,
-                                                        rate: sku.rate,
-                                                      );
-
-                                                      await _controller
-                                                          .getCartProducts(
-                                                        pCode: widget.pCode,
-                                                      );
-
-                                                      await productsController
-                                                          .searchProduct(
-                                                        pCode: widget.pCode,
-                                                      );
-
-                                                      WidgetsBinding.instance
-                                                          .addPostFrameCallback(
-                                                              (_) {
-                                                        if (_scrollController
-                                                            .hasClients) {
-                                                          _scrollController
-                                                              .jumpTo(offset);
-                                                        }
-                                                      });
-                                                    },
-                                                    child: const Icon(
-                                                      Icons.add,
-                                                      color: kColorSecondary,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                              // Handle SKU with Free Input Quantity (No Predefined Pack)
+                                              if (sku.pack.isEmpty) ...[
+                                                _buildQtyTextField(sku),
+                                              ] else ...[
+                                                _buildQtyButtons(sku),
+                                              ],
                                             ],
                                           ),
                                         ),
@@ -346,6 +165,98 @@ class CardCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  /// 📌 Quantity Input Field (for SKUs without predefined pack)
+  Widget _buildQtyTextField(sku) {
+    TextEditingController qtyController =
+        TextEditingController(text: sku.cartQty.toString());
+
+    return SizedBox(
+      width: 0.2.screenWidth,
+      child: AppTextFormField(
+        controller: qtyController,
+        keyboardType: TextInputType.number,
+        hintText: 'Qty',
+        onChanged: (value) {
+          if (_debounce?.isActive ?? false) _debounce!.cancel();
+          _debounce = Timer(
+              const Duration(
+                seconds: 1,
+              ), () async {
+            double qty = double.tryParse(value) ?? 0.0;
+            await _updateCart(sku, qty);
+          });
+        },
+      ),
+    );
+  }
+
+  /// 📌 Quantity Increment/Decrement Buttons (for SKUs with predefined pack)
+  Widget _buildQtyButtons(sku) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Decrease Quantity
+        InkWell(
+          onTap: () async {
+            await _updateCart(sku, sku.cartQty - 1);
+          },
+          child: const Icon(
+            Icons.remove,
+            color: kColorSecondary,
+            size: 20,
+          ),
+        ),
+        AppSpaces.h10,
+        Text(
+          '${sku.cartQty}',
+          style: TextStyles.kMediumFredoka(
+            fontSize: FontSizes.k16FontSize,
+            color: kColorTextPrimary,
+          ),
+        ),
+        AppSpaces.h10,
+        // Increase Quantity
+        InkWell(
+          onTap: () async {
+            await _updateCart(sku, sku.cartQty + 1);
+          },
+          child: const Icon(
+            Icons.add,
+            color: kColorSecondary,
+            size: 20,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 📌 Update Cart with Scroll Position Preservation
+  Future<void> _updateCart(sku, double qty) async {
+    if (qty < 0) return; // Prevent negative values
+
+    double offset = widget.scrollController.hasClients
+        ? widget.scrollController.offset
+        : 0.0;
+
+    await widget.controller.addOrUpdateCart(
+      pCode: widget.widget.pCode,
+      iCode: sku.skuIcode,
+      qty: qty > 0 ? qty : 0,
+      rate: sku.rate,
+    );
+
+    await widget.controller.getCartProducts(pCode: widget.widget.pCode);
+    await widget.productsController.searchProduct(pCode: widget.widget.pCode);
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        if (widget.scrollController.hasClients) {
+          widget.scrollController.jumpTo(offset);
+        }
+      },
     );
   }
 }

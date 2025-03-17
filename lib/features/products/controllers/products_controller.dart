@@ -120,7 +120,7 @@ class ProductsController extends GetxController {
   Future<void> addOrUpdateCart({
     required String pCode,
     required String iCode,
-    required int qty,
+    required double qty,
     required double rate,
   }) async {
     isLoading.value = true;

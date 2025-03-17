@@ -28,7 +28,7 @@ class CartSKUDm {
   final String skuName;
   final String pack;
   final double rate;
-  final int cartQty;
+  final double cartQty;
 
   CartSKUDm({
     required this.skuIcode,

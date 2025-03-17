@@ -28,7 +28,7 @@ class SKUDm {
   final String skuName;
   final String pack;
   final double rate;
-  final int cartQty;
+  final double cartQty;
 
   SKUDm({
     required this.skuIcode,
@@ -44,7 +44,7 @@ class SKUDm {
       skuName: json['skuiname'] ?? '',
       pack: json['pack'] ?? '',
       rate: (json['rate'] ?? 0).toDouble(),
-      cartQty: json['cartQty'] ?? 0,
+      cartQty: json['cartQty'],
     );
   }
 }
