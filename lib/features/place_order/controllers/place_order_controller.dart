@@ -49,7 +49,6 @@ class PlaceOrderController extends GetxController {
     );
 
     selectedDTime.value = selectedSlotObj.dTime;
-    print(selectedDTime.value);
   }
 
   final CartController cartController = Get.find<CartController>();

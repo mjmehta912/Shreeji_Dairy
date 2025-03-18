@@ -46,8 +46,6 @@ class PlaceOrderRepo {
       'DTime': dTime,
     };
 
-    print(requestBody);
-
     try {
       var response = await ApiService.postRequest(
         endpoint: '/Order/placeOrder',

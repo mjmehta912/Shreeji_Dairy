@@ -8,6 +8,8 @@ import 'package:shreeji_dairy/features/credit_note/credit_notes/screens/credit_n
 import 'package:shreeji_dairy/features/credit_note_approval/credit_note_approval_menu/screens/credit_note_approval_menu_screen.dart';
 import 'package:shreeji_dairy/features/credit_note_status/screens/credit_note_status_screen.dart';
 import 'package:shreeji_dairy/features/notification_master/noifications/screens/notifications_screen.dart';
+import 'package:shreeji_dairy/features/order_authorisation/screens/order_authorisation_screen.dart';
+import 'package:shreeji_dairy/features/order_status/screens/order_status_screen.dart';
 import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/features/auth/select_customer/screens/select_customer_branch_screen.dart';
@@ -70,7 +72,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
       "Order Status": {
         "icon": kIconOrderStatus,
-        "action": () {},
+        "action": () {
+          Get.to(
+            () => OrderStatusScreen(
+              pCode: widget.pCode,
+              pName: widget.pName,
+            ),
+          );
+        },
       },
       "View Outstanding": {
         "icon": kIconViewOutstandings,
@@ -235,7 +244,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
       "Order Authorization": {
         "icon": kIconOrderAuthorization,
-        "action": () {},
+        "action": () {
+          Get.to(
+            () => OrderAuthorisationScreen(
+              pCode: widget.pCode,
+              pName: widget.pName,
+            ),
+          );
+        },
       },
     };
   }
