@@ -5,6 +5,7 @@ import 'package:shreeji_dairy/features/order_status/controllers/order_status_con
 import 'package:shreeji_dairy/features/order_status/widgets/order_status_card.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
@@ -39,10 +40,9 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
 
   void _initialize() async {
     await _controller.getCustomers();
-    _controller.selectedCustomer.value = widget.pName;
-    _controller.selectedCustomerCode.value = widget.pCode;
+
     await _controller.getOrders(
-      pCode: widget.pCode,
+      pCode: '',
     );
   }
 
@@ -74,18 +74,46 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
                   AppTextFormField(
                     controller: _controller.searchController,
                     hintText: 'Search Order',
+                    onChanged: (value) {
+                      _controller.getOrders(
+                        pCode: _controller.selectedCustomerCode.value,
+                      );
+                    },
                   ),
                   AppSpaces.v10,
-                  Obx(
-                    () => AppDropdown(
-                      items: _controller.customerNames,
-                      hintText: 'Customer',
-                      onChanged: _controller.onCustomerSelected,
-                      selectedItem:
-                          _controller.selectedCustomer.value.isNotEmpty
-                              ? _controller.selectedCustomer.value
-                              : null,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Obx(
+                        () => SizedBox(
+                          width: 0.8.screenWidth,
+                          child: AppDropdown(
+                            items: _controller.customerNames,
+                            hintText: 'Customer',
+                            onChanged: _controller.onCustomerSelected,
+                            selectedItem:
+                                _controller.selectedCustomer.value.isNotEmpty
+                                    ? _controller.selectedCustomer.value
+                                    : null,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          _controller.selectedCustomer.value = '';
+                          _controller.selectedCustomerCode.value = '';
+
+                          await _controller.getOrders(
+                            pCode: '',
+                          );
+                        },
+                        icon: Icon(
+                          Icons.clear,
+                          size: 25,
+                          color: kColorTextPrimary,
+                        ),
+                      ),
+                    ],
                   ),
                   AppSpaces.v10,
                   Obx(

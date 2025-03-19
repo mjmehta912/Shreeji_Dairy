@@ -24,10 +24,17 @@ class OrderStatusCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              order.iName,
+              order.pName,
               style: TextStyles.kMediumFredoka(
                 fontSize: FontSizes.k18FontSize,
                 color: kColorSecondary,
+              ),
+            ),
+            Text(
+              order.iName,
+              style: TextStyles.kMediumFredoka(
+                fontSize: FontSizes.k18FontSize,
+                color: kColorTextPrimary,
               ),
             ),
             Row(
@@ -69,15 +76,18 @@ class OrderStatusCard extends StatelessWidget {
                 ),
               ],
             ),
-            AppTitleValueRow(
-              title: 'Status',
-              value: order.status == 0
-                  ? 'Pending'
+            Text(
+              order.status == 0
+                  ? 'PENDING'
                   : order.status == 1
-                      ? 'Approved'
+                      ? 'APPROVED'
                       : order.status == 2
-                          ? 'Hold'
-                          : 'Rejected',
+                          ? 'HOLD'
+                          : 'REJECTED',
+              style: TextStyles.kMediumFredoka(
+                fontSize: FontSizes.k18FontSize,
+                color: kColorSecondary,
+              ),
             ),
           ],
         ),

@@ -44,10 +44,9 @@ class _OrderAuthorisationScreenState extends State<OrderAuthorisationScreen> {
 
   void _initialize() async {
     await _controller.getCustomers();
-    _controller.selectedCustomer.value = widget.pName;
-    _controller.selectedCustomerCode.value = widget.pCode;
+
     await _controller.getOrders(
-      pCode: widget.pCode,
+      pCode: '',
     );
   }
 
@@ -76,16 +75,49 @@ class _OrderAuthorisationScreenState extends State<OrderAuthorisationScreen> {
               padding: AppPaddings.p10,
               child: Column(
                 children: [
-                  Obx(
-                    () => AppDropdown(
-                      items: _controller.customerNames,
-                      hintText: 'Customer',
-                      onChanged: _controller.onCustomerSelected,
-                      selectedItem:
-                          _controller.selectedCustomer.value.isNotEmpty
-                              ? _controller.selectedCustomer.value
-                              : null,
-                    ),
+                  AppTextFormField(
+                    controller: _controller.searchController,
+                    hintText: 'Search Order',
+                    onChanged: (value) {
+                      _controller.getOrders(
+                        pCode: _controller.selectedCustomerCode.value,
+                      );
+                    },
+                  ),
+                  AppSpaces.v10,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Obx(
+                        () => SizedBox(
+                          width: 0.8.screenWidth,
+                          child: AppDropdown(
+                            items: _controller.customerNames,
+                            hintText: 'Customer',
+                            onChanged: _controller.onCustomerSelected,
+                            selectedItem:
+                                _controller.selectedCustomer.value.isNotEmpty
+                                    ? _controller.selectedCustomer.value
+                                    : null,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          _controller.selectedCustomer.value = '';
+                          _controller.selectedCustomerCode.value = '';
+
+                          await _controller.getOrders(
+                            pCode: '',
+                          );
+                        },
+                        icon: Icon(
+                          Icons.clear,
+                          size: 25,
+                          color: kColorTextPrimary,
+                        ),
+                      ),
+                    ],
                   ),
                   AppSpaces.v10,
                   Obx(

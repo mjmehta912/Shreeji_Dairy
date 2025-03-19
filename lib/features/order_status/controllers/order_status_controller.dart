@@ -49,6 +49,7 @@ class OrderStatusController extends GetxController {
         pCode: pCode,
         icCodes: '',
         status: selectedStatus.value,
+        searchText: searchController.text,
       );
 
       orders.assignAll(fetchedOrders);

@@ -14,6 +14,7 @@ class OrderAuthorisationController extends GetxController {
   var selectedCustomer = ''.obs;
   var selectedCustomerCode = ''.obs;
   var approvedQtyController = TextEditingController();
+  var searchController = TextEditingController();
 
   Future<void> getOrders({
     required String pCode,
@@ -25,6 +26,8 @@ class OrderAuthorisationController extends GetxController {
         pCode: pCode,
         icCodes: '',
         status: '0,2',
+        searchText:
+            searchController.text.isNotEmpty ? searchController.text : '',
       );
 
       orders.assignAll(fetchedOrders);

@@ -33,10 +33,17 @@ class OrderAuthorisationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              order.iName,
+              order.pName,
               style: TextStyles.kMediumFredoka(
                 fontSize: FontSizes.k18FontSize,
                 color: kColorSecondary,
+              ),
+            ),
+            Text(
+              order.iName,
+              style: TextStyles.kMediumFredoka(
+                fontSize: FontSizes.k18FontSize,
+                color: kColorTextPrimary,
               ),
             ),
             AppTitleValueRow(

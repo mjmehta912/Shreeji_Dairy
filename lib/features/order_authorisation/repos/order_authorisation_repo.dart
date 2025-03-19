@@ -5,9 +5,10 @@ import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
 class OrderAuthorisationRepo {
   static Future<List<OrderDm>> getOrders({
-    required String pCode,
+    String pCode = '',
     String icCodes = '',
     required String status,
+    String searchText = '',
   }) async {
     try {
       String? token = await SecureStorageHelper.read(
@@ -18,6 +19,7 @@ class OrderAuthorisationRepo {
         "PCODE": pCode,
         "ICCODEs": icCodes,
         "Statuses": status,
+        "SearchText": searchText,
       };
 
       final response = await ApiService.postRequest(

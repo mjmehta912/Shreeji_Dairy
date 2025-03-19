@@ -155,9 +155,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
 
           if (creditNoteMenu != null) {
-            Get.to(() => CreditNoteApprovalMenuScreen(
-                  subMenus: creditNoteMenu.subMenu,
-                ));
+            Get.to(
+              () => CreditNoteApprovalMenuScreen(
+                subMenus: creditNoteMenu.subMenu,
+              ),
+            );
           } else {
             Get.snackbar(
               "Access Denied",
@@ -173,6 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (storePCode == null || storePCode.isEmpty) {
             Get.dialog(
               AlertDialog(
+                backgroundColor: kColorWhite,
                 title: Text(
                   'Store Not Registered',
                   style: TextStyles.kMediumFredoka(
