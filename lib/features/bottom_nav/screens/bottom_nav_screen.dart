@@ -43,6 +43,7 @@ class BottomNavScreen extends StatelessWidget {
         ProductsScreen(
           pCode: pCode,
           pName: pName,
+          branchCode: branchCode!,
           deliDateOption: deliDateOption,
         ),
         InvoicesScreen(

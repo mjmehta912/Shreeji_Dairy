@@ -35,6 +35,7 @@ class PlaceOrderRepo {
     required String pCode,
     required String dDate,
     required String dTime,
+    required String branchPrefix,
   }) async {
     String? token = await SecureStorageHelper.read(
       'token',
@@ -44,6 +45,7 @@ class PlaceOrderRepo {
       'PCODE': pCode,
       'DDate': dDate,
       'DTime': dTime,
+      "BranchPrefix": branchPrefix,
     };
 
     try {

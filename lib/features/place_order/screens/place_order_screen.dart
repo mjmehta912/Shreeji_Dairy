@@ -21,12 +21,14 @@ class PlaceOrderScreen extends StatefulWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.branchCode,
     required this.deliDateOption,
     required this.totalAmount,
   });
 
   final String pCode;
   final String pName;
+  final String branchCode;
   final String deliDateOption;
   final double totalAmount;
 
@@ -186,6 +188,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                 dDate: DateFormat('yyyy-MM-dd')
                                     .format(selectedDate),
                                 dTime: _controller.selectedDTime.value,
+                                branchPrefix: widget.branchCode,
                               );
                             } else {
                               DateTime selectedDate = DateFormat('dd-MM-yyyy')
@@ -222,6 +225,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                 pCode: widget.pCode,
                                 dDate: DateFormat('yyyy-MM-dd')
                                     .format(selectedDate),
+                                branchPrefix: widget.branchCode,
                                 dTime: _controller.deliveryTimeController.text,
                               );
                             }

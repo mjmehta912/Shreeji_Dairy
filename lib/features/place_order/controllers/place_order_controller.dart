@@ -58,6 +58,7 @@ class PlaceOrderController extends GetxController {
     required String pCode,
     required String dDate,
     required String dTime,
+    required String branchPrefix,
   }) async {
     isLoading.value = true;
 
@@ -66,6 +67,7 @@ class PlaceOrderController extends GetxController {
         pCode: pCode,
         dDate: dDate,
         dTime: dTime,
+        branchPrefix: branchPrefix,
       );
 
       if (response != null && response.containsKey('message')) {

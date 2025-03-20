@@ -21,11 +21,13 @@ class ProductsScreen extends StatefulWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.branchCode,
     required this.deliDateOption,
   });
 
   final String pCode;
   final String pName;
+  final String branchCode;
   final String deliDateOption;
 
   @override
@@ -160,6 +162,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                             () => CartScreen(
                               pCode: widget.pCode,
                               pName: widget.pName,
+                              branchCode: widget.branchCode,
                               deliDateOption: widget.deliDateOption,
                             ),
                           );
@@ -171,6 +174,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                     () => CartScreen(
                                       pCode: widget.pCode,
                                       pName: widget.pName,
+                                      branchCode: widget.branchCode,
                                       deliDateOption: widget.deliDateOption,
                                     ),
                                   );
@@ -207,6 +211,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                       () => CartScreen(
                                         pCode: widget.pCode,
                                         pName: widget.pName,
+                                        branchCode: widget.branchCode,
                                         deliDateOption: widget.deliDateOption,
                                       ),
                                     );
