@@ -99,7 +99,7 @@ class QcTestParaScreen extends StatelessWidget {
                                           Text(
                                             testPara.icname,
                                             style: TextStyles.kMediumFredoka(
-                                              fontSize: FontSizes.k18FontSize,
+                                              fontSize: FontSizes.k16FontSize,
                                               color: kColorTextPrimary,
                                             ),
                                           ),
@@ -115,7 +115,7 @@ class QcTestParaScreen extends StatelessWidget {
                                                       style: TextStyles
                                                           .kRegularFredoka(
                                                         fontSize: FontSizes
-                                                            .k16FontSize,
+                                                            .k14FontSize,
                                                         color:
                                                             kColorTextPrimary,
                                                       ),
@@ -182,7 +182,7 @@ class QcTestParaScreen extends StatelessWidget {
                                             testPara.iname,
                                             style: TextStyles.kMediumFredoka(
                                               color: kColorTextPrimary,
-                                              fontSize: FontSizes.k18FontSize,
+                                              fontSize: FontSizes.k16FontSize,
                                             ),
                                           ),
                                           AppSpaces.v10,
@@ -197,7 +197,7 @@ class QcTestParaScreen extends StatelessWidget {
                                                       style: TextStyles
                                                           .kRegularFredoka(
                                                         fontSize: FontSizes
-                                                            .k16FontSize,
+                                                            .k14FontSize,
                                                         color:
                                                             kColorTextPrimary,
                                                       ),

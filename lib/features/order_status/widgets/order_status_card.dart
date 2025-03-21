@@ -26,68 +26,64 @@ class OrderStatusCard extends StatelessWidget {
             Text(
               order.pName,
               style: TextStyles.kMediumFredoka(
-                fontSize: FontSizes.k18FontSize,
+                fontSize: FontSizes.k16FontSize,
                 color: kColorSecondary,
+              ).copyWith(
+                height: 1.25,
               ),
             ),
             Text(
               order.iName,
               style: TextStyles.kMediumFredoka(
-                fontSize: FontSizes.k18FontSize,
+                fontSize: FontSizes.k16FontSize,
                 color: kColorTextPrimary,
+              ).copyWith(
+                height: 1.25,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppTitleValueRow(
-                  title: 'Order No.',
-                  value: order.invNo,
-                ),
-                AppTitleValueRow(
-                  title: 'Order Date',
-                  value: order.date,
-                ),
-              ],
+            AppTitleValueRow(
+              title: 'Order No.',
+              value: order.invNo,
+            ),
+            AppTitleValueRow(
+              title: 'Order Date',
+              value: order.date,
+            ),
+            AppTitleValueRow(
+              title: 'Del. Date',
+              value: order.dDate,
+            ),
+            AppTitleValueRow(
+              title: 'Del. Time',
+              value: order.dTime,
+            ),
+            AppTitleValueRow(
+              title: 'Order Qty',
+              value: order.orderQty.toString(),
+            ),
+            AppTitleValueRow(
+              title: 'Approved Qty',
+              value: order.approvedQty.toString(),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                AppTitleValueRow(
-                  title: 'Del. Date',
-                  value: order.dDate,
-                ),
-                AppTitleValueRow(
-                  title: 'Del. Time',
-                  value: order.dTime,
+                Text(
+                  order.status == 0
+                      ? 'PENDING'
+                      : order.status == 1
+                          ? 'APPROVED'
+                          : order.status == 2
+                              ? 'HOLD'
+                              : 'REJECTED',
+                  style: TextStyles.kMediumFredoka(
+                    fontSize: FontSizes.k16FontSize,
+                    color: kColorSecondary,
+                  ).copyWith(
+                    height: 1.25,
+                  ),
                 ),
               ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppTitleValueRow(
-                  title: 'Order Qty',
-                  value: order.orderQty.toString(),
-                ),
-                AppTitleValueRow(
-                  title: 'Approved Qty',
-                  value: order.approvedQty.toString(),
-                ),
-              ],
-            ),
-            Text(
-              order.status == 0
-                  ? 'PENDING'
-                  : order.status == 1
-                      ? 'APPROVED'
-                      : order.status == 2
-                          ? 'HOLD'
-                          : 'REJECTED',
-              style: TextStyles.kMediumFredoka(
-                fontSize: FontSizes.k18FontSize,
-                color: kColorSecondary,
-              ),
             ),
           ],
         ),

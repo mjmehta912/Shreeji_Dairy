@@ -102,7 +102,7 @@ class TestingParametersScreen extends StatelessWidget {
             Text(
               title,
               style: TextStyles.kMediumFredoka(
-                fontSize: FontSizes.k18FontSize,
+                fontSize: FontSizes.k16FontSize,
                 color: kColorTextPrimary,
               ),
             ),
@@ -116,7 +116,7 @@ class TestingParametersScreen extends StatelessWidget {
                       label: Text(
                         result.testResult,
                         style: TextStyles.kRegularFredoka(
-                          fontSize: FontSizes.k16FontSize,
+                          fontSize: FontSizes.k14FontSize,
                           color: kColorTextPrimary,
                         ),
                       ),

@@ -95,7 +95,9 @@ class _QcApprovalActionScreenState extends State<QcApprovalActionScreen> {
                                   children: [
                                     Text(
                                       qcPara.testPara,
-                                      style: TextStyles.kMediumFredoka(),
+                                      style: TextStyles.kMediumFredoka(
+                                        fontSize: FontSizes.k18FontSize,
+                                      ),
                                     ),
                                     ...qcPara.testResult.map(
                                       (testResult) {

@@ -184,7 +184,7 @@ class _CreditNoteStatusScreenState extends State<CreditNoteStatusScreen> {
             ),
           ),
           child: Padding(
-            padding: AppPaddings.p14,
+            padding: AppPaddings.p20,
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxHeight: 0.75 * Get.height,

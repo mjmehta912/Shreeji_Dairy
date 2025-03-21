@@ -345,8 +345,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
                         ),
                         itemCount: _controller.menuAccess
                             .where(
@@ -370,6 +370,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     RichText(
+                //       text: TextSpan(
+                //         style: TextStyles.kRegularFredoka(
+                //           fontSize: FontSizes.k14FontSize,
+                //           color: kColorTextPrimary,
+                //         ),
+                //         children: [
+                //           TextSpan(
+                //             text: "Developed by ",
+                //           ),
+                //           TextSpan(
+                //             text: "Jinee Infotech",
+                //             style: TextStyles.kRegularFredoka(
+                //               fontSize: FontSizes.k14FontSize,
+                //               color: kColorSecondary,
+                //             ).copyWith(
+                //               decoration: TextDecoration.underline,
+                //               decorationColor: kColorSecondary,
+                //             ),
+                //             recognizer: TapGestureRecognizer()
+                //               ..onTap = () async {
+                //                 final Uri url = Uri.parse(
+                //                   "https://jinee.in/Default.aspx",
+                //                 );
+                //                 if (await canLaunchUrl(url)) {
+                //                   await launchUrl(
+                //                     url,
+                //                     mode: LaunchMode.externalApplication,
+                //                   );
+                //                 }
+                //               },
+                //           ),
+                //           TextSpan(text: "  |  "),
+                //           WidgetSpan(
+                //             child: FutureBuilder<String>(
+                //               future: VersionService.getVersion(),
+                //               builder: (context, snapshot) {
+                //                 if (snapshot.connectionState ==
+                //                     ConnectionState.waiting) {
+                //                   return Text(
+                //                     "v...",
+                //                     style: TextStyles.kRegularFredoka(
+                //                       fontSize: FontSizes.k14FontSize,
+                //                       color: kColorBlack,
+                //                     ),
+                //                   );
+                //                 } else if (snapshot.hasError) {
+                //                   return Text(
+                //                     "vError",
+                //                     style: TextStyles.kRegularFredoka(
+                //                       fontSize: FontSizes.k14FontSize,
+                //                       color: kColorRed,
+                //                     ),
+                //                   );
+                //                 } else {
+                //                   return Text(
+                //                     "v${snapshot.data}",
+                //                     style: TextStyles.kRegularFredoka(
+                //                       fontSize: FontSizes.k14FontSize,
+                //                       color: kColorBlack,
+                //                     ),
+                //                   );
+                //                 }
+                //               },
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // AppSpaces.v60,
+                // AppSpaces.v20,
               ],
             ),
           ),
@@ -413,12 +489,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           },
         ),
-        AppSpaces.v10,
-        Divider(
-          color: kColorLightGrey,
-          indent: 20,
-          endIndent: 20,
-        ),
       ],
     );
   }
@@ -434,6 +504,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Card(
         elevation: 3,
         color: kColorWhite,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: kColorSecondary,
+            width: 0.5,
+          ),
+        ),
         child: Padding(
           padding: AppPaddings.p10,
           child: Column(
@@ -452,7 +529,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Text(
                 title,
                 style: TextStyles.kRegularFredoka(
-                  fontSize: FontSizes.k14FontSize,
+                  fontSize: FontSizes.k12FontSize,
                   color: kColorTextPrimary,
                 ).copyWith(
                   height: 1.25,

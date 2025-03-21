@@ -398,7 +398,7 @@ class _AccountingApprovalScreenState extends State<AccountingApprovalScreen> {
             ),
           ),
           child: Padding(
-            padding: AppPaddings.p10,
+            padding: AppPaddings.p20,
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxHeight: 0.75 * Get.height,

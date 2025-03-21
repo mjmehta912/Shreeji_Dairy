@@ -69,7 +69,7 @@ class _CartCardState extends State<CartCard> {
                         widget.product.printName,
                         style: TextStyles.kMediumFredoka(
                           color: kColorTextPrimary,
-                          fontSize: FontSizes.k18FontSize,
+                          fontSize: FontSizes.k16FontSize,
                         ).copyWith(
                           height: 1,
                         ),

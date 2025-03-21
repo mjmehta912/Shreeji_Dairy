@@ -130,7 +130,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
                                 selectedColor: kColorSecondary,
                                 label: Text(status['label']!),
                                 labelStyle: TextStyles.kRegularFredoka(
-                                  fontSize: FontSizes.k14FontSize,
+                                  fontSize: FontSizes.k12FontSize,
                                   color: _controller.selectedStatus.value ==
                                           status['value']
                                       ? kColorWhite

@@ -35,15 +35,19 @@ class OrderAuthorisationCard extends StatelessWidget {
             Text(
               order.pName,
               style: TextStyles.kMediumFredoka(
-                fontSize: FontSizes.k18FontSize,
+                fontSize: FontSizes.k16FontSize,
                 color: kColorSecondary,
+              ).copyWith(
+                height: 1.25,
               ),
             ),
             Text(
               order.iName,
               style: TextStyles.kMediumFredoka(
-                fontSize: FontSizes.k18FontSize,
+                fontSize: FontSizes.k16FontSize,
                 color: kColorTextPrimary,
+              ).copyWith(
+                height: 1.25,
               ),
             ),
             AppTitleValueRow(
@@ -76,15 +80,25 @@ class OrderAuthorisationCard extends StatelessWidget {
                 ),
               ],
             ),
-            AppTitleValueRow(
-              title: 'status',
-              value: order.status == 0
-                  ? 'Pending'
-                  : order.status == 1
-                      ? 'Approved'
-                      : order.status == 2
-                          ? 'Hold'
-                          : 'Rejected',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  order.status == 0
+                      ? 'PENDING'
+                      : order.status == 1
+                          ? 'APPROVED'
+                          : order.status == 2
+                              ? 'HOLD'
+                              : 'REJECTED',
+                  style: TextStyles.kMediumFredoka(
+                    fontSize: FontSizes.k16FontSize,
+                    color: kColorSecondary,
+                  ).copyWith(
+                    height: 1.25,
+                  ),
+                ),
+              ],
             ),
             AppSpaces.v10,
             Row(

@@ -67,7 +67,7 @@ class _ProductCardState extends State<ProductCard> {
                         widget.product.printName,
                         style: TextStyles.kMediumFredoka(
                           color: kColorTextPrimary,
-                          fontSize: FontSizes.k18FontSize,
+                          fontSize: FontSizes.k16FontSize,
                         ).copyWith(height: 1),
                       ),
                       AppSpaces.v10,

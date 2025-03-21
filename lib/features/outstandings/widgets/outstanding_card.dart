@@ -29,7 +29,7 @@ class OutstandingCard extends StatelessWidget {
                 Text(
                   outstanding.invNo,
                   style: TextStyles.kMediumFredoka(
-                    fontSize: FontSizes.k18FontSize,
+                    fontSize: FontSizes.k16FontSize,
                     color: kColorTextPrimary,
                   ).copyWith(
                     height: 1.25,

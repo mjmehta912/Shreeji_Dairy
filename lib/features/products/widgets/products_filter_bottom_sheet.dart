@@ -33,7 +33,7 @@ void showFilterBottomSheet<T>({
       ),
       padding: AppPaddings.p16,
       constraints: BoxConstraints(
-        maxHeight: 0.5.screenHeight,
+        maxHeight: 0.75.screenHeight,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
