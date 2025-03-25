@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
@@ -26,6 +28,7 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
   final StoreOrderController _controller = Get.put(
     StoreOrderController(),
   );
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -221,10 +224,18 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                               fontWeight: FontWeight.w600,
                                               keyboardType:
                                                   TextInputType.number,
-                                              onChanged: (_) {
-                                                _controller.addOrUpdateCart(
-                                                  iCode: product.icode,
-                                                );
+                                              onChanged: (value) {
+                                                if (_debounce?.isActive ??
+                                                    false) _debounce!.cancel();
+
+                                                // Start a new timer
+                                                _debounce = Timer(
+                                                    Duration(milliseconds: 500),
+                                                    () {
+                                                  _controller.addOrUpdateCart(
+                                                    iCode: product.icode,
+                                                  );
+                                                });
                                               },
                                             ),
                                           )

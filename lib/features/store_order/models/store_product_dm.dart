@@ -22,7 +22,7 @@ class StoreCategoryDm {
 class StoreProductDm {
   final String printname;
   final String? pack;
-  int cartQty;
+  double cartQty;
   final String icode;
   final double rate;
 
@@ -38,7 +38,7 @@ class StoreProductDm {
     return StoreProductDm(
       printname: json['printname'] as String,
       pack: json['pack'] as String?,
-      cartQty: json['cartQty'] as int,
+      cartQty: json['cartQty'] as double,
       icode: json['icode'] as String,
       rate: (json['rate'] as num).toDouble(),
     );
