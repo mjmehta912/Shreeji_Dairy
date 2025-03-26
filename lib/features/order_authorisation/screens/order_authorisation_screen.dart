@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/order_authorisation/controllers/order_authorisation_controller.dart';
-import 'package:shreeji_dairy/features/order_authorisation/models/order_dm.dart';
 import 'package:shreeji_dairy/features/order_authorisation/widgets/order_authorisation_card.dart';
-import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
-import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
-import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
@@ -143,25 +139,25 @@ class _OrderAuthorisationScreenState extends State<OrderAuthorisationScreen> {
 
                             return OrderAuthorisationCard(
                               order: order,
-                              onAccept: () => _showApprovalDialog(order, 1),
-                              onHold: () async {
-                                await _controller.approveOrder(
-                                  status: 2,
-                                  pCode: order.pCode,
-                                  iCode: order.iCode,
-                                  invNo: order.invNo,
-                                  approvedQty: 0.0,
-                                );
-                              },
-                              onReject: () async {
-                                await _controller.approveOrder(
-                                  status: 3,
-                                  pCode: order.pCode,
-                                  iCode: order.iCode,
-                                  invNo: order.invNo,
-                                  approvedQty: 0.0,
-                                );
-                              },
+                              // onAccept: () => _showApprovalDialog(order, 1),
+                              // onHold: () async {
+                              //   await _controller.approveOrder(
+                              //     status: 2,
+                              //     pCode: order.pCode,
+                              //     iCode: order.iCode,
+                              //     invNo: order.invNo,
+                              //     approvedQty: 0.0,
+                              //   );
+                              // },
+                              // onReject: () async {
+                              //   await _controller.approveOrder(
+                              //     status: 3,
+                              //     pCode: order.pCode,
+                              //     iCode: order.iCode,
+                              //     invNo: order.invNo,
+                              //     approvedQty: 0.0,
+                              //   );
+                              // },
                             );
                           },
                         ),
@@ -182,54 +178,54 @@ class _OrderAuthorisationScreenState extends State<OrderAuthorisationScreen> {
     );
   }
 
-  void _showApprovalDialog(OrderDm order, int status) {
-    _controller.approvedQtyController.text = order.orderQty.toString();
-    Get.defaultDialog(
-      title: 'Approve Order',
-      titleStyle: TextStyles.kRegularFredoka(),
-      contentPadding: AppPaddings.p20,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AppTextFormField(
-            controller: _controller.approvedQtyController,
-            hintText: 'Approved Qty',
-            keyboardType: TextInputType.number,
-          ),
-          AppSpaces.v10,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              AppButton(
-                onPressed: () async {
-                  double? approvedQty =
-                      double.tryParse(_controller.approvedQtyController.text);
-                  if (approvedQty == null || approvedQty <= 0) {
-                    showErrorSnackbar(
-                      'Error',
-                      'Enter a valid quantity',
-                    );
-                    return;
-                  }
+  // void _showApprovalDialog(OrderDm order, int status) {
+  //   _controller.approvedQtyController.text = order.orderQty.toString();
+  //   Get.defaultDialog(
+  //     title: 'Approve Order',
+  //     titleStyle: TextStyles.kRegularFredoka(),
+  //     contentPadding: AppPaddings.p20,
+  //     content: Column(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         AppTextFormField(
+  //           controller: _controller.approvedQtyController,
+  //           hintText: 'Approved Qty',
+  //           keyboardType: TextInputType.number,
+  //         ),
+  //         AppSpaces.v10,
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.end,
+  //           children: [
+  //             AppButton(
+  //               onPressed: () async {
+  //                 double? approvedQty =
+  //                     double.tryParse(_controller.approvedQtyController.text);
+  //                 if (approvedQty == null || approvedQty <= 0) {
+  //                   showErrorSnackbar(
+  //                     'Error',
+  //                     'Enter a valid quantity',
+  //                   );
+  //                   return;
+  //                 }
 
-                  await _controller.approveOrder(
-                    status: status,
-                    pCode: order.pCode,
-                    iCode: order.iCode,
-                    invNo: order.invNo,
-                    approvedQty: approvedQty,
-                  );
-                },
-                title: 'Save',
-                buttonWidth: 0.2.screenWidth,
-                buttonHeight: 35,
-                buttonColor: kColorSecondary,
-                titleSize: FontSizes.k16FontSize,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  //                 await _controller.approveOrder(
+  //                   status: status,
+  //                   pCode: order.pCode,
+  //                   iCode: order.iCode,
+  //                   invNo: order.invNo,
+  //                   approvedQty: approvedQty,
+  //                 );
+  //               },
+  //               title: 'Save',
+  //               buttonWidth: 0.2.screenWidth,
+  //               buttonHeight: 35,
+  //               buttonColor: kColorSecondary,
+  //               titleSize: FontSizes.k16FontSize,
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

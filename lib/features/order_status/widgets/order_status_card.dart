@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/order_authorisation/models/order_dm.dart';
+import 'package:shreeji_dairy/features/order_status/models/order_item_dm.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
@@ -13,7 +13,7 @@ class OrderStatusCard extends StatelessWidget {
     required this.order,
   });
 
-  final OrderDm order;
+  final OrderItemDm order;
 
   @override
   Widget build(BuildContext context) {

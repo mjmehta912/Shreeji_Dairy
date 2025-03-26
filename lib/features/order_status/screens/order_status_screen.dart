@@ -41,7 +41,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
   void _initialize() async {
     await _controller.getCustomers();
 
-    await _controller.getOrders(
+    await _controller.getOrderItems(
       pCode: '',
     );
   }
@@ -75,7 +75,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
                     controller: _controller.searchController,
                     hintText: 'Search Order',
                     onChanged: (value) {
-                      _controller.getOrders(
+                      _controller.getOrderItems(
                         pCode: _controller.selectedCustomerCode.value,
                       );
                     },
@@ -103,7 +103,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
                           _controller.selectedCustomer.value = '';
                           _controller.selectedCustomerCode.value = '';
 
-                          await _controller.getOrders(
+                          await _controller.getOrderItems(
                             pCode: '',
                           );
                         },

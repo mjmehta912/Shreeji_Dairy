@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
-import 'package:shreeji_dairy/features/order_authorisation/models/order_dm.dart';
+import 'package:shreeji_dairy/features/order_status/models/order_item_dm.dart';
 import 'package:shreeji_dairy/features/order_status/repos/order_status_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class OrderStatusController extends GetxController {
   var isLoading = false.obs;
 
-  var orders = <OrderDm>[].obs;
+  var orders = <OrderItemDm>[].obs;
   var customers = <CustomerDm>[].obs;
   var customerNames = <String>[].obs;
   var selectedCustomer = ''.obs;
@@ -39,13 +39,13 @@ class OrderStatusController extends GetxController {
     },
   ];
 
-  Future<void> getOrders({
+  Future<void> getOrderItems({
     required String pCode,
   }) async {
     isLoading.value = true;
 
     try {
-      final fetchedOrders = await OrderStatusRepo.getOrders(
+      final fetchedOrders = await OrderStatusRepo.getOrderItems(
         pCode: pCode,
         icCodes: '',
         status: selectedStatus.value,
@@ -72,7 +72,9 @@ class OrderStatusController extends GetxController {
 
   void onStatusSelected(String status) async {
     selectedStatus.value = status;
-    await getOrders(pCode: selectedCustomerCode.value);
+    await getOrderItems(
+      pCode: selectedCustomerCode.value,
+    );
   }
 
   Future<void> getCustomers() async {
@@ -108,7 +110,7 @@ class OrderStatusController extends GetxController {
 
     selectedCustomerCode.value = customerObj.pCode;
 
-    await getOrders(
+    await getOrderItems(
       pCode: selectedCustomerCode.value,
     );
   }

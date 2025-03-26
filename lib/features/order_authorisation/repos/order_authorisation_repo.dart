@@ -6,7 +6,6 @@ import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 class OrderAuthorisationRepo {
   static Future<List<OrderDm>> getOrders({
     String pCode = '',
-    String icCodes = '',
     required String status,
     String searchText = '',
   }) async {
@@ -17,7 +16,6 @@ class OrderAuthorisationRepo {
 
       Map<String, dynamic> requestBody = {
         "PCODE": pCode,
-        "ICCODEs": icCodes,
         "Statuses": status,
         "SearchText": searchText,
       };

@@ -1,10 +1,10 @@
 import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
-import 'package:shreeji_dairy/features/order_authorisation/models/order_dm.dart';
+import 'package:shreeji_dairy/features/order_status/models/order_item_dm.dart';
 import 'package:shreeji_dairy/services/api_service.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
 class OrderStatusRepo {
-  static Future<List<OrderDm>> getOrders({
+  static Future<List<OrderItemDm>> getOrderItems({
     String pCode = '',
     String icCodes = '',
     required String status,
@@ -23,7 +23,7 @@ class OrderStatusRepo {
       };
 
       final response = await ApiService.postRequest(
-        endpoint: '/Order/orders',
+        endpoint: '/Order/orderItems',
         requestBody: requestBody,
         token: token,
       );
@@ -31,7 +31,7 @@ class OrderStatusRepo {
       if (response['data'] != null) {
         return (response['data'] as List<dynamic>)
             .map(
-              (item) => OrderDm.fromJson(item),
+              (item) => OrderItemDm.fromJson(item),
             )
             .toList();
       }

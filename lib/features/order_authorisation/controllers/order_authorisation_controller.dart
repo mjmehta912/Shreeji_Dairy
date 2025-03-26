@@ -24,7 +24,6 @@ class OrderAuthorisationController extends GetxController {
     try {
       final fetchedOrders = await OrderAuthorisationRepo.getOrders(
         pCode: pCode,
-        icCodes: '',
         status: '0,2',
         searchText:
             searchController.text.isNotEmpty ? searchController.text : '',
