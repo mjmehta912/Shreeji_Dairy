@@ -211,7 +211,7 @@ class _CartCardState extends State<CartCard> {
         ),
         AppSpaces.h10,
         Text(
-          '${sku.cartQty}',
+          sku.cartQty.toInt().toString(),
           style: TextStyles.kMediumFredoka(
             fontSize: FontSizes.k16FontSize,
             color: kColorTextPrimary,

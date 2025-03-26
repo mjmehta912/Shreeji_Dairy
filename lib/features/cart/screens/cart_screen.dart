@@ -19,12 +19,14 @@ class CartScreen extends StatefulWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.cCode,
     required this.branchCode,
     required this.deliDateOption,
   });
 
   final String pCode;
   final String pName;
+  final String cCode;
   final String branchCode;
   final String deliDateOption;
 
@@ -147,6 +149,7 @@ class _CartScreenState extends State<CartScreen> {
                                   () => PlaceOrderScreen(
                                     pCode: widget.pCode,
                                     pName: widget.pName,
+                                    cCode: widget.cCode,
                                     branchCode: widget.branchCode,
                                     deliDateOption: widget.deliDateOption,
                                     totalAmount: _controller.totalAmount,

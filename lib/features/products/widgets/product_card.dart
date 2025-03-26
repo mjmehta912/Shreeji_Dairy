@@ -122,52 +122,56 @@ class _ProductCardState extends State<ProductCard> {
                                                     _debounce!.cancel();
                                                   }
                                                   _debounce = Timer(
-                                                      const Duration(
-                                                        seconds: 1,
-                                                      ), () async {
-                                                    double qty =
-                                                        double.tryParse(
-                                                                value) ??
-                                                            0.0;
+                                                    const Duration(
+                                                      seconds: 1,
+                                                    ),
+                                                    () async {
+                                                      double qty =
+                                                          double.tryParse(
+                                                                  value) ??
+                                                              0.0;
 
-                                                    double offset = widget
-                                                            .scrollController
-                                                            .hasClients
-                                                        ? widget
-                                                            .scrollController
-                                                            .offset
-                                                        : 0.0;
+                                                      double offset = widget
+                                                              .scrollController
+                                                              .hasClients
+                                                          ? widget
+                                                              .scrollController
+                                                              .offset
+                                                          : 0.0;
 
-                                                    await widget.controller
-                                                        .addOrUpdateCart(
-                                                      pCode:
-                                                          widget.widget.pCode,
-                                                      iCode: sku.skuIcode,
-                                                      qty: qty,
-                                                      rate: sku.rate,
-                                                    );
+                                                      await widget.controller
+                                                          .addOrUpdateCart(
+                                                        pCode:
+                                                            widget.widget.pCode,
+                                                        iCode: sku.skuIcode,
+                                                        qty: qty,
+                                                        rate: sku.rate,
+                                                      );
 
-                                                    await widget.controller
-                                                        .searchProduct(
-                                                      pCode:
-                                                          widget.widget.pCode,
-                                                      searchText: widget
-                                                          .controller
-                                                          .searchController
-                                                          .text,
-                                                    );
+                                                      await widget.controller
+                                                          .searchProduct(
+                                                        pCode:
+                                                            widget.widget.pCode,
+                                                        searchText: widget
+                                                            .controller
+                                                            .searchController
+                                                            .text,
+                                                      );
 
-                                                    WidgetsBinding.instance
-                                                        .addPostFrameCallback(
-                                                            (_) {
-                                                      if (widget
-                                                          .scrollController
-                                                          .hasClients) {
-                                                        widget.scrollController
-                                                            .jumpTo(offset);
-                                                      }
-                                                    });
-                                                  });
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                        (_) {
+                                                          if (widget
+                                                              .scrollController
+                                                              .hasClients) {
+                                                            widget
+                                                                .scrollController
+                                                                .jumpTo(offset);
+                                                          }
+                                                        },
+                                                      );
+                                                    },
+                                                  );
                                                 },
                                                 hintText: 'Qty',
                                               ),
@@ -193,7 +197,9 @@ class _ProductCardState extends State<ProductCard> {
                                             sku.pack,
                                             style: TextStyles.kMediumFredoka(
                                               fontSize: FontSizes.k14FontSize,
-                                            ).copyWith(height: 1),
+                                            ).copyWith(
+                                              height: 1,
+                                            ),
                                           ),
                                           AppSpaces.v4,
                                           Text(
@@ -235,7 +241,9 @@ class _ProductCardState extends State<ProductCard> {
                                                     ),
                                                     AppSpaces.h10,
                                                     Text(
-                                                      '${sku.cartQty}',
+                                                      sku.cartQty
+                                                          .toInt()
+                                                          .toString(),
                                                       style: TextStyles
                                                           .kMediumFredoka(
                                                         fontSize: FontSizes

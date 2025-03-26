@@ -226,7 +226,9 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                                   TextInputType.number,
                                               onChanged: (value) {
                                                 if (_debounce?.isActive ??
-                                                    false) _debounce!.cancel();
+                                                    false) {
+                                                  _debounce!.cancel();
+                                                }
 
                                                 // Start a new timer
                                                 _debounce = Timer(

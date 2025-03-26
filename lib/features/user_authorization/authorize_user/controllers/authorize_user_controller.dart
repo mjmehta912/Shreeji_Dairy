@@ -14,6 +14,7 @@ class AuthorizeUserController extends GetxController {
     2: 'Salesman',
     3: 'Franchise Owner',
     4: 'Customer',
+    5: 'Staff',
   }.obs;
 
   var selectedUserType = Rxn<int>();

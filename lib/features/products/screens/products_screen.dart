@@ -21,12 +21,14 @@ class ProductsScreen extends StatefulWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.cCode,
     required this.branchCode,
     required this.deliDateOption,
   });
 
   final String pCode;
   final String pName;
+  final String cCode;
   final String branchCode;
   final String deliDateOption;
 
@@ -160,6 +162,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         onTap: () {
                           Get.to(
                             () => CartScreen(
+                              cCode: widget.cCode,
                               pCode: widget.pCode,
                               pName: widget.pName,
                               branchCode: widget.branchCode,
@@ -172,6 +175,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 onPressed: () {
                                   Get.to(
                                     () => CartScreen(
+                                      cCode: widget.cCode,
                                       pCode: widget.pCode,
                                       pName: widget.pName,
                                       branchCode: widget.branchCode,
@@ -209,6 +213,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   onPressed: () {
                                     Get.to(
                                       () => CartScreen(
+                                        cCode: widget.cCode,
                                         pCode: widget.pCode,
                                         pName: widget.pName,
                                         branchCode: widget.branchCode,

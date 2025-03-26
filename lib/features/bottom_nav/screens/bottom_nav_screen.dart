@@ -18,6 +18,7 @@ class BottomNavScreen extends StatelessWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.cCode,
     required this.deliDateOption,
     this.branchCode,
     this.branchName,
@@ -25,6 +26,7 @@ class BottomNavScreen extends StatelessWidget {
 
   final String pCode;
   final String pName;
+  final String cCode;
   final String deliDateOption;
   final String? branchCode;
   final String? branchName;
@@ -43,6 +45,7 @@ class BottomNavScreen extends StatelessWidget {
         ProductsScreen(
           pCode: pCode,
           pName: pName,
+          cCode: cCode,
           branchCode: branchCode!,
           deliDateOption: deliDateOption,
         ),

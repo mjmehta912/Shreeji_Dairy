@@ -21,6 +21,7 @@ class PlaceOrderScreen extends StatefulWidget {
     super.key,
     required this.pCode,
     required this.pName,
+    required this.cCode,
     required this.branchCode,
     required this.deliDateOption,
     required this.totalAmount,
@@ -28,6 +29,7 @@ class PlaceOrderScreen extends StatefulWidget {
 
   final String pCode;
   final String pName;
+  final String cCode;
   final String branchCode;
   final String deliDateOption;
   final double totalAmount;
@@ -45,7 +47,9 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   void initState() {
     super.initState();
     if (widget.deliDateOption == 'Slot Time') {
-      _controller.getSlots();
+      _controller.getCategoryWiseSlots(
+        cCode: widget.cCode,
+      );
     }
   }
 

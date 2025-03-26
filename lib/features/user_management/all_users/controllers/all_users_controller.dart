@@ -65,6 +65,8 @@ class AllUsersController extends GetxController {
         return 'Franchise Owner';
       case 4:
         return 'Customer';
+      case 5:
+        return 'Staff';
       default:
         return 'Unknown role';
     }

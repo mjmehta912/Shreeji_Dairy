@@ -38,7 +38,7 @@ class AppAppbar extends StatelessWidget implements PreferredSizeWidget {
             title,
             style: titleStyle ??
                 TextStyles.kRegularFredoka(
-                  fontSize: FontSizes.k24FontSize,
+                  fontSize: FontSizes.k20FontSize,
                   color: kColorTextPrimary,
                 ),
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/notification_master/noifications/controllers/notifications_controller.dart';
-import 'package:shreeji_dairy/features/notification_master/notification_recievers/screens/notification_recievers_screen.dart';
+import 'package:shreeji_dairy/features/slot_master/categories/controllers/catergories_controller.dart';
+import 'package:shreeji_dairy/features/slot_master/slots/screens/slots_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
@@ -12,13 +12,13 @@ import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 
-class NotificationsScreen extends StatelessWidget {
-  NotificationsScreen({
+class CategoriesScreen extends StatelessWidget {
+  CategoriesScreen({
     super.key,
   });
 
-  final NotificationsController _controller = Get.put(
-    NotificationsController(),
+  final CatergoriesController _controller = Get.put(
+    CatergoriesController(),
   );
 
   @override
@@ -32,7 +32,7 @@ class NotificationsScreen extends StatelessWidget {
           child: Scaffold(
             backgroundColor: kColorWhite,
             appBar: AppAppbar(
-              title: 'Notifications',
+              title: 'Customer Categories',
               leading: IconButton(
                 onPressed: () => Get.back(),
                 icon: Icon(
@@ -49,17 +49,17 @@ class NotificationsScreen extends StatelessWidget {
                   AppTextFormField(
                     controller: _controller.searchController,
                     hintText: 'Search',
-                    onChanged: _controller.searchNotifications,
+                    onChanged: _controller.searchCategories,
                   ),
                   AppSpaces.v10,
                   Obx(
                     () {
-                      if (_controller.filteredNotifications.isEmpty &&
+                      if (_controller.filteredCategories.isEmpty &&
                           !_controller.isLoading.value) {
                         return Expanded(
                           child: Center(
                             child: Text(
-                              'No notifications found.',
+                              'No categories found.',
                               style: TextStyles.kRegularFredoka(),
                             ),
                           ),
@@ -68,17 +68,17 @@ class NotificationsScreen extends StatelessWidget {
                       return Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: _controller.filteredNotifications.length,
+                          itemCount: _controller.filteredCategories.length,
                           itemBuilder: (context, index) {
-                            final notification =
-                                _controller.filteredNotifications[index];
+                            final category =
+                                _controller.filteredCategories[index];
 
                             return GestureDetector(
                               onTap: () {
                                 Get.to(
-                                  () => NotificationRecieversScreen(
-                                    nid: notification.nid,
-                                    nName: notification.nName,
+                                  () => SlotsScreen(
+                                    cCode: category.cCode,
+                                    cName: category.cName,
                                   ),
                                 );
                               },
@@ -90,7 +90,7 @@ class NotificationsScreen extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        notification.nName,
+                                        category.cName,
                                         style: TextStyles.kRegularFredoka(
                                           fontSize: FontSizes.k16FontSize,
                                         ),

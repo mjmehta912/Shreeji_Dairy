@@ -112,7 +112,6 @@ class LoginController extends GetxController {
         'storePCode',
         response['storePCode'] ?? '',
       );
-
       Get.offAll(
         () => SelectCustomerBranchScreen(),
       );

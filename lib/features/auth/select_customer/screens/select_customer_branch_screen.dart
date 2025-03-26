@@ -92,6 +92,7 @@ class SelectCustomerBranchScreen extends StatelessWidget {
                             FocusManager.instance.primaryFocus?.unfocus();
                             Get.offAll(
                               () => BottomNavScreen(
+                                cCode: _controller.selectedCCode.value,
                                 pCode: _controller.selectedCustomerCode.value,
                                 pName: _controller.selectedCustomer.value,
                                 deliDateOption:

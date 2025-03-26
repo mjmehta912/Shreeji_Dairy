@@ -15,6 +15,7 @@ import 'package:shreeji_dairy/features/profile/controllers/profile_controller.da
 import 'package:shreeji_dairy/features/auth/select_customer/screens/select_customer_branch_screen.dart';
 import 'package:shreeji_dairy/features/qc_test_parameter/qc_test_parameters/screens/qc_test_para_screen.dart';
 import 'package:shreeji_dairy/features/reasons/screens/reasons_screen.dart';
+import 'package:shreeji_dairy/features/slot_master/categories/screens/categories_screen.dart';
 import 'package:shreeji_dairy/features/store_order/screens/store_order_screen.dart';
 import 'package:shreeji_dairy/features/testing_parmeter/testing_parameters/screens/testing_parameters_screen.dart';
 import 'package:shreeji_dairy/features/upload_product_image/screens/upload_product_image_screen.dart';
@@ -253,6 +254,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               pCode: widget.pCode,
               pName: widget.pName,
             ),
+          );
+        },
+      },
+      "Slot Master": {
+        "icon": kIconSlotMaster,
+        "action": () {
+          Get.to(
+            () => CategoriesScreen(),
           );
         },
       },
@@ -506,10 +515,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: kColorWhite,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(
-            color: kColorSecondary,
-            width: 0.5,
-          ),
         ),
         child: Padding(
           padding: AppPaddings.p10,

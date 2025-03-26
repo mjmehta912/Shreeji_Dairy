@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/notification_master/notification_recievers/controllers/notification_recievers_controller.dart';
+import 'package:shreeji_dairy/features/slot_master/slots/controllers/slots_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
@@ -9,38 +9,40 @@ import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
 import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_card1.dart';
-import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
+import 'package:shreeji_dairy/widgets/app_time_picker_field.dart';
+import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
-class NotificationRecieversScreen extends StatefulWidget {
-  const NotificationRecieversScreen({
+class SlotsScreen extends StatefulWidget {
+  const SlotsScreen({
     super.key,
-    required this.nid,
-    required this.nName,
+    required this.cCode,
+    required this.cName,
   });
 
-  final int nid;
-  final String nName;
+  final String cCode;
+  final String cName;
 
   @override
-  State<NotificationRecieversScreen> createState() =>
-      _NotificationRecieversScreenState();
+  State<SlotsScreen> createState() => _SlotsScreenState();
 }
 
-class _NotificationRecieversScreenState
-    extends State<NotificationRecieversScreen> {
-  final NotificationRecieversController _controller = Get.put(
-    NotificationRecieversController(),
+class _SlotsScreenState extends State<SlotsScreen> {
+  final SlotsController _controller = Get.put(
+    SlotsController(),
   );
 
   @override
   void initState() {
     super.initState();
-    _controller.getNotificationRecievers(
-      nid: widget.nid.toString(),
+    _initialize();
+  }
+
+  void _initialize() async {
+    await _controller.getCategoryWiseSlots(
+      cCode: widget.cCode,
     );
-    _controller.getUsers();
   }
 
   @override
@@ -54,7 +56,7 @@ class _NotificationRecieversScreenState
           child: Scaffold(
             backgroundColor: kColorWhite,
             appBar: AppAppbar(
-              title: widget.nName,
+              title: widget.cName,
               leading: IconButton(
                 onPressed: () => Get.back(),
                 icon: Icon(
@@ -71,17 +73,17 @@ class _NotificationRecieversScreenState
                   AppTextFormField(
                     controller: _controller.searchController,
                     hintText: 'Search',
-                    onChanged: _controller.searchNotificationRecievers,
+                    onChanged: _controller.searchSlots,
                   ),
                   AppSpaces.v10,
                   Obx(
                     () {
-                      if (_controller.filteredNotificationRecievers.isEmpty &&
+                      if (_controller.filteredSlots.isEmpty &&
                           !_controller.isLoading.value) {
                         return Expanded(
                           child: Center(
                             child: Text(
-                              'No Notifications Recievers found.',
+                              'No slots found.',
                               style: TextStyles.kRegularFredoka(),
                             ),
                           ),
@@ -90,40 +92,48 @@ class _NotificationRecieversScreenState
                       return Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount:
-                              _controller.filteredNotificationRecievers.length,
+                          itemCount: _controller.filteredSlots.length,
                           itemBuilder: (context, index) {
-                            final notificationReciever = _controller
-                                .filteredNotificationRecievers[index];
+                            final slot = _controller.filteredSlots[index];
 
-                            return AppCard1(
-                              child: Padding(
-                                padding: AppPaddings.p10,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '${notificationReciever.firstName} ${notificationReciever.lastName}',
-                                      style: TextStyles.kRegularFredoka(
-                                        fontSize: FontSizes.k16FontSize,
+                            return GestureDetector(
+                              onTap: () {},
+                              child: AppCard1(
+                                child: Padding(
+                                  padding: AppPaddings.p10,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          AppTitleValueRow(
+                                            title: 'Slot',
+                                            value: slot.slot,
+                                          ),
+                                          AppTitleValueRow(
+                                            title: 'Del. Time',
+                                            value: slot.dTime,
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        _controller.removeReciever(
-                                          nid: widget.nid.toString(),
-                                          userId: notificationReciever.userId
-                                              .toString(),
-                                        );
-                                      },
-                                      child: Icon(
-                                        Icons.delete,
-                                        size: 20,
-                                        color: kColorRed,
+                                      InkWell(
+                                        onTap: () {
+                                          _controller.removeSlot(
+                                            id: slot.id.toString(),
+                                            cCode: widget.cCode,
+                                          );
+                                        },
+                                        child: Icon(
+                                          Icons.delete,
+                                          size: 20,
+                                          color: kColorRed,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
@@ -141,7 +151,7 @@ class _NotificationRecieversScreenState
               shape: const CircleBorder(),
               child: IconButton(
                 onPressed: () {
-                  _showAddRecieverDialog();
+                  _showAddSlotDialog();
                 },
                 icon: Icon(
                   Icons.add,
@@ -161,9 +171,9 @@ class _NotificationRecieversScreenState
     );
   }
 
-  void _showAddRecieverDialog() {
-    _controller.selectedUser.value = '';
-    _controller.selectedUserId.value = 0;
+  void _showAddSlotDialog() {
+    _controller.slotFromController.clear();
+    _controller.slotToController.clear();
     Get.dialog(
       Dialog(
         backgroundColor: kColorWhite,
@@ -178,14 +188,14 @@ class _NotificationRecieversScreenState
             ),
             child: SingleChildScrollView(
               child: Form(
-                key: _controller.notificationRecieverFormKey,
+                key: _controller.slotFormKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Add Reciever',
+                        'Add Slot',
                         style: TextStyles.kMediumFredoka(
                           fontSize: FontSizes.k20FontSize,
                           color: kColorSecondary,
@@ -193,16 +203,14 @@ class _NotificationRecieversScreenState
                       ),
                     ),
                     AppSpaces.v10,
-                    Obx(
-                      () => AppDropdown(
-                        items: _controller.userNames,
-                        hintText: 'Reciever',
-                        onChanged: _controller.onUserSelected,
-                        selectedItem: _controller.selectedUser.value.isNotEmpty
-                            ? _controller.selectedUser.value
-                            : null,
-                        validatorText: 'Please select a reciever',
-                      ),
+                    AppTimePickerTextFormField(
+                      timeController: _controller.slotFromController,
+                      hintText: 'From',
+                    ),
+                    AppSpaces.v10,
+                    AppTimePickerTextFormField(
+                      timeController: _controller.slotToController,
+                      hintText: 'To',
                     ),
                     AppSpaces.v20,
                     Row(
@@ -222,11 +230,10 @@ class _NotificationRecieversScreenState
                           buttonWidth: 0.2 * Get.width,
                           buttonHeight: 40,
                           onPressed: () {
-                            if (_controller
-                                .notificationRecieverFormKey.currentState!
+                            if (_controller.slotFormKey.currentState!
                                 .validate()) {
-                              _controller.addReciever(
-                                nid: widget.nid.toString(),
+                              _controller.addSlot(
+                                cCode: widget.cCode,
                               );
                             }
                           },

@@ -2,7 +2,7 @@ import 'package:shreeji_dairy/features/slot_master/slots/models/category_wise_sl
 import 'package:shreeji_dairy/services/api_service.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
-class PlaceOrderRepo {
+class SlotsRepo {
   static Future<List<CategoryWiseSlotDm>> getCategoryWiseSlots({
     required String cCode,
   }) async {
@@ -36,26 +36,43 @@ class PlaceOrderRepo {
     }
   }
 
-  static Future<dynamic> placeOrder({
-    required String pCode,
-    required String dDate,
+  static Future<Map<String, dynamic>> removeSlot({
+    required String id,
+  }) async {
+    String? token = await SecureStorageHelper.read('token');
+
+    try {
+      final response = await ApiService.getRequest(
+        endpoint: '/Slot/remove',
+        queryParams: {
+          'ID': id,
+        },
+        token: token,
+      );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<dynamic> addSlot({
+    required String slot,
+    required String cCode,
     required String dTime,
-    required String branchPrefix,
   }) async {
     String? token = await SecureStorageHelper.read(
       'token',
     );
 
     final Map<String, dynamic> requestBody = {
-      'PCODE': pCode,
-      'DDate': dDate,
-      'DTime': dTime,
-      "BranchPrefix": branchPrefix,
+      "Slot": slot,
+      "CCODE": cCode,
+      "DTime": dTime,
     };
 
     try {
       var response = await ApiService.postRequest(
-        endpoint: '/Order/placeOrder',
+        endpoint: '/Slot/add',
         requestBody: requestBody,
         token: token,
       );

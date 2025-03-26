@@ -30,6 +30,7 @@ const kIconQcTest = 'assets/icons/qc_test.svg';
 const kIconReason = 'assets/icons/reason.svg';
 const kIconNotification = 'assets/icons/notification.svg';
 const kIconOrderAuthorization = 'assets/icons/order_authorization.svg';
+const kIconSlotMaster = 'assets/icons/slot_master.svg';
 
 const kLoadingGif = 'assets/images/loading.gif';
 

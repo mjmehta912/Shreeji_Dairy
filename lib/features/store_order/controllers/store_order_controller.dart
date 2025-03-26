@@ -62,7 +62,9 @@ class StoreOrderController extends GetxController {
       for (var category in storeProducts) {
         for (var product in category.products) {
           productControllers[product.icode] = TextEditingController(
-            text: product.cartQty == 0.0 ? '' : product.cartQty.toString(),
+            text: product.cartQty == 0.0
+                ? ''
+                : product.cartQty.toInt().toString(),
           );
         }
       }
@@ -88,11 +90,11 @@ class StoreOrderController extends GetxController {
   Future<void> addOrUpdateCart({
     required String iCode,
   }) async {
-    final qty =
-        double.tryParse(productControllers[iCode]?.text ?? '0.0') ?? 0.0;
-    final product = storeProducts
-        .expand((category) => category.products)
-        .firstWhere((product) => product.icode == iCode);
+    final qty = int.tryParse(productControllers[iCode]?.text ?? '0') ?? 0;
+    final product =
+        storeProducts.expand((category) => category.products).firstWhere(
+              (product) => product.icode == iCode,
+            );
     final rate = product.rate;
 
     String? storePcode = await SecureStorageHelper.read(
@@ -105,7 +107,7 @@ class StoreOrderController extends GetxController {
       var response = await StoreOrderRepo.addOrUpdateCart(
         pCode: storePcode!,
         iCode: iCode,
-        qty: qty,
+        qty: qty.toDouble(),
         rate: rate,
       );
 

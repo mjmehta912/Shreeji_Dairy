@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/features/cart/controllers/cart_controller.dart';
-import 'package:shreeji_dairy/features/place_order/models/slot_dm.dart';
 import 'package:shreeji_dairy/features/place_order/repos/place_order_repo.dart';
 import 'package:shreeji_dairy/features/products/controllers/products_controller.dart';
+import 'package:shreeji_dairy/features/slot_master/slots/models/category_wise_slot_dm.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
 class PlaceOrderController extends GetxController {
@@ -11,25 +11,26 @@ class PlaceOrderController extends GetxController {
   final placeOrderFormKey = GlobalKey<FormState>();
 
   var deliveryDateController = TextEditingController();
-  var slots = <SlotDm>[].obs;
+  var slots = <CategoryWiseSlotDm>[].obs;
   var slotTimes = <String>[].obs;
   var selectedDTime = ''.obs;
   var selectedSlotTime = ''.obs;
   var deliveryTimeController = TextEditingController();
 
-  Future<void> getSlots() async {
+  Future<void> getCategoryWiseSlots({
+    required String cCode,
+  }) async {
     try {
       isLoading.value = true;
 
-      final fetchedSlots = await PlaceOrderRepo.getSlots();
-
+      final fetchedSlots = await PlaceOrderRepo.getCategoryWiseSlots(
+        cCode: cCode,
+      );
       slots.assignAll(fetchedSlots);
       slotTimes.assignAll(
-        fetchedSlots
-            .map(
-              (sl) => sl.slot,
-            )
-            .toList(),
+        fetchedSlots.map(
+          (sl) => sl.slot,
+        ),
       );
     } catch (e) {
       showErrorSnackbar(
