@@ -36,10 +36,14 @@ class ProfileScreen extends StatefulWidget {
     required this.pCode,
     required this.pName,
     required this.branchCode,
+    required this.cCode,
+    required this.deliDateOption,
   });
 
   final String pCode;
   final String pName;
+  final String cCode;
+  final String deliDateOption;
   final String branchCode;
 
   @override
@@ -209,7 +213,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           } else {
             Get.to(
-              () => StoreOrderScreen(),
+              () => StoreOrderScreen(
+                pCode: widget.pCode,
+                pName: widget.pName,
+                cCode: widget.cCode,
+                branchCode: widget.branchCode,
+                deliDateOption: widget.deliDateOption,
+              ),
             );
           }
         },

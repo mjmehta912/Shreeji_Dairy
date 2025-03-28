@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/store_order/controllers/store_order_controller.dart';
+import 'package:shreeji_dairy/features/store_order/screens/place_store_order_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
@@ -18,7 +19,18 @@ import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 class StoreOrderScreen extends StatefulWidget {
   const StoreOrderScreen({
     super.key,
+    required this.pCode,
+    required this.pName,
+    required this.cCode,
+    required this.branchCode,
+    required this.deliDateOption,
   });
+
+  final String pCode;
+  final String pName;
+  final String cCode;
+  final String branchCode;
+  final String deliDateOption;
 
   @override
   State<StoreOrderScreen> createState() => _StoreOrderScreenState();
@@ -259,7 +271,16 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                     title: 'Place Order',
                     titleColor: kColorTextPrimary,
                     onPressed: () {
-                      _controller.placeOrder();
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      Get.to(
+                        () => PlaceStoreOrderScreen(
+                          pCode: widget.pCode,
+                          pName: widget.pName,
+                          cCode: widget.cCode,
+                          branchCode: widget.branchCode,
+                          deliDateOption: widget.deliDateOption,
+                        ),
+                      );
                     },
                   ),
                   AppSpaces.v10,

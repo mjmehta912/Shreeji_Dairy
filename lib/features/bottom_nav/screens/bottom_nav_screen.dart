@@ -60,7 +60,9 @@ class BottomNavScreen extends StatelessWidget {
         ProfileScreen(
           pCode: pCode,
           pName: pName,
+          cCode: cCode,
           branchCode: branchCode!,
+          deliDateOption: deliDateOption,
         ),
       ];
 

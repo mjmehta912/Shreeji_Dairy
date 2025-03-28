@@ -126,38 +126,6 @@ class StoreOrderController extends GetxController {
     }
   }
 
-  Future<void> placeOrder() async {
-    String? storePcode = await SecureStorageHelper.read(
-      'storePCode',
-    );
-
-    isLoading.value = true;
-
-    try {
-      var response = await StoreOrderRepo.placeOrder(
-        pCode: storePcode!,
-      );
-
-      if (response != null && response.containsKey('message')) {
-        String message = response['message'];
-
-        await fetchStoreProducts();
-
-        showSuccessSnackbar(
-          'Order Placed!',
-          message,
-        );
-      }
-    } catch (e) {
-      showErrorSnackbar(
-        'Error',
-        e.toString(),
-      );
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
   Future<void> getGroups() async {
     try {
       isLoading.value = true;
