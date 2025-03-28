@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/order_authorisation/controllers/order_authorisation_controller.dart';
-import 'package:shreeji_dairy/features/order_authorisation/widgets/order_authorisation_card.dart';
+import 'package:shreeji_dairy/features/order_authorisation/orders/controllers/orders_controller.dart';
+import 'package:shreeji_dairy/features/order_authorisation/orders/widgets/orders_card.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
@@ -12,8 +12,8 @@ import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 
-class OrderAuthorisationScreen extends StatefulWidget {
-  const OrderAuthorisationScreen({
+class OrdersScreen extends StatefulWidget {
+  const OrdersScreen({
     super.key,
     required this.pCode,
     required this.pName,
@@ -23,13 +23,12 @@ class OrderAuthorisationScreen extends StatefulWidget {
   final String pName;
 
   @override
-  State<OrderAuthorisationScreen> createState() =>
-      _OrderAuthorisationScreenState();
+  State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
-class _OrderAuthorisationScreenState extends State<OrderAuthorisationScreen> {
-  final OrderAuthorisationController _controller = Get.put(
-    OrderAuthorisationController(),
+class _OrdersScreenState extends State<OrdersScreen> {
+  final OrdersController _controller = Get.put(
+    OrdersController(),
   );
 
   @override
@@ -137,27 +136,8 @@ class _OrderAuthorisationScreenState extends State<OrderAuthorisationScreen> {
                           itemBuilder: (context, index) {
                             final order = _controller.orders[index];
 
-                            return OrderAuthorisationCard(
+                            return OrdersCard(
                               order: order,
-                              // onAccept: () => _showApprovalDialog(order, 1),
-                              // onHold: () async {
-                              //   await _controller.approveOrder(
-                              //     status: 2,
-                              //     pCode: order.pCode,
-                              //     iCode: order.iCode,
-                              //     invNo: order.invNo,
-                              //     approvedQty: 0.0,
-                              //   );
-                              // },
-                              // onReject: () async {
-                              //   await _controller.approveOrder(
-                              //     status: 3,
-                              //     pCode: order.pCode,
-                              //     iCode: order.iCode,
-                              //     invNo: order.invNo,
-                              //     approvedQty: 0.0,
-                              //   );
-                              // },
                             );
                           },
                         ),
@@ -177,55 +157,4 @@ class _OrderAuthorisationScreenState extends State<OrderAuthorisationScreen> {
       ],
     );
   }
-
-  // void _showApprovalDialog(OrderDm order, int status) {
-  //   _controller.approvedQtyController.text = order.orderQty.toString();
-  //   Get.defaultDialog(
-  //     title: 'Approve Order',
-  //     titleStyle: TextStyles.kRegularFredoka(),
-  //     contentPadding: AppPaddings.p20,
-  //     content: Column(
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         AppTextFormField(
-  //           controller: _controller.approvedQtyController,
-  //           hintText: 'Approved Qty',
-  //           keyboardType: TextInputType.number,
-  //         ),
-  //         AppSpaces.v10,
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.end,
-  //           children: [
-  //             AppButton(
-  //               onPressed: () async {
-  //                 double? approvedQty =
-  //                     double.tryParse(_controller.approvedQtyController.text);
-  //                 if (approvedQty == null || approvedQty <= 0) {
-  //                   showErrorSnackbar(
-  //                     'Error',
-  //                     'Enter a valid quantity',
-  //                   );
-  //                   return;
-  //                 }
-
-  //                 await _controller.approveOrder(
-  //                   status: status,
-  //                   pCode: order.pCode,
-  //                   iCode: order.iCode,
-  //                   invNo: order.invNo,
-  //                   approvedQty: approvedQty,
-  //                 );
-  //               },
-  //               title: 'Save',
-  //               buttonWidth: 0.2.screenWidth,
-  //               buttonHeight: 35,
-  //               buttonColor: kColorSecondary,
-  //               titleSize: FontSizes.k16FontSize,
-  //             ),
-  //           ],
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

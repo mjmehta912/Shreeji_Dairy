@@ -1,9 +1,9 @@
 import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
-import 'package:shreeji_dairy/features/order_authorisation/models/order_dm.dart';
+import 'package:shreeji_dairy/features/order_authorisation/orders/models/order_dm.dart';
 import 'package:shreeji_dairy/services/api_service.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
-class OrderAuthorisationRepo {
+class OrdersRepo {
   static Future<List<OrderDm>> getOrders({
     String pCode = '',
     required String status,
@@ -69,37 +69,6 @@ class OrderAuthorisationRepo {
       }
 
       return [];
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  static Future<dynamic> approveOrder({
-    required int status,
-    required String pCode,
-    required String iCode,
-    required String invNo,
-    required double approvedQty,
-  }) async {
-    String? token = await SecureStorageHelper.read(
-      'token',
-    );
-
-    final Map<String, dynamic> requestBody = {
-      "Status": status,
-      "PCODE": pCode,
-      "ICODE": iCode,
-      "INVNO": invNo,
-      "QTY": approvedQty,
-    };
-
-    try {
-      var response = await ApiService.postRequest(
-        endpoint: '/Order/approval',
-        requestBody: requestBody,
-        token: token,
-      );
-      return response;
     } catch (e) {
       rethrow;
     }

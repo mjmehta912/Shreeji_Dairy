@@ -8,7 +8,7 @@ import 'package:shreeji_dairy/features/credit_note/credit_notes/screens/credit_n
 import 'package:shreeji_dairy/features/credit_note_approval/credit_note_approval_menu/screens/credit_note_approval_menu_screen.dart';
 import 'package:shreeji_dairy/features/credit_note_status/screens/credit_note_status_screen.dart';
 import 'package:shreeji_dairy/features/notification_master/noifications/screens/notifications_screen.dart';
-import 'package:shreeji_dairy/features/order_authorisation/screens/order_authorisation_screen.dart';
+import 'package:shreeji_dairy/features/order_authorisation/orders/screens/orders_screen.dart';
 import 'package:shreeji_dairy/features/order_status/screens/order_status_screen.dart';
 import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
@@ -250,7 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         "icon": kIconOrderAuthorization,
         "action": () {
           Get.to(
-            () => OrderAuthorisationScreen(
+            () => OrdersScreen(
               pCode: widget.pCode,
               pName: widget.pName,
             ),

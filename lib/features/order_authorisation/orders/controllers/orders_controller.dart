@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
-import 'package:shreeji_dairy/features/order_authorisation/models/order_dm.dart';
-import 'package:shreeji_dairy/features/order_authorisation/repos/order_authorisation_repo.dart';
+import 'package:shreeji_dairy/features/order_authorisation/orders/models/order_dm.dart';
+import 'package:shreeji_dairy/features/order_authorisation/orders/repos/orders_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 
-class OrderAuthorisationController extends GetxController {
+class OrdersController extends GetxController {
   var isLoading = false.obs;
 
   var orders = <OrderDm>[].obs;
@@ -13,7 +13,6 @@ class OrderAuthorisationController extends GetxController {
   var customerNames = <String>[].obs;
   var selectedCustomer = ''.obs;
   var selectedCustomerCode = ''.obs;
-  var approvedQtyController = TextEditingController();
   var searchController = TextEditingController();
 
   Future<void> getOrders({
@@ -22,7 +21,7 @@ class OrderAuthorisationController extends GetxController {
     isLoading.value = true;
 
     try {
-      final fetchedOrders = await OrderAuthorisationRepo.getOrders(
+      final fetchedOrders = await OrdersRepo.getOrders(
         pCode: pCode,
         status: '0,2',
         searchText:
@@ -51,7 +50,7 @@ class OrderAuthorisationController extends GetxController {
     try {
       isLoading.value = true;
 
-      final fetchedCustomers = await OrderAuthorisationRepo.getCustomers();
+      final fetchedCustomers = await OrdersRepo.getCustomers();
 
       customers.assignAll(fetchedCustomers);
       customerNames.assignAll(
@@ -83,47 +82,5 @@ class OrderAuthorisationController extends GetxController {
     await getOrders(
       pCode: selectedCustomerCode.value,
     );
-  }
-
-  Future<void> approveOrder({
-    required int status,
-    required String pCode,
-    required String iCode,
-    required String invNo,
-    required double approvedQty,
-  }) async {
-    isLoading.value = true;
-
-    try {
-      var response = await OrderAuthorisationRepo.approveOrder(
-        status: status,
-        pCode: pCode,
-        iCode: iCode,
-        invNo: invNo,
-        approvedQty: approvedQty,
-      );
-
-      if (response != null && response.containsKey('message')) {
-        String message = response['message'];
-
-        Get.back();
-
-        await getOrders(
-          pCode: selectedCustomerCode.value,
-        );
-
-        showSuccessSnackbar(
-          'Success',
-          message,
-        );
-      }
-    } catch (e) {
-      showErrorSnackbar(
-        'Error',
-        e.toString(),
-      );
-    } finally {
-      isLoading.value = false;
-    }
   }
 }
