@@ -77,6 +77,41 @@ class _AuthOrderScreenState extends State<AuthOrderScreen> {
                   AppSpaces.v10,
                   Obx(
                     () {
+                      if (!_controller.isSelecting.value) {
+                        return SizedBox.shrink();
+                      }
+                      return GestureDetector(
+                        child: Row(
+                          children: [
+                            Obx(
+                              () => Checkbox(
+                                activeColor: kColorGreen,
+                                shape: const CircleBorder(),
+                                value: _controller.selectedItems.length ==
+                                    _controller.filteredOrderDetails
+                                        .where(
+                                          (item) =>
+                                              item.status == 0 ||
+                                              item.status == 2,
+                                        )
+                                        .length,
+                                onChanged: (value) => _controller.selectAll(),
+                              ),
+                            ),
+                            Text(
+                              'Select All',
+                              style: TextStyles.kRegularFredoka(
+                                fontSize: FontSizes.k16FontSize,
+                                color: kColorTextPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  Obx(
+                    () {
                       if (_controller.filteredOrderDetails.isEmpty &&
                           !_controller.isLoading.value) {
                         return Expanded(
@@ -95,33 +130,134 @@ class _AuthOrderScreenState extends State<AuthOrderScreen> {
                           itemBuilder: (context, index) {
                             final orderDetail =
                                 _controller.filteredOrderDetails[index];
-                            return AuthOrderCard(
-                              orderDetail: orderDetail,
-                              onAccept: () => _showApprovalDialog(
-                                orderDetail,
-                                1,
+
+                            return GestureDetector(
+                              onLongPress: () => _controller
+                                  .toggleSelection(orderDetail.iCode),
+                              onTap: () {
+                                if (_controller.isSelecting.value) {
+                                  _controller
+                                      .toggleSelection(orderDetail.iCode);
+                                }
+                              },
+                              child: Stack(
+                                children: [
+                                  AuthOrderCard(
+                                    orderDetail: orderDetail,
+                                    onAccept: () =>
+                                        _showApprovalDialog(orderDetail, 1),
+                                    onHold: () async {
+                                      await _controller.approveOrder(
+                                        status: 2,
+                                        pCode: orderDetail.pCode,
+                                        iCodes: orderDetail.iCode,
+                                        invNo: orderDetail.invNo,
+                                        approvedQty: 0.0,
+                                      );
+                                    },
+                                    onReject: () async {
+                                      await _controller.approveOrder(
+                                        status: 3,
+                                        pCode: orderDetail.pCode,
+                                        iCodes: orderDetail.iCode,
+                                        invNo: orderDetail.invNo,
+                                        approvedQty: 0.0,
+                                      );
+                                    },
+                                  ),
+                                  Positioned(
+                                    right: 10,
+                                    top: 10,
+                                    child: Obx(
+                                      () => Checkbox(
+                                        activeColor: kColorGreen,
+                                        shape: const CircleBorder(),
+                                        value: _controller.selectedItems
+                                            .contains(orderDetail.iCode),
+                                        onChanged: (orderDetail.status == 0 ||
+                                                orderDetail.status == 2)
+                                            ? (value) {
+                                                _controller.toggleSelection(
+                                                    orderDetail.iCode);
+                                              }
+                                            : null,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              onHold: () async {
-                                await _controller.approveOrder(
-                                  status: 2,
-                                  pCode: orderDetail.pCode,
-                                  iCodes: orderDetail.iCode,
-                                  invNo: orderDetail.invNo,
-                                  approvedQty: 0.0,
-                                );
-                              },
-                              onReject: () async {
-                                await _controller.approveOrder(
-                                  status: 3,
-                                  pCode: orderDetail.pCode,
-                                  iCodes: orderDetail.iCode,
-                                  invNo: orderDetail.invNo,
-                                  approvedQty: 0.0,
-                                );
-                              },
                             );
                           },
                         ),
+                      );
+                    },
+                  ),
+                  Obx(
+                    () {
+                      if (!_controller.isSelecting.value) {
+                        return SizedBox.shrink();
+                      }
+                      return Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              AppButton(
+                                buttonWidth: 0.45.screenWidth,
+                                buttonHeight: 40,
+                                buttonColor: kColorRed,
+                                title: "Reject Selected",
+                                titleSize: FontSizes.k18FontSize,
+                                onPressed: () async {
+                                  String iCodes =
+                                      _controller.selectedItems.join(',');
+
+                                  var firstSelected = _controller
+                                      .filteredOrderDetails
+                                      .firstWhere(
+                                    (order) => _controller.selectedItems
+                                        .contains(order.iCode),
+                                  );
+
+                                  await _controller.approveOrder(
+                                    status: 3,
+                                    pCode: firstSelected.pCode,
+                                    iCodes: iCodes,
+                                    invNo: firstSelected.invNo,
+                                    approvedQty: 0,
+                                  );
+                                },
+                              ),
+                              AppButton(
+                                buttonWidth: 0.45.screenWidth,
+                                buttonHeight: 40,
+                                buttonColor: kColorSecondary,
+                                title: "Accept Selected",
+                                titleSize: FontSizes.k18FontSize,
+                                onPressed: () async {
+                                  String iCodes =
+                                      _controller.selectedItems.join(',');
+
+                                  var firstSelected = _controller
+                                      .filteredOrderDetails
+                                      .firstWhere(
+                                    (order) => _controller.selectedItems
+                                        .contains(order.iCode),
+                                  );
+
+                                  await _controller.approveOrder(
+                                    status: 1,
+                                    pCode: firstSelected.pCode,
+                                    iCodes: iCodes,
+                                    invNo: firstSelected.invNo,
+                                    approvedQty: 0,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          AppSpaces.v10,
+                        ],
                       );
                     },
                   ),

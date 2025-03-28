@@ -13,6 +13,9 @@ class AuthOrderController extends GetxController {
   var approvedQtyController = TextEditingController();
   var searchController = TextEditingController();
 
+  var selectedItems = <String>{}.obs;
+  var isSelecting = false.obs;
+
   Future<void> getOrderDetails({
     required String invNo,
   }) async {
@@ -25,6 +28,8 @@ class AuthOrderController extends GetxController {
 
       orderDetails.assignAll(fetchedOrderDetails);
       filteredOrderDetails.assignAll(fetchedOrderDetails);
+      selectedItems.clear();
+      isSelecting.value = false;
     } catch (e) {
       showErrorSnackbar(
         'Error',
@@ -88,6 +93,43 @@ class AuthOrderController extends GetxController {
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void toggleSelection(String iCode) {
+    var orderDetail = filteredOrderDetails.firstWhere(
+      (item) => item.iCode == iCode,
+    );
+
+    if (orderDetail.status != 0 && orderDetail.status != 2) {
+      return;
+    }
+
+    if (selectedItems.contains(iCode)) {
+      selectedItems.remove(iCode);
+    } else {
+      selectedItems.add(iCode);
+    }
+
+    isSelecting.value = selectedItems.isNotEmpty;
+  }
+
+  void selectAll() {
+    var eligibleItems = filteredOrderDetails
+        .where(
+          (item) => item.status == 0 || item.status == 2,
+        )
+        .map(
+          (item) => item.iCode,
+        )
+        .toSet();
+
+    if (selectedItems.length == eligibleItems.length) {
+      selectedItems.clear();
+      isSelecting.value = false;
+    } else {
+      selectedItems.assignAll(eligibleItems);
+      isSelecting.value = true;
     }
   }
 }

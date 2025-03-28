@@ -60,7 +60,7 @@ class OrdersCard extends StatelessWidget {
                   titleSize: FontSizes.k16FontSize,
                   onPressed: () {
                     Get.to(
-                      AuthOrderScreen(
+                      () => AuthOrderScreen(
                         invNo: order.invNo,
                       ),
                     );
