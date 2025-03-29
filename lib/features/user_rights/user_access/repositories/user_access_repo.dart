@@ -23,6 +23,9 @@ class UserAccessRepo {
           ledgerDate: LedgerDateDm(
             ledgerStart: '',
             ledgerEnd: '',
+            product: false,
+            ledger: false,
+            invoice: false,
           ),
         );
       }
@@ -93,6 +96,9 @@ class UserAccessRepo {
     required int userId,
     String? ledgerStart,
     String? ledgerEnd,
+    bool? product,
+    bool? invoice,
+    bool? ledger,
   }) async {
     String? token = await SecureStorageHelper.read(
       'token',
@@ -102,7 +108,12 @@ class UserAccessRepo {
       'UserId': userId,
       'LedgerStart': ledgerStart,
       'LedgerEnd': ledgerEnd,
+      'Product': product,
+      'Invoice': invoice,
+      'Ledger': ledger,
     };
+
+    print(requestBody);
 
     try {
       var response = await ApiService.postRequest(

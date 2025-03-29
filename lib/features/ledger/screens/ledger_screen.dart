@@ -285,10 +285,32 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                                     parent.invNo!,
                                                     style: TextStyles
                                                         .kRegularFredoka(
-                                                      color: kColorTextPrimary,
+                                                      color: parent
+                                                                      .dbc !=
+                                                                  null &&
+                                                              parent.dbc!
+                                                                  .isNotEmpty &&
+                                                              parent.dbc! ==
+                                                                  'SALE'
+                                                          ? kColorSecondary
+                                                          : kColorTextPrimary,
                                                       fontSize:
                                                           FontSizes.k14FontSize,
-                                                    ).copyWith(height: 1),
+                                                    ).copyWith(
+                                                      height: 1,
+                                                      decoration: parent
+                                                                      .dbc !=
+                                                                  null &&
+                                                              parent.dbc!
+                                                                  .isNotEmpty &&
+                                                              parent.dbc! ==
+                                                                  'SALE'
+                                                          ? TextDecoration
+                                                              .underline
+                                                          : TextDecoration.none,
+                                                      decorationColor:
+                                                          kColorSecondary,
+                                                    ),
                                                   ),
                                                 ),
                                                 Text(

@@ -19,6 +19,7 @@ class LedgerController extends GetxController {
   var selectedCustomerCode = ''.obs;
   var fromDateController = TextEditingController();
   var toDateController = TextEditingController();
+
   var showBillDtl = false.obs;
   var showItemDtl = false.obs;
   var showSign = true.obs;

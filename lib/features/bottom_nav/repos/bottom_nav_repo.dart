@@ -2,7 +2,7 @@ import 'package:shreeji_dairy/features/user_rights/user_access/models/user_acces
 import 'package:shreeji_dairy/services/api_service.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
-class ProfileRepo {
+class BottomNavRepo {
   static Future<UserAccessDm> getUserAccess({
     required int userId,
   }) async {

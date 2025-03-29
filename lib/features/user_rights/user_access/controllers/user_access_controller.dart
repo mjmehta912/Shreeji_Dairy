@@ -14,6 +14,9 @@ class UserAccessController extends GetxController {
   var ledgerDate = LedgerDateDm(
     ledgerStart: '',
     ledgerEnd: '',
+    product: false,
+    ledger: false,
+    invoice: false,
   ).obs;
 
   var ledgerStartDateController = TextEditingController();
@@ -23,8 +26,9 @@ class UserAccessController extends GetxController {
     try {
       isLoading.value = true;
 
-      final fetchedUserAccess =
-          await UserAccessRepo.getUserAccess(userId: userId);
+      final fetchedUserAccess = await UserAccessRepo.getUserAccess(
+        userId: userId,
+      );
 
       menuAccess.assignAll(fetchedUserAccess.menuAccess);
       ledgerDate.value = fetchedUserAccess.ledgerDate;
@@ -131,7 +135,12 @@ class UserAccessController extends GetxController {
   //   }
   // }
 
-  Future<void> setLedger({required int userId}) async {
+  Future<void> setLedger({
+    required int userId,
+    bool? product,
+    bool? invoice,
+    bool? ledger,
+  }) async {
     isLoading.value = true;
 
     try {
@@ -147,6 +156,9 @@ class UserAccessController extends GetxController {
                 DateFormat('dd-MM-yyyy').parse(ledgerEndDateController.text),
               )
             : null,
+        product: product,
+        invoice: invoice,
+        ledger: ledger,
       );
 
       if (response != null && response.containsKey('message')) {
@@ -155,7 +167,10 @@ class UserAccessController extends GetxController {
         getUserAccess(userId: userId);
         profileController.getUserAccess();
 
-        showSuccessSnackbar('Success', message);
+        showSuccessSnackbar(
+          'Success',
+          message,
+        );
       }
     } catch (e) {
       showErrorSnackbar('Error', e.toString());

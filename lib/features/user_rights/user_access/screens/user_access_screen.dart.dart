@@ -39,7 +39,11 @@ class _UserAccessScreenState extends State<UserAccessScreen> {
   @override
   void initState() {
     super.initState();
-    _controller.getUserAccess(
+    _initialize();
+  }
+
+  void _initialize() async {
+    await _controller.getUserAccess(
       userId: widget.userId,
     );
   }
@@ -206,10 +210,103 @@ class _UserAccessScreenState extends State<UserAccessScreen> {
                             ),
                           ],
                         ),
+                        AppSpaces.v10,
+                        ListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          leading: Text(
+                            "Products",
+                            style: TextStyles.kMediumFredoka(
+                              fontSize: FontSizes.k18FontSize,
+                              color: kColorTextPrimary,
+                            ),
+                          ),
+                          trailing: Obx(
+                            () => Switch(
+                              value: _controller.ledgerDate.value.product,
+                              activeColor: kColorWhite,
+                              inactiveThumbColor: kColorWhite,
+                              inactiveTrackColor: kColorGrey,
+                              activeTrackColor: kColorSecondary,
+                              onChanged: (value) async {
+                                _controller.setLedger(
+                                  userId: widget.userId,
+                                  product: value,
+                                );
+                                setState(
+                                  () {
+                                    _controller.ledgerDate.value.product =
+                                        value;
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          leading: Text(
+                            "Invoices",
+                            style: TextStyles.kMediumFredoka(
+                              fontSize: FontSizes.k18FontSize,
+                              color: kColorTextPrimary,
+                            ),
+                          ),
+                          trailing: Obx(
+                            () => Switch(
+                              value: _controller.ledgerDate.value.invoice,
+                              activeColor: kColorWhite,
+                              inactiveThumbColor: kColorWhite,
+                              inactiveTrackColor: kColorGrey,
+                              activeTrackColor: kColorSecondary,
+                              onChanged: (value) async {
+                                _controller.setLedger(
+                                  userId: widget.userId,
+                                  invoice: value,
+                                );
+                                setState(
+                                  () {
+                                    _controller.ledgerDate.value.invoice =
+                                        value;
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          leading: Text(
+                            "Ledger",
+                            style: TextStyles.kMediumFredoka(
+                              fontSize: FontSizes.k18FontSize,
+                              color: kColorTextPrimary,
+                            ),
+                          ),
+                          trailing: Obx(
+                            () => Switch(
+                              value: _controller.ledgerDate.value.ledger,
+                              activeColor: kColorWhite,
+                              inactiveThumbColor: kColorWhite,
+                              inactiveTrackColor: kColorGrey,
+                              activeTrackColor: kColorSecondary,
+                              onChanged: (value) async {
+                                _controller.setLedger(
+                                  userId: widget.userId,
+                                  ledger: value,
+                                );
+
+                                setState(
+                                  () {
+                                    _controller.ledgerDate.value.ledger = value;
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  AppSpaces.v10,
                   Visibility(
                     visible: widget.appAccess,
                     child: Obx(

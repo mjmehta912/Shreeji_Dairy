@@ -10,11 +10,13 @@ import 'package:shreeji_dairy/features/products/screens/products_screen.dart';
 import 'package:shreeji_dairy/features/profile/screens/profile_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
+import 'package:shreeji_dairy/widgets/app_button.dart';
 
-class BottomNavScreen extends StatelessWidget {
-  BottomNavScreen({
+class BottomNavScreen extends StatefulWidget {
+  const BottomNavScreen({
     super.key,
     required this.pCode,
     required this.pName,
@@ -30,129 +32,142 @@ class BottomNavScreen extends StatelessWidget {
   final String deliDateOption;
   final String? branchCode;
   final String? branchName;
-  final BottomNavController _controller = Get.put(
-    BottomNavController(),
-  );
 
-  final List<GlobalKey<NavigatorState>> _navigatorKeys = [
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-  ];
+  @override
+  State<BottomNavScreen> createState() => _BottomNavScreenState();
+}
 
-  List<Widget> get pages => [
-        ProductsScreen(
-          pCode: pCode,
-          pName: pName,
-          cCode: cCode,
-          branchCode: branchCode!,
-          deliDateOption: deliDateOption,
-        ),
-        InvoicesScreen(
-          pCode: pCode,
-          pName: pName,
-        ),
-        LedgerScreen(
-          pCode: pCode,
-          pName: pName,
-        ),
-        ProfileScreen(
-          pCode: pCode,
-          pName: pName,
-          cCode: cCode,
-          branchCode: branchCode!,
-          deliDateOption: deliDateOption,
-        ),
-      ];
+class _BottomNavScreenState extends State<BottomNavScreen> {
+  final BottomNavController _controller = Get.put(BottomNavController());
+
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  void _initialize() async {
+    await _controller.getUserAccess();
+
+    // Set initial index: If product access is available, start with Products, otherwise start with Services.
+    _controller.selectedIndex.value =
+        _controller.ledgerDate.value.product ? 0 : 3;
+  }
+
+  final List<GlobalKey<NavigatorState>> _navigatorKeys =
+      List.generate(4, (_) => GlobalKey<NavigatorState>());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(
-        () => pages[_controller.selectedIndex.value],
-      ),
+      body: Obx(() => _getPage(_controller.selectedIndex.value)),
       extendBody: true,
-      bottomNavigationBar: Obx(
-        () => Container(
-          margin: AppPaddings.p16,
-          padding: AppPaddings.p8,
-          decoration: BoxDecoration(
-            color: kColorWhite,
-            borderRadius: BorderRadius.circular(100),
-            boxShadow: [
-              BoxShadow(
-                color: kColorBlackWithOpacity,
-                blurRadius: 8,
-                spreadRadius: 1,
-                offset: Offset(0, 4),
-              ),
-            ],
+      bottomNavigationBar: Obx(() => _buildBottomNavigationBar()),
+    );
+  }
+
+  /// Returns the appropriate page based on index
+  Widget _getPage(int index) {
+    switch (index) {
+      case 0:
+        return ProductsScreen(
+          pCode: widget.pCode,
+          pName: widget.pName,
+          cCode: widget.cCode,
+          branchCode: widget.branchCode!,
+          deliDateOption: widget.deliDateOption,
+        );
+      case 1:
+        return InvoicesScreen(
+          pCode: widget.pCode,
+          pName: widget.pName,
+        );
+      case 2:
+        return LedgerScreen(
+          pCode: widget.pCode,
+          pName: widget.pName,
+        );
+      default:
+        return ProfileScreen(
+          pCode: widget.pCode,
+          pName: widget.pName,
+          cCode: widget.cCode,
+          branchCode: widget.branchCode!,
+          deliDateOption: widget.deliDateOption,
+        );
+    }
+  }
+
+  /// Builds the bottom navigation bar
+  Widget _buildBottomNavigationBar() {
+    return Container(
+      margin: AppPaddings.p16,
+      padding: AppPaddings.p8,
+      decoration: BoxDecoration(
+        color: kColorWhite,
+        borderRadius: BorderRadius.circular(100),
+        boxShadow: [
+          BoxShadow(
+            color: kColorBlackWithOpacity,
+            blurRadius: 8,
+            spreadRadius: 1,
+            offset: Offset(0, 4),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(
-                icon: kIconHome,
-                iconFilled: kIconHomeFilled,
-                label: 'Products',
-                index: 0,
-                isSelected: _controller.selectedIndex.value == 0,
-                onTap: () {
-                  _controller.changeIndex(0);
-                  _navigatorKeys[0].currentState?.pushReplacementNamed('/');
-                },
-              ),
-              _buildNavItem(
-                icon: kIconBill,
-                iconFilled: kIconBillFilled,
-                label: 'Invoices',
-                index: 1,
-                isSelected: _controller.selectedIndex.value == 1,
-                onTap: () {
-                  _controller.changeIndex(1);
-                  _navigatorKeys[1].currentState?.pushReplacementNamed('/');
-                },
-              ),
-              _buildNavItem(
-                icon: kIconLedger,
-                iconFilled: kIconLedgerFilled,
-                label: 'Ledger',
-                index: 2,
-                isSelected: _controller.selectedIndex.value == 2,
-                onTap: () {
-                  _controller.changeIndex(2);
-                  _navigatorKeys[2].currentState?.pushReplacementNamed('/');
-                },
-              ),
-              _buildNavItem(
-                icon: kIconSettings,
-                iconFilled: kIconSettingsFilled,
-                label: 'Services',
-                index: 3,
-                isSelected: _controller.selectedIndex.value == 3,
-                onTap: () {
-                  _controller.changeIndex(3);
-                  _navigatorKeys[3].currentState?.pushReplacementNamed('/');
-                },
-              ),
-            ],
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavItem(
+            icon: kIconHome,
+            iconFilled: kIconHomeFilled,
+            label: 'Products',
+            index: 0,
+            hasAccess: _controller.ledgerDate.value.product,
           ),
-        ),
+          _buildNavItem(
+            icon: kIconBill,
+            iconFilled: kIconBillFilled,
+            label: 'Invoices',
+            index: 1,
+            hasAccess: _controller.ledgerDate.value.invoice,
+          ),
+          _buildNavItem(
+            icon: kIconLedger,
+            iconFilled: kIconLedgerFilled,
+            label: 'Ledger',
+            index: 2,
+            hasAccess: _controller.ledgerDate.value.ledger,
+          ),
+          _buildNavItem(
+            icon: kIconSettings,
+            iconFilled: kIconSettingsFilled,
+            label: 'Services',
+            index: 3,
+            hasAccess: true, // Always available
+          ),
+        ],
       ),
     );
   }
 
+  /// Builds individual navigation items with access control
   Widget _buildNavItem({
     required String icon,
     required String iconFilled,
     required String label,
     required int index,
-    required bool isSelected,
-    required VoidCallback onTap,
+    required bool hasAccess,
   }) {
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        if (hasAccess) {
+          _controller.changeIndex(index);
+          _navigatorKeys[index].currentState?.pushReplacementNamed('/');
+        } else {
+          _showAccessDeniedDialog(label);
+        }
+      },
       borderRadius: BorderRadius.circular(10),
       child: Ink(
         padding: AppPaddings.p4,
@@ -164,17 +179,19 @@ class BottomNavScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset(
-              isSelected ? iconFilled : icon,
-              height: isSelected ? 22 : 18,
+              _controller.selectedIndex.value == index ? iconFilled : icon,
+              height: _controller.selectedIndex.value == index ? 22 : 18,
               colorFilter: ColorFilter.mode(
-                isSelected ? kColorSecondary : kColorGrey,
+                _controller.selectedIndex.value == index
+                    ? kColorSecondary
+                    : kColorGrey,
                 BlendMode.srcIn,
               ),
             ),
             AppSpaces.v4,
             Text(
               label,
-              style: isSelected
+              style: _controller.selectedIndex.value == index
                   ? TextStyles.kRegularFredoka(
                       color: kColorSecondary,
                       fontSize: FontSizes.k12FontSize,
@@ -186,6 +203,33 @@ class BottomNavScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Shows an error dialog when access is denied
+  void _showAccessDeniedDialog(String label) {
+    Get.defaultDialog(
+      contentPadding: AppPaddings.p20,
+      title: "Access Denied",
+      titleStyle: TextStyles.kMediumFredoka(
+        fontSize: FontSizes.k22FontSize,
+        color: kColorTextPrimary,
+      ),
+      content: Text(
+        "You don’t have access to $label.",
+        style: TextStyles.kRegularFredoka(
+          fontSize: FontSizes.k16FontSize,
+          color: kColorTextPrimary,
+        ),
+      ),
+      confirm: AppButton(
+        buttonWidth: 0.2.screenWidth,
+        buttonHeight: 40,
+        title: 'OK',
+        onPressed: () {
+          Get.back();
+        },
       ),
     );
   }

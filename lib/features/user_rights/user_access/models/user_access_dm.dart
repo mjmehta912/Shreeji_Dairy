@@ -12,7 +12,7 @@ class UserAccessDm {
       menuAccess: (json['menuAceess'] as List)
           .map((item) => MenuAccessDm.fromJson(item))
           .toList(),
-      ledgerDate: LedgerDateDm.fromJson(json['ledgerDate']),
+      ledgerDate: LedgerDateDm.fromJson(json['data']),
     );
   }
 }
@@ -67,16 +67,25 @@ class SubMenuAccessDm {
 class LedgerDateDm {
   final String ledgerStart;
   final String ledgerEnd;
+  bool product;
+  bool invoice;
+  bool ledger;
 
   LedgerDateDm({
     required this.ledgerStart,
     required this.ledgerEnd,
+    required this.product,
+    required this.invoice,
+    required this.ledger,
   });
 
   factory LedgerDateDm.fromJson(Map<String, dynamic> json) {
     return LedgerDateDm(
       ledgerStart: json['ledgerStart'] ?? '',
       ledgerEnd: json['ledgerEnd'] ?? '',
+      product: json['Product'],
+      invoice: json['Invoice'],
+      ledger: json['Ledger'],
     );
   }
 }
