@@ -90,6 +90,7 @@ class UserAccessController extends GetxController {
 
         getUserAccess(userId: userId);
         profileController.getUserAccess();
+        // profileController.checkVersion();
 
         showSuccessSnackbar('Success', message);
       }
@@ -166,6 +167,7 @@ class UserAccessController extends GetxController {
 
         getUserAccess(userId: userId);
         profileController.getUserAccess();
+        // profileController.checkVersion();
 
         showSuccessSnackbar(
           'Success',
@@ -173,7 +175,10 @@ class UserAccessController extends GetxController {
         );
       }
     } catch (e) {
-      showErrorSnackbar('Error', e.toString());
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
     } finally {
       isLoading.value = false;
     }

@@ -30,9 +30,8 @@ class ApiService {
         headers: headers,
       );
 
-      // ✅ Handle 204 No Content explicitly
       if (response.statusCode == 204) {
-        return null; // Return null or an empty value as per your app's requirement
+        return null;
       }
 
       final contentType = response.headers['content-type'];

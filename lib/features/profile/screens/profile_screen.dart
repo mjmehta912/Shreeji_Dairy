@@ -289,8 +289,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    _initialize();
+  }
+
+  void _initialize() async {
+    await _controller.checkVersion();
     _controller.loadUserInfo();
-    _controller.getUserAccess();
+    await _controller.getUserAccess();
   }
 
   @override

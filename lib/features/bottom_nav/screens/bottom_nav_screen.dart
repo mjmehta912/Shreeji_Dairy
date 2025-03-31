@@ -144,14 +144,13 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
             iconFilled: kIconSettingsFilled,
             label: 'Services',
             index: 3,
-            hasAccess: true, // Always available
+            hasAccess: true,
           ),
         ],
       ),
     );
   }
 
-  /// Builds individual navigation items with access control
   Widget _buildNavItem({
     required String icon,
     required String iconFilled,

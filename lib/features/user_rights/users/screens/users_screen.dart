@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
+import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/features/user_rights/users/controllers/users_controller.dart';
 import 'package:shreeji_dairy/features/user_rights/users/widgets/users_card.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
@@ -19,6 +20,8 @@ class UsersScreen extends StatelessWidget {
     UsersController(),
   );
 
+  final ProfileController profileController = Get.find<ProfileController>();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -32,8 +35,9 @@ class UsersScreen extends StatelessWidget {
             appBar: AppAppbar(
               title: 'Users',
               leading: IconButton(
-                onPressed: () {
+                onPressed: () async {
                   Get.back();
+                  await profileController.checkVersion();
                 },
                 icon: Icon(
                   Icons.arrow_back_ios,
