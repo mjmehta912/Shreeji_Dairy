@@ -40,6 +40,7 @@ class AuthOrderRepo {
     required int status,
     required String pCode,
     required String iCodes,
+    required String oldICodes,
     required String invNo,
     required double approvedQty,
   }) async {
@@ -51,6 +52,7 @@ class AuthOrderRepo {
       "Status": status,
       "PCODE": pCode,
       "ICODEs": iCodes,
+      "Old_Icodes": oldICodes, //temp
       "INVNO": invNo,
       "QTY": approvedQty,
     };

@@ -69,6 +69,7 @@ class AuthOrderController extends GetxController {
         status: status,
         pCode: pCode,
         iCodes: iCodes,
+        oldICodes: iCodes,
         invNo: invNo,
         approvedQty: approvedQty,
       );
