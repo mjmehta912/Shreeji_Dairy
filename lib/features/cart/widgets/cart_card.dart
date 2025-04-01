@@ -7,6 +7,7 @@ import 'package:shreeji_dairy/features/cart/screens/cart_screen.dart';
 import 'package:shreeji_dairy/features/products/controllers/products_controller.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
@@ -90,71 +91,74 @@ class _CartCardState extends State<CartCard> {
                                     ),
                                   )
                                 ]
-                              : widget.product.skus.map((sku) {
-                                  return AppCard1(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Padding(
-                                          padding: AppPaddings.p2,
-                                          child: InkWell(
-                                            onTap: () {
-                                              widget.controller.removeProduct(
-                                                pCode: widget.widget.pCode,
-                                                iCode: sku.skuIcode,
-                                              );
-                                            },
-                                            child: const Icon(
-                                              Icons.cancel_outlined,
-                                              color: kColorTextPrimary,
-                                              size: 20,
+                              : widget.product.skus.map(
+                                  (sku) {
+                                    return AppCard1(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                            padding: AppPaddings.p2,
+                                            child: InkWell(
+                                              onTap: () {
+                                                widget.controller.removeProduct(
+                                                  pCode: widget.widget.pCode,
+                                                  iCode: sku.skuIcode,
+                                                  oldICode: sku.oldSkuICode,
+                                                );
+                                              },
+                                              child: const Icon(
+                                                Icons.cancel_outlined,
+                                                color: kColorTextPrimary,
+                                                size: 20,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: AppPaddings.ph10,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              // Display SKU Pack Name if Available
-                                              if (sku.pack.isNotEmpty) ...[
+                                          Padding(
+                                            padding: AppPaddings.ph10,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                // Display SKU Pack Name if Available
+                                                if (sku.pack.isNotEmpty) ...[
+                                                  Text(
+                                                    sku.pack,
+                                                    style: TextStyles
+                                                        .kMediumFredoka(
+                                                      fontSize:
+                                                          FontSizes.k14FontSize,
+                                                    ).copyWith(height: 1),
+                                                  ),
+                                                  AppSpaces.v4,
+                                                ],
+                                                // Display Price
                                                 Text(
-                                                  sku.pack,
-                                                  style:
-                                                      TextStyles.kMediumFredoka(
+                                                  '₹ ${sku.rate}',
+                                                  style: TextStyles
+                                                      .kRegularFredoka(
                                                     fontSize:
                                                         FontSizes.k14FontSize,
                                                   ).copyWith(height: 1),
                                                 ),
-                                                AppSpaces.v4,
-                                              ],
-                                              // Display Price
-                                              Text(
-                                                '₹ ${sku.rate}',
-                                                style:
-                                                    TextStyles.kRegularFredoka(
-                                                  fontSize:
-                                                      FontSizes.k14FontSize,
-                                                ).copyWith(height: 1),
-                                              ),
-                                              AppSpaces.v8,
+                                                AppSpaces.v8,
 
-                                              // Handle SKU with Free Input Quantity (No Predefined Pack)
-                                              if (sku.pack.isEmpty) ...[
-                                                _buildQtyTextField(sku),
-                                              ] else ...[
-                                                _buildQtyButtons(sku),
+                                                // Handle SKU with Free Input Quantity (No Predefined Pack)
+                                                if (sku.pack.isEmpty) ...[
+                                                  _buildQtyTextField(sku),
+                                                ] else ...[
+                                                  _buildQtyButtons(sku),
+                                                ],
                                               ],
-                                            ],
+                                            ),
                                           ),
-                                        ),
-                                        AppSpaces.v6,
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
+                                          AppSpaces.v6,
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ).toList(),
                         ),
                       ),
                     ],
@@ -234,22 +238,35 @@ class _CartCardState extends State<CartCard> {
   }
 
   /// 📌 Update Cart with Scroll Position Preservation
-  Future<void> _updateCart(sku, double qty) async {
+  Future<void> _updateCart(CartSKUDm sku, double qty) async {
     if (qty < 0) return; // Prevent negative values
 
     double offset = widget.scrollController.hasClients
         ? widget.scrollController.offset
         : 0.0;
 
-    await widget.controller.addOrUpdateCart(
-      pCode: widget.widget.pCode,
-      iCode: sku.skuIcode,
-      qty: qty > 0 ? qty : 0,
-      rate: sku.rate,
-    );
+    if (sku.oldSkuICode.isEmpty) {
+      showErrorSnackbar(
+        'Alert!',
+        'Item not mapped',
+      );
+    } else {
+      await widget.controller.addOrUpdateCart(
+        pCode: widget.widget.pCode,
+        iCode: sku.skuIcode,
+        oldICode: sku.oldSkuICode,
+        qty: qty > 0 ? qty : 0,
+        rate: sku.rate,
+      );
 
-    await widget.controller.getCartProducts(pCode: widget.widget.pCode);
-    await widget.productsController.searchProduct(pCode: widget.widget.pCode);
+      await widget.controller.getCartProducts(
+        pCode: widget.widget.pCode,
+      );
+
+      await widget.productsController.searchProduct(
+        pCode: widget.widget.pCode,
+      );
+    }
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {

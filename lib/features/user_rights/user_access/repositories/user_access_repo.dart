@@ -113,8 +113,6 @@ class UserAccessRepo {
       'Ledger': ledger,
     };
 
-    print(requestBody);
-
     try {
       var response = await ApiService.postRequest(
         endpoint: '/User/setLedger',

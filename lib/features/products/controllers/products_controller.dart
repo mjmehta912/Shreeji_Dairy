@@ -120,6 +120,7 @@ class ProductsController extends GetxController {
   Future<void> addOrUpdateCart({
     required String pCode,
     required String iCode,
+    required String oldICode,
     required double qty,
     required double rate,
   }) async {
@@ -129,6 +130,7 @@ class ProductsController extends GetxController {
       var response = await ProductsRepo.addOrUpdateCart(
         pCode: pCode,
         iCode: iCode,
+        oldICode: oldICode,
         qty: qty,
         rate: rate,
       );

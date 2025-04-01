@@ -234,6 +234,8 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                               hintText: 'Qty',
                                               fontSize: FontSizes.k18FontSize,
                                               fontWeight: FontWeight.w600,
+                                              enabled:
+                                                  product.oldIcode.isNotEmpty,
                                               keyboardType:
                                                   TextInputType.number,
                                               onChanged: (value) {
@@ -244,12 +246,17 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
 
                                                 // Start a new timer
                                                 _debounce = Timer(
-                                                    Duration(milliseconds: 500),
-                                                    () {
-                                                  _controller.addOrUpdateCart(
-                                                    iCode: product.icode,
-                                                  );
-                                                });
+                                                  Duration(
+                                                    milliseconds: 500,
+                                                  ),
+                                                  () {
+                                                    _controller.addOrUpdateCart(
+                                                      iCode: product.icode,
+                                                      oldIcode:
+                                                          product.oldIcode,
+                                                    );
+                                                  },
+                                                );
                                               },
                                             ),
                                           )

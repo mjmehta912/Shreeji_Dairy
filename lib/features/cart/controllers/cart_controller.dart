@@ -52,6 +52,7 @@ class CartController extends GetxController {
   Future<void> addOrUpdateCart({
     required String pCode,
     required String iCode,
+    required String oldICode,
     required double qty,
     required double rate,
   }) async {
@@ -61,6 +62,7 @@ class CartController extends GetxController {
       var response = await CartRepo.addOrUpdateCart(
         pCode: pCode,
         iCode: iCode,
+        oldICode: oldICode,
         qty: qty,
         rate: rate,
       );
@@ -84,6 +86,7 @@ class CartController extends GetxController {
   Future<void> removeProduct({
     required String pCode,
     required String iCode,
+    required String oldICode,
   }) async {
     isLoading.value = true;
 
@@ -91,6 +94,7 @@ class CartController extends GetxController {
       var response = await CartRepo.removeProduct(
         pCode: pCode,
         iCode: iCode,
+        oldICode: oldICode,
       );
 
       if (response != null && response.containsKey('message')) {

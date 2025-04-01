@@ -89,6 +89,7 @@ class StoreOrderController extends GetxController {
 
   Future<void> addOrUpdateCart({
     required String iCode,
+    required String oldIcode,
   }) async {
     final qty = int.tryParse(productControllers[iCode]?.text ?? '0') ?? 0;
     final product =
@@ -107,6 +108,7 @@ class StoreOrderController extends GetxController {
       var response = await StoreOrderRepo.addOrUpdateCart(
         pCode: storePcode!,
         iCode: iCode,
+        oldIcode: oldIcode,
         qty: qty.toDouble(),
         rate: rate,
       );

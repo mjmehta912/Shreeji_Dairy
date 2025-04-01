@@ -41,6 +41,7 @@ class CartRepo {
   static Future<dynamic> addOrUpdateCart({
     required String pCode,
     required String iCode,
+    required String oldICode,
     required double qty,
     required double rate,
   }) async {
@@ -51,6 +52,7 @@ class CartRepo {
     final Map<String, dynamic> requestBody = {
       'PCODE': pCode,
       'ICODE': iCode,
+      "Old_Icode": oldICode,
       'QTY': qty,
       'Rate': rate,
     };
@@ -70,6 +72,7 @@ class CartRepo {
   static Future<dynamic> removeProduct({
     required String pCode,
     required String iCode,
+    required String oldICode,
   }) async {
     String? token = await SecureStorageHelper.read(
       'token',
@@ -78,6 +81,7 @@ class CartRepo {
     final Map<String, dynamic> requestBody = {
       'PCODE': pCode,
       'ICODE': iCode,
+      'Old_Icode': oldICode,
     };
 
     try {

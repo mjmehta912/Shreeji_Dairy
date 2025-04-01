@@ -83,9 +83,9 @@ class LedgerDateDm {
     return LedgerDateDm(
       ledgerStart: json['ledgerStart'] ?? '',
       ledgerEnd: json['ledgerEnd'] ?? '',
-      product: json['Product'],
-      invoice: json['Invoice'],
-      ledger: json['Ledger'],
+      product: json['Product'] ?? false,
+      invoice: json['Invoice'] ?? false,
+      ledger: json['Ledger'] ?? false,
     );
   }
 }

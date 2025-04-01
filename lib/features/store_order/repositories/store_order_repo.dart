@@ -53,6 +53,7 @@ class StoreOrderRepo {
   static Future<dynamic> addOrUpdateCart({
     required String pCode,
     required String iCode,
+    required String oldIcode,
     required double qty,
     required double rate,
   }) async {
@@ -63,6 +64,7 @@ class StoreOrderRepo {
     final Map<String, dynamic> requestBody = {
       'PCODE': pCode,
       'ICODE': iCode,
+      'Old_Icode': oldIcode,
       'QTY': qty,
       'Rate': rate,
     };

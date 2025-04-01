@@ -6,6 +6,7 @@ import 'package:shreeji_dairy/features/products/models/product_dm.dart';
 import 'package:shreeji_dairy/features/products/screens/products_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
+import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
@@ -139,24 +140,34 @@ class _ProductCardState extends State<ProductCard> {
                                                               .offset
                                                           : 0.0;
 
-                                                      await widget.controller
-                                                          .addOrUpdateCart(
-                                                        pCode:
-                                                            widget.widget.pCode,
-                                                        iCode: sku.skuIcode,
-                                                        qty: qty,
-                                                        rate: sku.rate,
-                                                      );
+                                                      if (sku.skuOldICode
+                                                          .isEmpty) {
+                                                        showErrorSnackbar(
+                                                          'Alert!',
+                                                          'Items Not Mapped',
+                                                        );
+                                                      } else {
+                                                        await widget.controller
+                                                            .addOrUpdateCart(
+                                                          pCode: widget
+                                                              .widget.pCode,
+                                                          iCode: sku.skuIcode,
+                                                          qty: qty,
+                                                          rate: sku.rate,
+                                                          oldICode:
+                                                              sku.skuOldICode,
+                                                        );
 
-                                                      await widget.controller
-                                                          .searchProduct(
-                                                        pCode:
-                                                            widget.widget.pCode,
-                                                        searchText: widget
-                                                            .controller
-                                                            .searchController
-                                                            .text,
-                                                      );
+                                                        await widget.controller
+                                                            .searchProduct(
+                                                          pCode: widget
+                                                              .widget.pCode,
+                                                          searchText: widget
+                                                              .controller
+                                                              .searchController
+                                                              .text,
+                                                        );
+                                                      }
 
                                                       WidgetsBinding.instance
                                                           .addPostFrameCallback(
@@ -284,22 +295,30 @@ class _ProductCardState extends State<ProductCard> {
     );
   }
 
-  Future<void> _updateCart(sku, double qty) async {
+  Future<void> _updateCart(SKUDm sku, double qty) async {
     double offset = widget.scrollController.hasClients
         ? widget.scrollController.offset
         : 0.0;
 
-    await widget.controller.addOrUpdateCart(
-      pCode: widget.widget.pCode,
-      iCode: sku.skuIcode,
-      qty: qty,
-      rate: sku.rate,
-    );
+    if (sku.skuOldICode.isEmpty) {
+      showErrorSnackbar(
+        'Alert!',
+        'Item not mapped',
+      );
+    } else {
+      await widget.controller.addOrUpdateCart(
+        pCode: widget.widget.pCode,
+        iCode: sku.skuIcode,
+        oldICode: sku.skuOldICode,
+        qty: qty,
+        rate: sku.rate,
+      );
 
-    await widget.controller.searchProduct(
-      pCode: widget.widget.pCode,
-      searchText: widget.controller.searchController.text,
-    );
+      await widget.controller.searchProduct(
+        pCode: widget.widget.pCode,
+        searchText: widget.controller.searchController.text,
+      );
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.scrollController.hasClients) {

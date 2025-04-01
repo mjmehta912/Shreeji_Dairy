@@ -1,11 +1,13 @@
 class CartProductDm {
   final String icode;
   final String printName;
+  final String oldICode;
   final List<CartSKUDm> skus;
 
   CartProductDm({
     required this.icode,
     required this.printName,
+    required this.oldICode,
     required this.skus,
   });
 
@@ -13,6 +15,7 @@ class CartProductDm {
     return CartProductDm(
       icode: json['icode'] ?? '',
       printName: json['printname'] ?? '',
+      oldICode: json['old_Icode'] ?? '',
       skus: (json['sku'] as List<dynamic>?)
               ?.map(
                 (sku) => CartSKUDm.fromJson(sku),
@@ -25,6 +28,7 @@ class CartProductDm {
 
 class CartSKUDm {
   final String skuIcode;
+  final String oldSkuICode;
   final String skuName;
   final String pack;
   final double rate;
@@ -32,6 +36,7 @@ class CartSKUDm {
 
   CartSKUDm({
     required this.skuIcode,
+    required this.oldSkuICode,
     required this.skuName,
     required this.pack,
     required this.rate,
@@ -41,6 +46,7 @@ class CartSKUDm {
   factory CartSKUDm.fromJson(Map<String, dynamic> json) {
     return CartSKUDm(
       skuIcode: json['skuicode'] ?? '',
+      oldSkuICode: json['skuOld_Icode'] ?? '',
       skuName: json['skuiname'] ?? '',
       pack: json['pack'] ?? '',
       rate: (json['rate'] ?? 0).toDouble(),
