@@ -5,6 +5,7 @@ import 'package:shreeji_dairy/features/place_order/repos/place_order_repo.dart';
 import 'package:shreeji_dairy/features/products/controllers/products_controller.dart';
 import 'package:shreeji_dairy/features/slot_master/slots/models/category_wise_slot_dm.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
+import 'package:shreeji_dairy/utils/helpers/device_helper.dart';
 
 class PlaceOrderController extends GetxController {
   var isLoading = false.obs;
@@ -63,12 +64,22 @@ class PlaceOrderController extends GetxController {
   }) async {
     isLoading.value = true;
 
+    String? deviceId = await DeviceHelper().getDeviceId();
+    if (deviceId == null) {
+      showErrorSnackbar(
+        'Login Failed',
+        'Unable to fetch device ID.',
+      );
+      isLoading.value = false;
+      return;
+    }
     try {
       var response = await PlaceOrderRepo.placeOrder(
         pCode: pCode,
         dDate: dDate,
         dTime: dTime,
         branchPrefix: branchPrefix,
+        deviceId: deviceId,
       );
 
       if (response != null && response.containsKey('message')) {
