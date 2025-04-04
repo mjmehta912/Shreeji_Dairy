@@ -14,7 +14,7 @@ class OrderItemDm {
   final String dDate;
   final String dTime;
   final double stock;
-  final int dispatched;
+  final double dispatched;
   final int percentage;
 
   OrderItemDm({
@@ -54,7 +54,7 @@ class OrderItemDm {
       dDate: json['DDate'],
       dTime: json['DTime'],
       stock: (json['Stock'] as num).toDouble(),
-      dispatched: json['Dispetched'],
+      dispatched: (json['Dispetched'] as num).toDouble(),
       percentage: json['Percentage'] ?? 0,
     );
   }

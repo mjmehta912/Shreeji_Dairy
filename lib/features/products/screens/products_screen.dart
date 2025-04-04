@@ -50,9 +50,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void _initialize() async {
-    await _controller.getGroups();
-    await _controller.getSubGroups();
-    await _controller.getSubGroups2();
+    await _controller.getGroups(
+      cCode: widget.cCode,
+    );
+    await _controller.getSubGroups(
+      cCode: widget.cCode,
+    );
+    await _controller.getSubGroups2(
+      cCode: widget.cCode,
+    );
     await _controller.searchProduct(
       pCode: widget.pCode,
       searchText: _controller.searchController.text,
@@ -70,8 +76,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
       onApply: () {
         _controller.selectedIcCodes.clear();
         _controller.selectedIpackgCodes.clear();
-        _controller.getSubGroups();
-        _controller.getSubGroups2();
+        _controller.getSubGroups(
+          cCode: widget.cCode,
+        );
+        _controller.getSubGroups2(
+          cCode: widget.cCode,
+        );
         _controller.searchProduct(
           searchText: _controller.searchController.text,
           pCode: widget.pCode,
@@ -79,8 +89,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
       },
       onClear: () {
         _controller.selectedIgCodes.clear();
-        _controller.getSubGroups();
-        _controller.getSubGroups2();
+        _controller.getSubGroups(
+          cCode: widget.cCode,
+        );
+        _controller.getSubGroups2(
+          cCode: widget.cCode,
+        );
         _controller.searchProduct(
           searchText: _controller.searchController.text,
           pCode: widget.pCode,
@@ -99,7 +113,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
       valueField: (subGroup) => subGroup.icCode,
       onApply: () {
         _controller.selectedIpackgCodes.clear();
-        _controller.getSubGroups2();
+        _controller.getSubGroups2(
+          cCode: widget.cCode,
+        );
         _controller.searchProduct(
           searchText: _controller.searchController.text,
           pCode: widget.pCode,
@@ -107,7 +123,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
       },
       onClear: () {
         _controller.selectedIcCodes.clear();
-        _controller.getSubGroups2();
+        _controller.getSubGroups2(
+          cCode: widget.cCode,
+        );
         _controller.searchProduct(
           searchText: _controller.searchController.text,
           pCode: widget.pCode,

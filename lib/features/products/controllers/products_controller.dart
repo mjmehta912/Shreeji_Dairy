@@ -154,11 +154,15 @@ class ProductsController extends GetxController {
     );
   }
 
-  Future<void> getGroups() async {
+  Future<void> getGroups({
+    required String cCode,
+  }) async {
     try {
       isLoading.value = true;
 
-      final fetchedGroups = await ProductsRepo.getGroups();
+      final fetchedGroups = await ProductsRepo.getGroups(
+        cCode: cCode,
+      );
 
       groups.assignAll(fetchedGroups);
     } catch (e) {
@@ -171,12 +175,15 @@ class ProductsController extends GetxController {
     }
   }
 
-  Future<void> getSubGroups() async {
+  Future<void> getSubGroups({
+    required String cCode,
+  }) async {
     try {
       isLoading.value = true;
 
       final fetchedSubGroups = await ProductsRepo.getSubGroups(
         igCodes: selectedIgCodes.join(','),
+        cCode: cCode,
       );
 
       subGroups.assignAll(fetchedSubGroups);
@@ -190,13 +197,16 @@ class ProductsController extends GetxController {
     }
   }
 
-  Future<void> getSubGroups2() async {
+  Future<void> getSubGroups2({
+    required String cCode,
+  }) async {
     try {
       isLoading.value = true;
 
       final fetchedSubGroups2 = await ProductsRepo.getSubGroups2(
         igCodes: selectedIgCodes.join(','),
         icCodes: selectedIcCodes.join(','),
+        cCode: cCode,
       );
 
       subGroups2.assignAll(fetchedSubGroups2);
