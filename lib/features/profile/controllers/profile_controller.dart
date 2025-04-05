@@ -122,7 +122,9 @@ class ProfileController extends GetxController {
       if (e is Map<String, dynamic>) {
         if (e['status'] == 403) {
           await SecureStorageHelper.clearAll();
-          Get.offAll(() => LoginScreen());
+          Get.offAll(
+            () => LoginScreen(),
+          );
           showErrorSnackbar(
             'Session Expired',
             e['message'] ?? 'Unauthorized access. Device ID is invalid.',

@@ -22,6 +22,7 @@ import 'package:shreeji_dairy/features/upload_product_image/screens/upload_produ
 import 'package:shreeji_dairy/features/user_authorization/unauthorized_users/screens/unauthorized_users_screen.dart';
 import 'package:shreeji_dairy/features/user_management/all_users/screens/all_users_screen.dart';
 import 'package:shreeji_dairy/features/user_rights/users/screens/users_screen.dart';
+import 'package:shreeji_dairy/features/user_type_master/user_types/screens/user_types_screen.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
@@ -272,6 +273,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         "action": () {
           Get.to(
             () => CategoriesScreen(),
+          );
+        },
+      },
+      "Usertype Master": {
+        "icon": kIconSlotMaster,
+        "action": () {
+          Get.to(
+            () => UserTypesScreen(),
           );
         },
       },

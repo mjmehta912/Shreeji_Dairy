@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/user_rights/user_access/screens/user_access_screen.dart.dart';
-import 'package:shreeji_dairy/features/user_rights/users/controllers/users_controller.dart';
-import 'package:shreeji_dairy/features/user_rights/users/models/user_dm.dart';
+import 'package:shreeji_dairy/features/user_type_master/user_type_access/screens/user_type_access_screen.dart';
+import 'package:shreeji_dairy/features/user_type_master/user_types/controllers/user_types_controller.dart';
+import 'package:shreeji_dairy/features/user_type_master/user_types/models/user_type_dm.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
-class UsersCard extends StatelessWidget {
-  const UsersCard({
+class UserTypesCard extends StatelessWidget {
+  const UserTypesCard({
     super.key,
-    required this.user,
-    required UsersController controller,
+    required UserTypesController controller,
+    required this.userType,
   }) : _controller = controller;
 
-  final UserDm user;
-  final UsersController _controller;
+  final UserTypesController _controller;
+  final UserTypeDm userType;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,11 @@ class UsersCard extends StatelessWidget {
         ListTile(
           onTap: () {
             Get.to(
-              () => UserAccessScreen(
-                firstName: user.firstName,
-                lastName: user.lastName,
-                userId: user.userId,
-                appAccess: user.appAccess,
+              () => UserTypeAccessScreen(
+                userDesignation:
+                    _controller.getUserDesignation(userType.userType),
+                userType: userType.userType,
+                appAccess: userType.appAccess == 1 ? true : false,
               ),
             );
           },
@@ -36,7 +36,9 @@ class UsersCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${user.firstName} ${user.lastName}',
+                _controller.getUserDesignation(
+                  userType.userType,
+                ),
                 style: TextStyles.kMediumFredoka(
                   color: kColorSecondary,
                 ).copyWith(
@@ -44,8 +46,8 @@ class UsersCard extends StatelessWidget {
                 ),
               ),
               AppTitleValueRow(
-                title: 'Designation',
-                value: _controller.getUserDesignation(user.userType),
+                title: 'Active Users',
+                value: '${userType.activeUsers} out of ${userType.totalUsers}',
               ),
             ],
           ),
