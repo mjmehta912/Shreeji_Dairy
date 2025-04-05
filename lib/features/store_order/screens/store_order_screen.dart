@@ -45,7 +45,9 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
   @override
   void initState() {
     super.initState();
-    _controller.getGroups();
+    _controller.getGroups(
+      cCode: widget.cCode,
+    );
     _controller.fetchStoreProducts(
       searchText: _controller.searchController.text,
       igCodes: _controller.selectedIgCode.value,

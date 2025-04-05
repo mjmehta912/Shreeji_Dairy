@@ -5,8 +5,6 @@ import 'package:shreeji_dairy/features/user_rights/user_access/screens/user_acce
 import 'package:shreeji_dairy/features/user_rights/users/controllers/users_controller.dart';
 import 'package:shreeji_dairy/features/user_rights/users/models/user_dm.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
-import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
-import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
 class UsersCard extends StatelessWidget {
@@ -32,36 +30,37 @@ class UsersCard extends StatelessWidget {
           ),
         );
       },
-      child: AppCard1(
-        child: Padding(
-          padding: AppPaddings.p10,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${user.firstName} ${user.lastName}',
-                    style: TextStyles.kMediumFredoka(
-                      color: kColorSecondary,
-                    ).copyWith(
-                      height: 1.25,
-                    ),
+      child: Column(
+        children: [
+          ListTile(
+            leading: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${user.firstName} ${user.lastName}',
+                  style: TextStyles.kMediumFredoka(
+                    color: kColorSecondary,
+                  ).copyWith(
+                    height: 1.25,
                   ),
-                  AppTitleValueRow(
-                    title: 'Designation',
-                    value: _controller.getUserDesignation(user.userType),
-                  ),
-                ],
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: kColorTextPrimary,
-              )
-            ],
+                ),
+                AppTitleValueRow(
+                  title: 'Designation',
+                  value: _controller.getUserDesignation(user.userType),
+                ),
+              ],
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              color: kColorTextPrimary,
+            ),
           ),
-        ),
+          Divider(
+            color: kColorLightGrey,
+            indent: 20,
+            endIndent: 20,
+          ),
+        ],
       ),
     );
   }

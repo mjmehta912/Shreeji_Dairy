@@ -116,6 +116,7 @@ class StoreOrderController extends GetxController {
       if (response != null && response.containsKey('message')) {
         fetchStoreProducts(
           searchText: searchController.text,
+          igCodes: selectedIgCode.value,
         );
       }
     } catch (e) {
@@ -128,11 +129,15 @@ class StoreOrderController extends GetxController {
     }
   }
 
-  Future<void> getGroups() async {
+  Future<void> getGroups({
+    required String cCode,
+  }) async {
     try {
       isLoading.value = true;
 
-      final fetchedGroups = await StoreOrderRepo.getGroups();
+      final fetchedGroups = await StoreOrderRepo.getGroups(
+        cCode: cCode,
+      );
 
       groups.assignAll(fetchedGroups);
     } catch (e) {

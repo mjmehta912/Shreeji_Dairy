@@ -48,8 +48,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   void _initialize() async {
     await _controller.getUserAccess();
-
-    // Set initial index: If product access is available, start with Products, otherwise start with Services.
     _controller.selectedIndex.value =
         _controller.ledgerDate.value.product ? 0 : 3;
   }
@@ -66,27 +64,35 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     );
   }
 
-  /// Returns the appropriate page based on index
+  /// Updated: Returns the page only if access is granted
   Widget _getPage(int index) {
+    final access = _controller.ledgerDate.value;
+
     switch (index) {
       case 0:
-        return ProductsScreen(
-          pCode: widget.pCode,
-          pName: widget.pName,
-          cCode: widget.cCode,
-          branchCode: widget.branchCode!,
-          deliDateOption: widget.deliDateOption,
-        );
+        return access.product
+            ? ProductsScreen(
+                pCode: widget.pCode,
+                pName: widget.pName,
+                cCode: widget.cCode,
+                branchCode: widget.branchCode!,
+                deliDateOption: widget.deliDateOption,
+              )
+            : _accessDeniedPlaceholder();
       case 1:
-        return InvoicesScreen(
-          pCode: widget.pCode,
-          pName: widget.pName,
-        );
+        return access.invoice
+            ? InvoicesScreen(
+                pCode: widget.pCode,
+                pName: widget.pName,
+              )
+            : _accessDeniedPlaceholder();
       case 2:
-        return LedgerScreen(
-          pCode: widget.pCode,
-          pName: widget.pName,
-        );
+        return access.ledger
+            ? LedgerScreen(
+                pCode: widget.pCode,
+                pName: widget.pName,
+              )
+            : _accessDeniedPlaceholder();
       default:
         return ProfileScreen(
           pCode: widget.pCode,
@@ -96,6 +102,19 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           deliDateOption: widget.deliDateOption,
         );
     }
+  }
+
+  /// Shows a simple placeholder if user has no access
+  Widget _accessDeniedPlaceholder() {
+    return Center(
+      child: Text(
+        "You don’t have access to this module.",
+        style: TextStyles.kMediumFredoka(
+          fontSize: FontSizes.k16FontSize,
+          color: kColorTextPrimary,
+        ),
+      ),
+    );
   }
 
   /// Builds the bottom navigation bar
@@ -111,7 +130,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
             color: kColorBlackWithOpacity,
             blurRadius: 8,
             spreadRadius: 1,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -206,7 +225,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     );
   }
 
-  /// Shows an error dialog when access is denied
   void _showAccessDeniedDialog(String label) {
     Get.defaultDialog(
       contentPadding: AppPaddings.p20,

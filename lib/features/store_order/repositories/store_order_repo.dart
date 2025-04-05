@@ -81,7 +81,9 @@ class StoreOrderRepo {
     }
   }
 
-  static Future<List<GroupDm>> getGroups() async {
+  static Future<List<GroupDm>> getGroups({
+    required String cCode,
+  }) async {
     String? token = await SecureStorageHelper.read(
       'token',
     );
@@ -90,6 +92,9 @@ class StoreOrderRepo {
       final response = await ApiService.getRequest(
         endpoint: '/Master/itemgroup',
         token: token,
+        queryParams: {
+          'CCODE': cCode,
+        },
       );
       if (response == null) {
         return [];

@@ -76,6 +76,10 @@ class SelectCustomerBranchController extends GetxController {
         if (customers.length == 1) {
           selectedCustomer.value = customers.first.pName;
           selectedCustomerCode.value = customers.first.pCode;
+          selectedDeliDateOption.value = customers.first.deliDateOption != null
+              ? customers.first.deliDateOption!
+              : '';
+          selectedCCode.value = customers.first.cCode;
 
           Get.offAll(
             () => BottomNavScreen(
