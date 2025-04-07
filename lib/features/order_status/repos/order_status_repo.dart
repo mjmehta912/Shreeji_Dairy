@@ -9,6 +9,8 @@ class OrderStatusRepo {
     String icCodes = '',
     required String status,
     String searchText = '',
+    required String fromDate,
+    required String toDate,
   }) async {
     try {
       String? token = await SecureStorageHelper.read(
@@ -20,6 +22,8 @@ class OrderStatusRepo {
         "ICCODEs": icCodes,
         "Statuses": status,
         "SearchText": searchText,
+        "FromDate": fromDate,
+        "ToDate": toDate,
       };
 
       final response = await ApiService.postRequest(

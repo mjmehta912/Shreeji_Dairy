@@ -4,6 +4,7 @@ import 'package:shreeji_dairy/features/order_status/models/order_item_dm.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
+import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
@@ -57,25 +58,60 @@ class OrderStatusCard extends StatelessWidget {
               title: 'Del. Time',
               value: order.dTime,
             ),
-            AppTitleValueRow(
-              title: 'Order Qty',
-              value: order.orderQty.toString(),
+            Row(
+              children: [
+                AppTitleValueRow(
+                  title: 'Ord. Qty',
+                  value: order.orderQty.toString(),
+                ),
+                AppSpaces.h10,
+                AppTitleValueRow(
+                  title: 'Approved Qty',
+                  value: order.approvedQty.toString(),
+                ),
+              ],
             ),
             AppTitleValueRow(
-              title: 'Approved Qty',
-              value: order.approvedQty.toString(),
+              title: 'Dispatched Qty',
+              value: order.dispatched.toString(),
             ),
+            AppSpaces.v10,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(
+                  begin: 0,
+                  end: order.percentage / 100,
+                ),
+                duration: Duration(
+                  milliseconds: 500,
+                ),
+                curve: Curves.easeOut,
+                builder: (context, value, _) => LinearProgressIndicator(
+                  minHeight: 10,
+                  value: value,
+                  backgroundColor: kColorLightGrey,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    kColorGreen,
+                  ),
+                ),
+              ),
+            ),
+            AppSpaces.v10,
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  order.status == 0
-                      ? 'PENDING'
-                      : order.status == 1
-                          ? 'APPROVED'
-                          : order.status == 2
-                              ? 'HOLD'
-                              : 'REJECTED',
+                  (order.dispatched == order.approvedQty) &&
+                          order.approvedQty != 0
+                      ? 'DELIVERED'
+                      : order.status == 0
+                          ? 'PENDING'
+                          : order.status == 1
+                              ? 'APPROVED'
+                              : order.status == 2
+                                  ? 'HOLD'
+                                  : 'REJECTED',
                   style: TextStyles.kMediumFredoka(
                     fontSize: FontSizes.k16FontSize,
                     color: kColorSecondary,

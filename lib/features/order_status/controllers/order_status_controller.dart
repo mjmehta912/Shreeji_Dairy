@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/features/auth/select_customer/models/customer_dm.dart';
 import 'package:shreeji_dairy/features/order_status/models/order_item_dm.dart';
 import 'package:shreeji_dairy/features/order_status/repos/order_status_repo.dart';
@@ -13,7 +14,8 @@ class OrderStatusController extends GetxController {
   var customerNames = <String>[].obs;
   var selectedCustomer = ''.obs;
   var selectedCustomerCode = ''.obs;
-
+  var fromDateController = TextEditingController();
+  var toDateController = TextEditingController();
   var searchController = TextEditingController();
   var selectedStatus = ''.obs;
   final statusOptions = [
@@ -37,8 +39,11 @@ class OrderStatusController extends GetxController {
       'label': 'Rejected',
       'value': '3',
     },
+    {
+      'label': 'Delivered',
+      'value': '4',
+    },
   ];
-
   Future<void> getOrderItems({
     required String pCode,
   }) async {
@@ -48,22 +53,33 @@ class OrderStatusController extends GetxController {
       final fetchedOrders = await OrderStatusRepo.getOrderItems(
         pCode: pCode,
         icCodes: '',
-        status: selectedStatus.value,
+        status: selectedStatus.value != '4'
+            ? selectedStatus.value
+            : '', // Don't send '4' to API
         searchText: searchController.text,
+        fromDate: DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(fromDateController.text),
+        ),
+        toDate: DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(toDateController.text),
+        ),
       );
 
-      orders.assignAll(fetchedOrders);
+      if (selectedStatus.value == '4') {
+        // Filter locally: delivered = approvedQty == dispatchedQty
+        final deliveredOrders = fetchedOrders.where((order) {
+          return order.approvedQty != 0.0 &&
+              (order.approvedQty == order.dispatched);
+        }).toList();
+        orders.assignAll(deliveredOrders);
+      } else {
+        orders.assignAll(fetchedOrders);
+      }
     } catch (e) {
       if (e is Map<String, dynamic>) {
-        showErrorSnackbar(
-          'Error',
-          e['message'],
-        );
+        showErrorSnackbar('Error', e['message']);
       } else {
-        showErrorSnackbar(
-          'Error',
-          e.toString(),
-        );
+        showErrorSnackbar('Error', e.toString());
       }
     } finally {
       isLoading.value = false;

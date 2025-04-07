@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/order_status/controllers/order_status_controller.dart';
 import 'package:shreeji_dairy/features/order_status/widgets/order_status_card.dart';
@@ -9,6 +10,7 @@ import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_appbar.dart';
+import 'package:shreeji_dairy/widgets/app_date_picker_field.dart';
 import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
@@ -43,6 +45,15 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
 
     _controller.selectedCustomerCode.value = widget.pCode;
     _controller.selectedCustomer.value = widget.pName;
+
+    final now = DateTime.now();
+    final startOfMonth = DateTime(now.year, now.month, 1);
+    final endOfMonth = DateTime(now.year, now.month + 1, 0);
+
+    _controller.fromDateController.text =
+        DateFormat('dd-MM-yyyy').format(startOfMonth);
+    _controller.toDateController.text =
+        DateFormat('dd-MM-yyyy').format(endOfMonth);
 
     await _controller.getOrderItems(
       pCode: _controller.selectedCustomerCode.value,
@@ -87,36 +98,43 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Obx(
-                        () => SizedBox(
-                          width: 0.8.screenWidth,
-                          child: AppDropdown(
-                            items: _controller.customerNames,
-                            hintText: 'Customer',
-                            onChanged: _controller.onCustomerSelected,
-                            selectedItem:
-                                _controller.selectedCustomer.value.isNotEmpty
-                                    ? _controller.selectedCustomer.value
-                                    : null,
-                          ),
+                      SizedBox(
+                        width: 0.45.screenWidth,
+                        child: AppDatePickerTextFormField(
+                          dateController: _controller.fromDateController,
+                          hintText: 'From Date',
+                          onChanged: (value) async {
+                            await _controller.getOrderItems(
+                              pCode: _controller.selectedCustomerCode.value,
+                            );
+                          },
                         ),
                       ),
-                      IconButton(
-                        onPressed: () async {
-                          _controller.selectedCustomer.value = '';
-                          _controller.selectedCustomerCode.value = '';
-
-                          await _controller.getOrderItems(
-                            pCode: '',
-                          );
-                        },
-                        icon: Icon(
-                          Icons.clear,
-                          size: 25,
-                          color: kColorTextPrimary,
+                      SizedBox(
+                        width: 0.45.screenWidth,
+                        child: AppDatePickerTextFormField(
+                          dateController: _controller.toDateController,
+                          hintText: 'To Date',
+                          onChanged: (value) async {
+                            await _controller.getOrderItems(
+                              pCode: _controller.selectedCustomerCode.value,
+                            );
+                          },
                         ),
                       ),
                     ],
+                  ),
+                  AppSpaces.v10,
+                  Obx(
+                    () => AppDropdown(
+                      items: _controller.customerNames,
+                      hintText: 'Customer',
+                      onChanged: _controller.onCustomerSelected,
+                      selectedItem:
+                          _controller.selectedCustomer.value.isNotEmpty
+                              ? _controller.selectedCustomer.value
+                              : null,
+                    ),
                   ),
                   AppSpaces.v10,
                   Obx(
