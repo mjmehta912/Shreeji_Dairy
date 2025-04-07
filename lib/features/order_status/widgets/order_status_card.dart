@@ -76,26 +76,9 @@ class OrderStatusCard extends StatelessWidget {
               value: order.dispatched.toString(),
             ),
             AppSpaces.v10,
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: TweenAnimationBuilder<double>(
-                tween: Tween<double>(
-                  begin: 0,
-                  end: order.percentage / 100,
-                ),
-                duration: Duration(
-                  milliseconds: 500,
-                ),
-                curve: Curves.easeOut,
-                builder: (context, value, _) => LinearProgressIndicator(
-                  minHeight: 10,
-                  value: value,
-                  backgroundColor: kColorLightGrey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    kColorGreen,
-                  ),
-                ),
-              ),
+            Padding(
+              padding: AppPaddings.p10,
+              child: buildProgressWithFloatingDot(order.percentage.toDouble()),
             ),
             AppSpaces.v10,
             Row(
@@ -124,6 +107,65 @@ class OrderStatusCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildProgressWithFloatingDot(double percentage) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double progress = percentage / 100;
+
+        return TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0, end: progress),
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+          builder: (context, value, _) {
+            double maxWidth = constraints.maxWidth;
+            double animatedCirclePosition = maxWidth * value;
+
+            return Stack(
+              clipBehavior: Clip.none,
+              children: [
+                // Progress bar
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: LinearProgressIndicator(
+                    minHeight: 9,
+                    value: value,
+                    backgroundColor: kColorLightGrey,
+                    valueColor: AlwaysStoppedAnimation<Color>(kColorGreen),
+                  ),
+                ),
+
+                // Animated floating dot
+                Positioned(
+                  left: animatedCirclePosition - 9, // center the dot
+                  top: -6,
+                  bottom: -6,
+                  child: Container(
+                    width: 18,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: kColorGreen,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: kColorWhite,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }
