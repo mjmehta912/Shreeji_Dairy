@@ -10,6 +10,7 @@ class StoreOrderRepo {
     String ipackgCodes = '',
     String searchText = '',
     String pCode = '',
+    bool packingItem = false,
   }) async {
     try {
       String? token = await SecureStorageHelper.read(
@@ -22,6 +23,7 @@ class StoreOrderRepo {
         "IPACKGCODEs": ipackgCodes,
         "SearchText": searchText,
         "PCODE": pCode,
+        "PackingItem": packingItem,
       };
 
       final response = await ApiService.postRequest(

@@ -14,7 +14,9 @@ class GroupWiseQcTestParaDm {
       icname: json['icname'],
       iccode: json['iccode'],
       testResult: (json['testResult'] as List<dynamic>)
-          .map((item) => GroupWiseQcTestResultDm.fromJson(item))
+          .map(
+            (item) => GroupWiseQcTestResultDm.fromJson(item),
+          )
           .toList(),
     );
   }

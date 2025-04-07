@@ -43,7 +43,9 @@ class QcTestParaController extends GetxController {
       final fetchedItemwiseQcTestingParameters =
           await QcTestParaRepo.getItemwiseQcTestingParameters();
 
-      itemwiseQcTestingParameters.assignAll(fetchedItemwiseQcTestingParameters);
+      itemwiseQcTestingParameters.assignAll(
+        fetchedItemwiseQcTestingParameters,
+      );
     } catch (e) {
       showErrorSnackbar(
         'Error',

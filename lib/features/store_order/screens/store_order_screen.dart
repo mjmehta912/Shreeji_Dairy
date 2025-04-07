@@ -118,6 +118,25 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                           ),
                           ChoiceChip(
                             label: Text(
+                              'PACKING',
+                              style: TextStyles.kRegularFredoka(
+                                fontSize: FontSizes.k12FontSize,
+                                color: kColorTextPrimary,
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            showCheckmark: false,
+                            backgroundColor: kColorWhite,
+                            selectedColor: kColorPrimary,
+                            selected: _controller.isPackingItem.value,
+                            onSelected: (selected) {
+                              _controller.showPackingItem();
+                            },
+                          ),
+                          ChoiceChip(
+                            label: Text(
                               'ALL',
                               style: TextStyles.kRegularFredoka(
                                 fontSize: FontSizes.k12FontSize,

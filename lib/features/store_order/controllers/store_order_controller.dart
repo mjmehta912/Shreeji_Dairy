@@ -16,6 +16,7 @@ class StoreOrderController extends GetxController {
   var selectedIgCode = ''.obs;
 
   var isCartFilterActive = false.obs;
+  var isPackingItem = false.obs;
 
   Future<void> fetchStoreProducts({
     String icCodes = '',
@@ -36,6 +37,7 @@ class StoreOrderController extends GetxController {
         ipackgCodes: ipackgCodes,
         searchText: searchText,
         pCode: storePcode!,
+        packingItem: isPackingItem.value,
       );
 
       if (isCartFilterActive.value) {
@@ -80,6 +82,15 @@ class StoreOrderController extends GetxController {
 
   void toggleCartFilter() {
     isCartFilterActive.value = !isCartFilterActive.value;
+
+    fetchStoreProducts(
+      searchText: searchController.text,
+      igCodes: selectedIgCode.value,
+    );
+  }
+
+  void showPackingItem() {
+    isPackingItem.value = !isPackingItem.value;
 
     fetchStoreProducts(
       searchText: searchController.text,
