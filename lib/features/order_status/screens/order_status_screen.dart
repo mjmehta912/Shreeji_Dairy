@@ -41,8 +41,11 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
   void _initialize() async {
     await _controller.getCustomers();
 
+    _controller.selectedCustomerCode.value = widget.pCode;
+    _controller.selectedCustomer.value = widget.pName;
+
     await _controller.getOrderItems(
-      pCode: '',
+      pCode: _controller.selectedCustomerCode.value,
     );
   }
 

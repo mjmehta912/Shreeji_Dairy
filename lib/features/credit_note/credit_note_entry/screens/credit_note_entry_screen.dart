@@ -51,7 +51,9 @@ class _CreditNoteEntryScreenState extends State<CreditNoteEntryScreen> {
   }
 
   void _initialize() async {
-    await _controller.getAllItems();
+    await _controller.getItems(
+      pCode: widget.pCode,
+    );
     await _controller.getReasons();
   }
 

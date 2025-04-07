@@ -3,22 +3,24 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/all_item_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/credit_note_reason_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/item_party_wise_inv_no_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/repos/credit_note_entry_repo.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_notes/controllers/credit_notes_controller.dart';
+import 'package:shreeji_dairy/features/products/models/product_dm.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
+import 'package:shreeji_dairy/utils/helpers/device_helper.dart';
+import 'package:shreeji_dairy/utils/helpers/version_info_service.dart';
 
 class CreditNoteEntryController extends GetxController {
   var isLoading = false.obs;
   var creditNoteEntryFormKey = GlobalKey<FormState>();
 
-  var items = <AllItemDm>[].obs;
-  var skus = <ItemSkuDm>[].obs;
+  var items = <ProductDm>[].obs;
+  var skus = <SKUDm>[].obs;
   var itemNames = <String>[].obs;
   var skuPacks = <String>[].obs;
-  var selectedItem = Rxn<AllItemDm>();
+  var selectedItem = Rxn<ProductDm>();
   var selectedSkuIcode = ''.obs;
   var selectedPack = ''.obs;
   var qtyController = TextEditingController();
@@ -89,15 +91,31 @@ class CreditNoteEntryController extends GetxController {
     selectedImage.value = null;
   }
 
-  Future<void> getAllItems() async {
+  Future<void> getItems({
+    required String pCode,
+  }) async {
     isLoading.value = true;
+    String? version = await VersionService.getVersion();
+    String? deviceId = await DeviceHelper().getDeviceId();
+
+    if (deviceId == null) {
+      showErrorSnackbar(
+        'Login Failed',
+        'Unable to fetch device ID.',
+      );
+      isLoading.value = false;
+      return;
+    }
 
     try {
-      final fetchedItems = await CreditNoteEntryRepo.getAllItems(
+      final fetchedItems = await CreditNoteEntryRepo.getItems(
         icCodes: '',
         igCodes: '',
         ipackgCodes: '',
         searchText: '',
+        pCode: pCode,
+        deviceId: deviceId,
+        version: version,
       );
 
       items.assignAll(fetchedItems);
@@ -129,7 +147,7 @@ class CreditNoteEntryController extends GetxController {
     }
   }
 
-  void onItemSelected(AllItemDm selected) {
+  void onItemSelected(ProductDm selected) {
     selectedPack.value = '';
     selectedSkuIcode.value = '';
     selectedItem.value = selected;
@@ -141,7 +159,7 @@ class CreditNoteEntryController extends GetxController {
     );
   }
 
-  void onSkuSelected(ItemSkuDm selectedSku) {
+  void onSkuSelected(SKUDm selectedSku) {
     selectedSkuIcode.value = selectedSku.skuIcode;
     selectedPack.value = selectedSku.pack;
   }

@@ -1,56 +1,12 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/all_item_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/credit_note_reason_dm.dart';
 import 'package:shreeji_dairy/features/credit_note/credit_note_entry/models/item_party_wise_inv_no_dm.dart';
+import 'package:shreeji_dairy/features/products/models/product_dm.dart';
 import 'package:shreeji_dairy/services/api_service.dart';
 import 'package:shreeji_dairy/utils/helpers/secure_storage_helper.dart';
 
 class CreditNoteEntryRepo {
-  static Future<List<AllItemDm>> getAllItems({
-    String icCodes = '',
-    String igCodes = '',
-    String ipackgCodes = '',
-    String searchText = '',
-  }) async {
-    try {
-      String? token = await SecureStorageHelper.read(
-        'token',
-      );
-
-      Map<String, dynamic> requestBody = {
-        "ICCODEs": icCodes,
-        "IGCODEs": igCodes,
-        "IPACKGCODEs": ipackgCodes,
-        "SearchText": searchText,
-      };
-
-      final response = await ApiService.postRequest(
-        endpoint: '/Product/items',
-        requestBody: requestBody,
-        token: token,
-      );
-
-      if (response['data'] != null) {
-        return (response['data'] as List<dynamic>)
-            .map(
-              (item) => AllItemDm.fromJson(item),
-            )
-            .toList();
-      }
-
-      return [];
-    } catch (e) {
-      if (e is Map<String, dynamic>) {
-        rethrow;
-      }
-      throw {
-        'status': 500,
-        'message': e.toString(),
-      };
-    }
-  }
-
   static Future<List<ItemPartyWiseInvNoDm>> getInvNos({
     required String iCode,
     required String pCode,
@@ -160,6 +116,56 @@ class CreditNoteEntryRepo {
       return response;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  static Future<List<ProductDm>> getItems({
+    String icCodes = '',
+    String igCodes = '',
+    String ipackgCodes = '',
+    String searchText = '',
+    String pCode = '',
+    String deviceId = '',
+    String version = '',
+  }) async {
+    try {
+      String? token = await SecureStorageHelper.read(
+        'token',
+      );
+
+      Map<String, dynamic> requestBody = {
+        "ICCODEs": icCodes,
+        "IGCODEs": igCodes,
+        "IPACKGCODEs": ipackgCodes,
+        "SearchText": searchText,
+        "PCODE": pCode,
+        "DeviceID": deviceId,
+        "Version": version,
+      };
+
+      final response = await ApiService.postRequest(
+        endpoint: '/Product/searchProduct',
+        requestBody: requestBody,
+        token: token,
+      );
+
+      if (response['data'] != null) {
+        return (response['data'] as List<dynamic>)
+            .map(
+              (item) => ProductDm.fromJson(item),
+            )
+            .toList();
+      }
+
+      return [];
+    } catch (e) {
+      if (e is Map<String, dynamic>) {
+        rethrow;
+      }
+      throw {
+        'status': 500,
+        'message': e.toString(),
+      };
     }
   }
 }
