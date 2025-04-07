@@ -277,7 +277,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       },
       "Usertype Master": {
-        "icon": kIconSlotMaster,
+        "icon": kIconUserTypeMaster,
         "action": () {
           Get.to(
             () => UserTypesScreen(),

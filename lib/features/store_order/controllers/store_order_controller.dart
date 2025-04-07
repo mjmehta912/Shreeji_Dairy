@@ -42,17 +42,19 @@ class StoreOrderController extends GetxController {
 
       if (isCartFilterActive.value) {
         final filteredProducts = fetchedProducts
-            .map((category) {
-              final filteredCategoryProducts =
-                  category.products.where((p) => p.cartQty > 0).toList();
-              if (filteredCategoryProducts.isNotEmpty) {
-                return StoreCategoryDm(
-                  icname: category.icname,
-                  products: filteredCategoryProducts,
-                );
-              }
-              return null;
-            })
+            .map(
+              (category) {
+                final filteredCategoryProducts =
+                    category.products.where((p) => p.cartQty > 0).toList();
+                if (filteredCategoryProducts.isNotEmpty) {
+                  return StoreCategoryDm(
+                    icname: category.icname,
+                    products: filteredCategoryProducts,
+                  );
+                }
+                return null;
+              },
+            )
             .whereType<StoreCategoryDm>()
             .toList();
 
