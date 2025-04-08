@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/order_status/models/order_item_dm.dart';
+import 'package:shreeji_dairy/features/authorization_status/models/order_item_dm.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
@@ -8,8 +8,8 @@ import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
 import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
-class OrderStatusCard extends StatelessWidget {
-  const OrderStatusCard({
+class AuthorizationStatusCard extends StatelessWidget {
+  const AuthorizationStatusCard({
     super.key,
     required this.order,
   });
@@ -50,6 +50,11 @@ class OrderStatusCard extends StatelessWidget {
               title: 'Order Date',
               value: order.date,
             ),
+            if (order.challanNo.isNotEmpty)
+              AppTitleValueRow(
+                title: 'Challan No.',
+                value: order.challanNo,
+              ),
             AppTitleValueRow(
               title: 'Del. Date',
               value: order.dDate,
@@ -85,16 +90,13 @@ class OrderStatusCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  (order.dispatched == order.approvedQty) &&
-                          order.approvedQty != 0
-                      ? 'DELIVERED'
-                      : order.status == 0
-                          ? 'PENDING'
-                          : order.status == 1
-                              ? 'APPROVED'
-                              : order.status == 2
-                                  ? 'HOLD'
-                                  : 'REJECTED',
+                  order.status == 0
+                      ? 'PENDING'
+                      : order.status == 1
+                          ? 'APPROVED'
+                          : order.status == 2
+                              ? 'HOLD'
+                              : 'REJECTED',
                   style: TextStyles.kMediumFredoka(
                     fontSize: FontSizes.k16FontSize,
                     color: kColorSecondary,

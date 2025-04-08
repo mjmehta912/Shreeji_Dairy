@@ -7,6 +7,7 @@ class OrderDetailDm {
   final String iName;
   final String itemCompany;
   final String pName;
+  final String challanNo;
   final double orderQty;
   final double approvedQty;
   final int status;
@@ -15,7 +16,8 @@ class OrderDetailDm {
   final String dTime;
   final double stock;
   final int dispatched;
-  final int percentage;
+  final double percentage;
+  final String orderStatus;
 
   OrderDetailDm({
     required this.invNo,
@@ -26,6 +28,7 @@ class OrderDetailDm {
     required this.iName,
     required this.itemCompany,
     required this.pName,
+    required this.challanNo,
     required this.orderQty,
     required this.approvedQty,
     required this.status,
@@ -35,6 +38,7 @@ class OrderDetailDm {
     required this.stock,
     required this.dispatched,
     required this.percentage,
+    required this.orderStatus,
   });
 
   factory OrderDetailDm.fromJson(Map<String, dynamic> json) {
@@ -47,6 +51,7 @@ class OrderDetailDm {
       iName: json['INAME'],
       itemCompany: json['ItemCompany'],
       pName: json['PNAME'],
+      challanNo: json['challanNo'] ?? '',
       orderQty: json['OrdQty'] ?? 0.0,
       approvedQty: json['ApprovedQty'] ?? 0.0,
       status: json['Status'] ?? 0,
@@ -55,7 +60,10 @@ class OrderDetailDm {
       dTime: json['DTime'],
       stock: (json['Stock'] as num).toDouble(),
       dispatched: json['Dispetched'],
-      percentage: json['Percentage'] ?? 0,
+      percentage: (json['Percentage'] is num)
+          ? (json['Percentage'] as num).toDouble()
+          : 0.0,
+      orderStatus: json['OrderStatus'],
     );
   }
 }

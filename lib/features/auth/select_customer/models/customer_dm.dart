@@ -16,7 +16,7 @@ class CustomerDm {
       pCode: json['PCODE'],
       pName: json['PNAME'],
       deliDateOption: json['DELIDATEOPTION'] ?? '',
-      cCode: json['CCODE'],
+      cCode: json['CCODE'] ?? '',
     );
   }
 }

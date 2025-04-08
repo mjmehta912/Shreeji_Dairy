@@ -3,27 +3,18 @@ import 'package:shreeji_dairy/constants/color_constants.dart';
 import 'package:shreeji_dairy/features/order_authorisation/auth_order/models/order_detail_dm.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
-import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_paddings.dart';
 import 'package:shreeji_dairy/utils/screen_utils/app_spacings.dart';
-import 'package:shreeji_dairy/widgets/app_button.dart';
 import 'package:shreeji_dairy/widgets/app_card1.dart';
 import 'package:shreeji_dairy/widgets/app_title_value_row.dart';
 
-class AuthOrderCard extends StatelessWidget {
-  const AuthOrderCard({
+class OrderStatusDetailCard extends StatelessWidget {
+  const OrderStatusDetailCard({
     super.key,
     required this.orderDetail,
-    required this.onAccept,
-    required this.onReject,
-    required this.onHold,
   });
 
   final OrderDetailDm orderDetail;
-
-  final VoidCallback onAccept;
-  final VoidCallback onReject;
-  final VoidCallback onHold;
 
   @override
   Widget build(BuildContext context) {
@@ -80,17 +71,19 @@ class AuthOrderCard extends StatelessWidget {
               title: 'Approved Qty',
               value: orderDetail.approvedQty.toString(),
             ),
+            AppSpaces.v10,
+            Padding(
+              padding: AppPaddings.p10,
+              child: buildProgressWithFloatingDot(
+                orderDetail.percentage.toDouble(),
+              ),
+            ),
+            AppSpaces.v10,
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  orderDetail.status == 0
-                      ? 'PENDING'
-                      : orderDetail.status == 1
-                          ? 'APPROVED'
-                          : orderDetail.status == 2
-                              ? 'HOLD'
-                              : 'REJECTED',
+                  orderDetail.orderStatus,
                   style: TextStyles.kMediumFredoka(
                     fontSize: FontSizes.k16FontSize,
                     color: kColorSecondary,
@@ -100,43 +93,68 @@ class AuthOrderCard extends StatelessWidget {
                 ),
               ],
             ),
-            AppSpaces.v10,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (orderDetail.status == 0 || orderDetail.status == 2)
-                  AppButton(
-                    buttonWidth: 0.2.screenWidth,
-                    buttonHeight: 35,
-                    buttonColor: kColorRed,
-                    titleSize: FontSizes.k16FontSize,
-                    title: 'Reject',
-                    onPressed: onReject,
-                  ),
-                if (orderDetail.status == 0)
-                  AppButton(
-                    buttonWidth: 0.2.screenWidth,
-                    buttonHeight: 35,
-                    buttonColor: kColorPrimary,
-                    titleSize: FontSizes.k16FontSize,
-                    title: 'Hold',
-                    titleColor: kColorTextPrimary,
-                    onPressed: onHold,
-                  ),
-                if (orderDetail.status == 0 || orderDetail.status == 2)
-                  AppButton(
-                    buttonWidth: 0.2.screenWidth,
-                    buttonHeight: 35,
-                    buttonColor: kColorSecondary,
-                    titleSize: FontSizes.k16FontSize,
-                    title: 'Accept',
-                    onPressed: onAccept,
-                  ),
-              ],
-            )
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildProgressWithFloatingDot(double percentage) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double progress = percentage / 100;
+
+        return TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0, end: progress),
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+          builder: (context, value, _) {
+            double maxWidth = constraints.maxWidth;
+            double animatedCirclePosition = maxWidth * value;
+
+            return Stack(
+              clipBehavior: Clip.none,
+              children: [
+                // Progress bar
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: LinearProgressIndicator(
+                    minHeight: 9,
+                    value: value,
+                    backgroundColor: kColorLightGrey,
+                    valueColor: AlwaysStoppedAnimation<Color>(kColorGreen),
+                  ),
+                ),
+
+                // Animated floating dot
+                Positioned(
+                  left: animatedCirclePosition - 9, // center the dot
+                  top: -6,
+                  bottom: -6,
+                  child: Container(
+                    width: 18,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: kColorGreen,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: kColorWhite,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
-import 'package:shreeji_dairy/features/order_status/controllers/order_status_controller.dart';
-import 'package:shreeji_dairy/features/order_status/widgets/order_status_card.dart';
+import 'package:shreeji_dairy/features/authorization_status/controllers/authorization_status_controller.dart';
+import 'package:shreeji_dairy/features/authorization_status/widgets/authorization_status_card.dart';
 import 'package:shreeji_dairy/styles/font_sizes.dart';
 import 'package:shreeji_dairy/styles/text_styles.dart';
 import 'package:shreeji_dairy/utils/extensions/app_size_extensions.dart';
@@ -15,8 +15,8 @@ import 'package:shreeji_dairy/widgets/app_dropdown.dart';
 import 'package:shreeji_dairy/widgets/app_loading_overlay.dart';
 import 'package:shreeji_dairy/widgets/app_text_form_field.dart';
 
-class OrderStatusScreen extends StatefulWidget {
-  const OrderStatusScreen({
+class AuthorizationStatusScreen extends StatefulWidget {
+  const AuthorizationStatusScreen({
     super.key,
     required this.pCode,
     required this.pName,
@@ -26,12 +26,13 @@ class OrderStatusScreen extends StatefulWidget {
   final String pName;
 
   @override
-  State<OrderStatusScreen> createState() => _OrderStatusScreenState();
+  State<AuthorizationStatusScreen> createState() =>
+      _AuthorizationStatusScreenState();
 }
 
-class _OrderStatusScreenState extends State<OrderStatusScreen> {
-  final OrderStatusController _controller = Get.put(
-    OrderStatusController(),
+class _AuthorizationStatusScreenState extends State<AuthorizationStatusScreen> {
+  final AuthorizationStatusController _controller = Get.put(
+    AuthorizationStatusController(),
   );
 
   @override
@@ -71,7 +72,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
           child: Scaffold(
             backgroundColor: kColorWhite,
             appBar: AppAppbar(
-              title: 'Order Status',
+              title: 'Authorisation Status',
               leading: IconButton(
                 onPressed: () => Get.back(),
                 icon: Icon(
@@ -192,7 +193,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
                           itemBuilder: (context, index) {
                             final order = _controller.orders[index];
 
-                            return OrderStatusCard(
+                            return AuthorizationStatusCard(
                               order: order,
                             );
                           },

@@ -9,7 +9,8 @@ import 'package:shreeji_dairy/features/credit_note_approval/credit_note_approval
 import 'package:shreeji_dairy/features/credit_note_status/screens/credit_note_status_screen.dart';
 import 'package:shreeji_dairy/features/notification_master/noifications/screens/notifications_screen.dart';
 import 'package:shreeji_dairy/features/order_authorisation/orders/screens/orders_screen.dart';
-import 'package:shreeji_dairy/features/order_status/screens/order_status_screen.dart';
+import 'package:shreeji_dairy/features/authorization_status/screens/authorization_status_screen.dart';
+import 'package:shreeji_dairy/features/order_status/all_orders/screens/all_orders_screen.dart';
 import 'package:shreeji_dairy/features/outstandings/screens/outstandings_screen.dart';
 import 'package:shreeji_dairy/features/profile/controllers/profile_controller.dart';
 import 'package:shreeji_dairy/features/auth/select_customer/screens/select_customer_branch_screen.dart';
@@ -80,7 +81,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         "icon": kIconOrderStatus,
         "action": () {
           Get.to(
-            () => OrderStatusScreen(
+            () => AllOrdersScreen(
+              pCode: widget.pCode,
+              pName: widget.pName,
+            ),
+          );
+        },
+      },
+      "Authorization Status": {
+        "icon": kIconAuthorizationStatus,
+        "action": () {
+          Get.to(
+            () => AuthorizationStatusScreen(
               pCode: widget.pCode,
               pName: widget.pName,
             ),
