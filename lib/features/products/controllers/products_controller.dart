@@ -19,6 +19,7 @@ class ProductsController extends GetxController {
   var isLoading = false.obs;
 
   var products = <ProductDm>[].obs;
+  var suggestedProducts = true.obs;
   var searchController = TextEditingController();
   var cartCount = 0.obs;
 
@@ -58,6 +59,7 @@ class ProductsController extends GetxController {
         pCode: pCode,
         deviceId: deviceId,
         version: version,
+        suggestion: suggestedProducts.value,
       );
 
       products.assignAll(fetchedProducts);

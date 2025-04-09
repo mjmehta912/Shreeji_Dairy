@@ -14,6 +14,7 @@ class ProductsRepo {
     String pCode = '',
     String deviceId = '',
     String version = '',
+    required bool suggestion,
   }) async {
     try {
       String? token = await SecureStorageHelper.read(
@@ -28,6 +29,7 @@ class ProductsRepo {
         "PCODE": pCode,
         "DeviceID": deviceId,
         "Version": version,
+        "Suggestion": suggestion,
       };
 
       final response = await ApiService.postRequest(

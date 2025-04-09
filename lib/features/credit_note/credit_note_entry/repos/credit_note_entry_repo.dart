@@ -141,6 +141,7 @@ class CreditNoteEntryRepo {
         "PCODE": pCode,
         "DeviceID": deviceId,
         "Version": version,
+        "Suggestion": false,
       };
 
       final response = await ApiService.postRequest(

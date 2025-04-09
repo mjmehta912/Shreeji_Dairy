@@ -71,6 +71,10 @@ class OrderStatusDetailCard extends StatelessWidget {
               title: 'Approved Qty',
               value: orderDetail.approvedQty.toString(),
             ),
+            AppTitleValueRow(
+              title: 'Dispatched Qty',
+              value: orderDetail.dispatched.toString(),
+            ),
             AppSpaces.v10,
             Padding(
               padding: AppPaddings.p10,

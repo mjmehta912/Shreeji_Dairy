@@ -305,34 +305,69 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         },
                       ];
 
-                      return Wrap(
-                        spacing: 8.0,
-                        children: filters.map(
-                          (filter) {
-                            return ChoiceChip(
-                              label: Text(
-                                filter["label"],
-                                style: TextStyles.kRegularFredoka(
-                                  fontSize: FontSizes.k12FontSize,
-                                  color:
-                                      (filter["selectedCodes"] as RxSet<String>)
-                                              .isNotEmpty
-                                          ? kColorWhite
-                                          : kColorTextPrimary,
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: FilterChip(
+                                avatar: Icon(
+                                  Icons.history,
+                                  size: 18,
+                                  color: kColorTextPrimary,
                                 ),
+                                label: Text(
+                                  'Recent Orders',
+                                  style: TextStyles.kRegularFredoka(
+                                      fontSize: FontSizes.k12FontSize,
+                                      color: kColorTextPrimary),
+                                ),
+                                selected: _controller.suggestedProducts.value,
+                                selectedColor: kColorPrimary,
+                                backgroundColor: kColorWhite,
+                                showCheckmark: false,
+                                onSelected: (selected) {
+                                  _controller.suggestedProducts.toggle();
+                                  _controller.searchProduct(
+                                    pCode: widget.pCode,
+                                    searchText:
+                                        _controller.searchController.text,
+                                  );
+                                },
                               ),
-                              showCheckmark: false,
-                              backgroundColor: kColorWhite,
-                              selectedColor: kColorSecondary,
-                              selected:
-                                  (filter["selectedCodes"] as RxSet<String>)
-                                      .isNotEmpty,
-                              onSelected: (selected) {
-                                filter["onSelected"]();
+                            ),
+                            ...filters.map(
+                              (filter) {
+                                final selectedCodes =
+                                    filter["selectedCodes"] as RxSet<String>;
+                                final isSelected = selectedCodes.isNotEmpty;
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: ChoiceChip(
+                                    label: Text(
+                                      filter["label"],
+                                      style: TextStyles.kRegularFredoka(
+                                        fontSize: FontSizes.k12FontSize,
+                                        color: isSelected
+                                            ? kColorWhite
+                                            : kColorTextPrimary,
+                                      ),
+                                    ),
+                                    showCheckmark: false,
+                                    backgroundColor: kColorWhite,
+                                    selectedColor: kColorSecondary,
+                                    selected: isSelected,
+                                    onSelected: (selected) {
+                                      filter["onSelected"]();
+                                    },
+                                  ),
+                                );
                               },
-                            );
-                          },
-                        ).toList(),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   ),
