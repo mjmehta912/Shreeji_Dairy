@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/constants/color_constants.dart';
@@ -24,121 +26,211 @@ void showFilterBottomSheet<T>({
 
   Get.bottomSheet(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: kColorWhite,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 10,
       ),
-      padding: AppPaddings.p16,
+      decoration: const BoxDecoration(
+        color: kColorWhite,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
+      ),
       constraints: BoxConstraints(
-        maxHeight: 0.75.screenHeight,
+        maxHeight: 0.85.screenHeight,
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
+          Container(
+            width: 40,
+            height: 5,
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              color: kColorWhite,
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
           Text(
             title,
-            style: TextStyles.kRegularFredoka(
-              fontSize: FontSizes.k20FontSize,
+            style: TextStyles.kMediumFredoka(
+              fontSize: FontSizes.k22FontSize,
               color: kColorTextPrimary,
-              fontWeight: FontWeight.bold,
             ),
           ),
           AppSpaces.v10,
           AppTextFormField(
-            controller: searchController,
             hintText: 'Search $title',
-            onChanged: (value) {
-              searchQuery.value = value.toLowerCase();
-            },
+            controller: searchController,
+            onChanged: (val) => searchQuery.value = val.toLowerCase(),
+          ),
+          AppSpaces.v10,
+          Row(
+            children: [
+              Obx(
+                () {
+                  final isAllSelected =
+                      tempSelectedItems.length == items.length;
+                  return TextButton.icon(
+                    onPressed: () {
+                      if (isAllSelected) {
+                        tempSelectedItems.clear();
+                      } else {
+                        tempSelectedItems.addAll(
+                          items.map((item) => valueField(item)),
+                        );
+                      }
+                    },
+                    icon: Icon(
+                      isAllSelected ? Icons.close : Icons.done_all,
+                      color: kColorSecondary,
+                    ),
+                    label: Text(
+                      isAllSelected ? 'Deselect All' : 'Select All',
+                      style: TextStyles.kRegularFredoka(
+                        fontSize: FontSizes.k16FontSize,
+                        color: kColorSecondary,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const Spacer(),
+              Obx(
+                () {
+                  return Text(
+                    '${tempSelectedItems.length} selected',
+                    style: TextStyles.kRegularFredoka(
+                      fontSize: FontSizes.k16FontSize,
+                      color: kColorGrey,
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
           AppSpaces.v10,
           Expanded(
             child: Obx(
               () {
                 final filteredItems = items
-                    .where((item) => displayField(item)
-                        .toLowerCase()
-                        .contains(searchQuery.value))
+                    .where(
+                      (item) => displayField(item)
+                          .toLowerCase()
+                          .contains(searchQuery.value),
+                    )
                     .toList()
                   ..sort(
                     (a, b) {
-                      bool aSelected =
+                      final aSelected =
                           tempSelectedItems.contains(valueField(a));
-                      bool bSelected =
+                      final bSelected =
                           tempSelectedItems.contains(valueField(b));
                       return (bSelected ? 1 : 0).compareTo(aSelected ? 1 : 0);
                     },
                   );
 
-                return ListView(
-                  shrinkWrap: true,
-                  children: filteredItems.map(
-                    (item) {
-                      return CheckboxListTile(
-                        title: Text(
-                          displayField(item),
-                          style: TextStyles.kRegularFredoka(
-                            fontSize: FontSizes.k16FontSize,
-                            color: kColorTextPrimary,
+                return ListView.builder(
+                  itemCount: filteredItems.length,
+                  itemBuilder: (_, index) {
+                    final item = filteredItems[index];
+                    final value = valueField(item);
+                    final label = displayField(item);
+                    final isSelected = tempSelectedItems.contains(value);
+
+                    return InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () {
+                        if (isSelected) {
+                          tempSelectedItems.remove(value);
+                        } else {
+                          tempSelectedItems.add(value);
+                        }
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut,
+                        margin: const EdgeInsets.symmetric(vertical: 5),
+                        padding: AppPaddings.p12,
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? kColorSecondary.withOpacity(0.1)
+                              : kColorLightGrey.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: isSelected
+                                ? kColorSecondary
+                                : Colors.transparent,
+                            width: 1.2,
                           ),
                         ),
-                        contentPadding: EdgeInsets.zero,
-                        value: tempSelectedItems.contains(valueField(item)),
-                        activeColor: kColorSecondary,
-                        onChanged: (isSelected) {
-                          if (isSelected == true) {
-                            tempSelectedItems.add(valueField(item));
-                          } else {
-                            tempSelectedItems.remove(valueField(item));
-                          }
-                        },
-                      );
-                    },
-                  ).toList(),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                label,
+                                style: isSelected
+                                    ? TextStyles.kMediumFredoka(
+                                        fontSize: FontSizes.k16FontSize,
+                                        color: kColorTextPrimary,
+                                      )
+                                    : TextStyles.kRegularFredoka(
+                                        fontSize: FontSizes.k14FontSize,
+                                        color: kColorTextPrimary,
+                                      ),
+                              ),
+                            ),
+                            if (isSelected)
+                              const Icon(
+                                Icons.check_circle,
+                                color: kColorSecondary,
+                                size: 20,
+                              ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
           ),
           AppSpaces.v10,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                child: Text(
-                  'Clear Filter',
-                  style: TextStyles.kRegularFredoka(
-                    fontSize: FontSizes.k18FontSize,
-                    color: kColorSecondary,
-                  ).copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationColor: kColorSecondary,
+          SafeArea(
+            child: Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                    title: 'Clear Filter',
+                    titleSize: FontSizes.k18FontSize,
+                    titleColor: kColorSecondary,
+                    buttonColor: kColorWhite,
+                    borderColor: kColorSecondary,
+                    onPressed: () {
+                      selectedItems.clear();
+                      onClear();
+                      Get.back();
+                    },
                   ),
                 ),
-                onPressed: () {
-                  selectedItems.clear();
-                  onClear();
-                  Get.back();
-                },
-              ),
-              AppButton(
-                buttonWidth: 0.5.screenWidth,
-                buttonHeight: 40,
-                buttonColor: kColorPrimary,
-                titleColor: kColorTextPrimary,
-                titleSize: FontSizes.k16FontSize,
-                onPressed: () {
-                  selectedItems
-                    ..clear()
-                    ..addAll(tempSelectedItems);
-                  onApply();
-                  Get.back();
-                },
-                title: 'Apply Filter',
-              ),
-            ],
+                const SizedBox(width: 10),
+                Expanded(
+                  child: AppButton(
+                    title: 'Apply Filter',
+                    titleSize: FontSizes.k18FontSize,
+                    onPressed: () {
+                      selectedItems
+                        ..clear()
+                        ..addAll(tempSelectedItems);
+                      onApply();
+                      Get.back();
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

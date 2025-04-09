@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shreeji_dairy/features/products/models/group_dm.dart';
+import 'package:shreeji_dairy/features/products/models/subgroup2_dm.dart';
+import 'package:shreeji_dairy/features/products/models/subgroup_dm.dart';
 import 'package:shreeji_dairy/features/store_order/models/store_product_dm.dart';
 import 'package:shreeji_dairy/features/store_order/repositories/store_order_repo.dart';
 import 'package:shreeji_dairy/utils/dialogs/app_dialogs.dart';
@@ -10,18 +12,23 @@ class StoreOrderController extends GetxController {
   var isLoading = false.obs;
 
   var storeProducts = <StoreCategoryDm>[].obs;
+  var suggestedProducts = true.obs;
   var searchController = TextEditingController();
   final Map<String, TextEditingController> productControllers = {};
   var groups = <GroupDm>[].obs;
-  var selectedIgCode = ''.obs;
+  var selectedIgCodes = <String>{}.obs;
+  var groupSearchController = TextEditingController();
+  var subGroups = <SubgroupDm>[].obs;
+  var selectedIcCodes = <String>{}.obs;
+  var subGroupSearchController = TextEditingController();
+  var subGroups2 = <Subgroup2Dm>[].obs;
+  var selectedIpackgCodes = <String>{}.obs;
+  var subGroup2SearchController = TextEditingController();
 
   var isCartFilterActive = false.obs;
   var isPackingItem = false.obs;
 
   Future<void> fetchStoreProducts({
-    String icCodes = '',
-    String igCodes = '',
-    String ipackgCodes = '',
     String searchText = '',
   }) async {
     isLoading.value = true;
@@ -32,12 +39,13 @@ class StoreOrderController extends GetxController {
 
     try {
       final fetchedProducts = await StoreOrderRepo.storeProducts(
-        icCodes: icCodes,
-        igCodes: igCodes,
-        ipackgCodes: ipackgCodes,
+        icCodes: selectedIcCodes.join(','),
+        igCodes: selectedIgCodes.join(','),
+        ipackgCodes: selectedIpackgCodes.join(','),
         searchText: searchText,
         pCode: storePcode!,
         packingItem: isPackingItem.value,
+        suggestion: suggestedProducts.value,
       );
 
       if (isCartFilterActive.value) {
@@ -87,7 +95,6 @@ class StoreOrderController extends GetxController {
 
     fetchStoreProducts(
       searchText: searchController.text,
-      igCodes: selectedIgCode.value,
     );
   }
 
@@ -96,7 +103,6 @@ class StoreOrderController extends GetxController {
 
     fetchStoreProducts(
       searchText: searchController.text,
-      igCodes: selectedIgCode.value,
     );
   }
 
@@ -129,7 +135,6 @@ class StoreOrderController extends GetxController {
       if (response != null && response.containsKey('message')) {
         fetchStoreProducts(
           searchText: searchController.text,
-          igCodes: selectedIgCode.value,
         );
       }
     } catch (e) {
@@ -153,6 +158,51 @@ class StoreOrderController extends GetxController {
       );
 
       groups.assignAll(fetchedGroups);
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getSubGroups({
+    required String cCode,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      final fetchedSubGroups = await StoreOrderRepo.getSubGroups(
+        igCodes: selectedIgCodes.join(','),
+        cCode: cCode,
+      );
+
+      subGroups.assignAll(fetchedSubGroups);
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getSubGroups2({
+    required String cCode,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      final fetchedSubGroups2 = await StoreOrderRepo.getSubGroups2(
+        igCodes: selectedIgCodes.join(','),
+        icCodes: selectedIcCodes.join(','),
+        cCode: cCode,
+      );
+
+      subGroups2.assignAll(fetchedSubGroups2);
     } catch (e) {
       showErrorSnackbar(
         'Error',
